@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import authRoutes from './auth.routes';
+import categoryRoutes from './category.routes';
 
 const router = Router();
 
@@ -15,5 +16,8 @@ router.get('/health', (_req: Request, res: Response) => {
 
 // Authentication routes — /api/auth
 router.use('/auth', authRoutes);
+
+// Category routes — /api/categories
+router.use('/categories', categoryRoutes);
 
 export default router;
