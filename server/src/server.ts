@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 
 import { config } from './config/config';
-import { connectDB } from './config/database';
+import { connectDB, disconnectDB } from './config/db';
 import { errorHandler, notFound } from './middleware/errorHandler';
 import indexRouter from './routes/index';
 
@@ -105,15 +105,14 @@ const startServer = async (): Promise<void> => {
 // =====================================================
 // Graceful Shutdown
 // =====================================================
-process.on('SIGTERM', () => {
-  console.log('🛑 SIGTERM received. Shutting down gracefully...');
+const shutdown = async (signal: string): Promise<void> => {
+  console.log(`\n🛑 ${signal} received. Shutting down gracefully...`);
+  await disconnectDB();
   process.exit(0);
-});
+};
 
-process.on('SIGINT', () => {
-  console.log('🛑 SIGINT received. Shutting down gracefully...');
-  process.exit(0);
-});
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT',  () => shutdown('SIGINT'));
 
 process.on('unhandledRejection', (reason: Error) => {
   console.error('❌ Unhandled Rejection:', reason);
