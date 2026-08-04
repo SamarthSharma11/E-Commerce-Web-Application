@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Star, ShoppingCart } from 'lucide-react';
 import type { Product } from '../types';
 import { useCartStore } from '../store/cartStore';
-import toast from 'react-hot-toast';
 
 // =====================================================
 // ProductCard Component
@@ -15,11 +14,10 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product, 1);
-    toast.success(`${product.name} added to cart`);
+    await addToCart(product, 1);
   };
 
   const effectivePrice = product.discountPrice ?? product.price;

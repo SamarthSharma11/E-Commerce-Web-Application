@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import api, { setAccessToken } from '../api/axios';
 import type { User, LoginCredentials, RegisterCredentials, ApiResponse } from '../types';
+import { useCartStore } from './cartStore';
 
 interface AuthState {
   user: User | null;
@@ -47,6 +48,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         isLoading: false,
         error: null,
       });
+
+      // Merge guest cart into backend cart
+      useCartStore.getState().mergeGuestCart();
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } }).response?.data
@@ -81,6 +85,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         isLoading: false,
         error: null,
       });
+
+      // Merge guest cart into backend cart
+      useCartStore.getState().mergeGuestCart();
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } }).response?.data

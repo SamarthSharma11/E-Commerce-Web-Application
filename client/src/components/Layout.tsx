@@ -1,8 +1,10 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, LogOut, ShieldCheck, Search, Menu, X } from 'lucide-react';
+import { ShoppingBag, User, LogOut, ShieldCheck, Search, Menu, X, ShoppingCart } from 'lucide-react';
 import CategoryNav from './CategoryNav';
 import useAuthStore from '../store/authStore';
+import { useCartStore, useCartCount } from '../store/cartStore';
+import CartDrawer from './CartDrawer';
 import { useState } from 'react';
 
 // =====================================================
@@ -12,6 +14,7 @@ const Layout: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const cartCount = useCartCount();
 
   const handleLogout = async () => {
     await logout();
@@ -40,6 +43,19 @@ const Layout: React.FC = () => {
 
             {/* Category Nav */}
             <CategoryNav />
+
+            {/* Cart Icon */}
+            <button
+              onClick={() => useCartStore.getState().setCartOpen(true)}
+              className="relative p-2 rounded-xl hover:bg-[var(--color-surface-2)] transition-colors"
+            >
+              <ShoppingCart className="w-5 h-5 text-[var(--color-text-muted)]" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-indigo-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
+            </button>
 
             {isAuthenticated ? (
               <div className="flex items-center gap-3">
@@ -111,6 +127,9 @@ const Layout: React.FC = () => {
       <footer className="border-t border-[var(--color-border)] py-6 text-center text-xs text-[var(--color-text-muted)]">
         &copy; {new Date().getFullYear()} ApexStore. Built with React + Vite + Express + MongoDB.
       </footer>
+
+      {/* Cart Drawer */}
+      <CartDrawer />
     </div>
   );
 };

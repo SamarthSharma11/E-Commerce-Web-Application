@@ -68,13 +68,13 @@ const ProductDetailPage: React.FC = () => {
     fetchReviews();
   }, [product?._id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
     if (product.stock === 0) {
       toast.error('Product is out of stock');
       return;
     }
-    addToCart(product, quantity);
+    await addToCart(product, quantity);
   };
 
   const handleSubmitReview = async (e: React.FormEvent) => {

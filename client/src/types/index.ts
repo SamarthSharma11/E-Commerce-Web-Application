@@ -89,6 +89,7 @@ export interface Category {
 // Cart Types
 // ---------------------------
 export interface CartItem {
+  _id: string;
   product: string | Product;
   name: string;
   image: string;
@@ -100,7 +101,8 @@ export interface Cart {
   _id: string;
   user: string;
   items: CartItem[];
-  totalPrice: number;
+  itemsCount: number;
+  subtotal: number;
   createdAt: string;
   updatedAt: string;
 }
