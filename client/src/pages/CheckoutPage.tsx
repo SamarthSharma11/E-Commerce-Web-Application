@@ -5,6 +5,7 @@ import api from '../api/axios';
 import useAuthStore from '../store/authStore';
 import { useCartStore, useCartCount, useCartSubtotal } from '../store/cartStore';
 import toast from 'react-hot-toast';
+import PaymentButton from '../components/PaymentButton';
 import type { Address, Order, ApiResponse } from '../types';
 
 // =====================================================
@@ -430,13 +431,29 @@ const CheckoutPage: React.FC = () => {
               <button onClick={() => setCurrentStep('review')} className="px-6 py-3 text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors">
                 Back
               </button>
-              <button
-                onClick={handlePlaceOrder}
-                disabled={isPlacingOrder}
-                className="px-8 py-3 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors flex items-center gap-2"
-              >
-                {isPlacingOrder ? 'Placing Order...' : `Pay ₹${totalPrice.toLocaleString()}`}
-              </button>
+
+              {paymentMethod === 'razorpay' ? (
+                <PaymentButton
+                  address={getSelectedAddress()!}
+                  amount={totalPrice}
+                  onSuccess={(order) => {
+                    setCreatedOrder(order);
+                    clearCart();
+                  }}
+                  onRetry={() => {
+                    // Keep user on payment step for retry
+                  }}
+                  disabled={!selectedAddressId}
+                />
+              ) : (
+                <button
+                  onClick={handlePlaceOrder}
+                  disabled={isPlacingOrder || !selectedAddressId}
+                  className="px-8 py-3 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors flex items-center gap-2"
+                >
+                  {isPlacingOrder ? 'Placing Order...' : `Pay ₹${totalPrice.toLocaleString()}`}
+                </button>
+              )}
             </div>
           </div>
         )}
