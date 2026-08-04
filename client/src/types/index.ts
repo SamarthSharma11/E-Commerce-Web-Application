@@ -50,10 +50,9 @@ export interface Product {
   brand?: string;
   images: string[];
   stock: number;
-  sold: number;
-  ratings: number;
-  numReviews: number;
-  reviews: Review[];
+  sku: string;
+  ratingsAverage: number;
+  ratingsCount: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -61,11 +60,14 @@ export interface Product {
 
 export interface Review {
   _id?: string;
-  user: string;
-  name: string;
+  user: string | { _id: string; name: string; avatar?: string };
+  product: string;
   rating: number;
   comment: string;
+  isVerifiedPurchase?: boolean;
+  helpfulVotes?: number;
   createdAt: string;
+  updatedAt?: string;
 }
 
 // ---------------------------
@@ -77,6 +79,7 @@ export interface Category {
   slug: string;
   description?: string;
   image?: string;
+  parentCategory?: string | Category | null;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -159,10 +162,10 @@ export interface ApiResponse<T = unknown> {
 }
 
 export interface PaginationMeta {
-  page: number;
+  currentPage: number;
   limit: number;
-  total: number;
-  pages: number;
+  totalCount: number;
+  totalPages: number;
 }
 
 // ---------------------------

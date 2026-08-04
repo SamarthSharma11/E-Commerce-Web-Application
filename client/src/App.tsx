@@ -8,6 +8,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import { ProtectedRoute, AdminRoute } from './components/ProtectedRoute';
+import Layout from './components/Layout';
+import ProductListPage from './pages/ProductListPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 // Home Dashboard Component
 const Home = () => {
@@ -28,6 +31,10 @@ const Home = () => {
           </Link>
 
           <div className="flex items-center gap-4">
+            <Link to="/products" className="hidden sm:flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-white transition-colors">
+              Shop
+            </Link>
+
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--color-surface-2)] border border-[var(--color-border)] text-xs font-medium">
@@ -116,6 +123,13 @@ const Home = () => {
               <ShieldCheck className="w-4 h-4" />
             </Link>
           )}
+
+          <Link
+            to="/products"
+            className="px-6 py-3.5 bg-[var(--color-surface-2)] hover:bg-[var(--color-border)] border border-[var(--color-border)] text-white font-semibold rounded-xl transition-all flex items-center gap-2"
+          >
+            <span>Browse Products</span>
+          </Link>
         </div>
       </main>
 
@@ -190,6 +204,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* Product Routes with Layout */}
+        <Route element={<Layout />}>
+          <Route path="/products" element={<ProductListPage />} />
+          <Route path="/products/:slug" element={<ProductDetailPage />} />
+        </Route>
 
         {/* Protected User Routes */}
         <Route element={<ProtectedRoute />}>
