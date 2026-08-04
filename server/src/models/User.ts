@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model, Types } from 'mongoose';
-import bcrypt from 'bcryptjs';
+import { hashPassword, comparePassword } from '../utils/auth';
 
 // =====================================================
 // Address Sub-document Interface
@@ -141,8 +141,7 @@ UserSchema.pre<IUser>('save', async function (next) {
   if (!this.isModified('password')) return next();
 
   try {
-    const saltRounds = 12;
-    this.password = await bcrypt.hash(this.password, saltRounds);
+    this.password = await hashPassword(this.password);
 
     // Record when password was changed (for JWT invalidation)
     if (!this.isNew) {
@@ -160,7 +159,7 @@ UserSchema.pre<IUser>('save', async function (next) {
 UserSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
-  return bcrypt.compare(candidatePassword, this.password);
+  return comparePassword(candidatePassword, this.password);
 };
 
 UserSchema.methods.changedPasswordAfter = function (
