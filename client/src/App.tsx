@@ -19,6 +19,9 @@ import OrderHistoryPage from './pages/OrderHistoryPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
+import DashboardHome from './pages/admin/DashboardHome';
+import AdminOrdersPage from './pages/admin/AdminOrdersPage';
+import AdminUsersPage from './pages/admin/AdminUsersPage';
 
 // Home Dashboard Component
 const Home = () => {
@@ -170,21 +173,6 @@ const Profile = () => {
   );
 };
 
-// Admin Dashboard Placeholder
-const AdminDashboard = () => {
-  return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-white p-8 flex flex-col items-center justify-center">
-      <div className="max-w-md w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 shadow-2xl">
-        <h2 className="text-xl font-bold font-['Outfit'] mb-4 text-purple-400">Admin Dashboard</h2>
-        <p className="text-sm text-gray-300">You are logged in as an administrator. Full dashboard features will be built in subsequent tasks.</p>
-        <Link to="/" className="inline-block mt-6 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl">
-          Back to Home
-        </Link>
-      </div>
-    </div>
-  );
-};
-
 function App() {
   const { checkAuth } = useAuthStore();
 
@@ -231,9 +219,11 @@ function App() {
         {/* Protected Admin Routes */}
         <Route element={<AdminRoute />}>
           <Route element={<AdminLayout />}>
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin" element={<DashboardHome />} />
             <Route path="/admin/products" element={<AdminProductsPage />} />
             <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+            <Route path="/admin/orders" element={<AdminOrdersPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
           </Route>
         </Route>
       </Routes>

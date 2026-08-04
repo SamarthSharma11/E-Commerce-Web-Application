@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Package, FolderTree, ShieldCheck } from 'lucide-react';
+import { ShoppingBag, Package, FolderTree, ShieldCheck, BarChart3, Users, ClipboardList } from 'lucide-react';
 
 // =====================================================
 // Admin Layout — Sidebar navigation for admin pages
@@ -9,9 +9,11 @@ const AdminLayout: React.FC = () => {
   const location = useLocation();
 
   const navItems = [
-    { path: '/admin', label: 'Dashboard', icon: ShieldCheck, exact: true },
+    { path: '/admin', label: 'Dashboard', icon: BarChart3, exact: true },
     { path: '/admin/products', label: 'Products', icon: Package },
     { path: '/admin/categories', label: 'Categories', icon: FolderTree },
+    { path: '/admin/orders', label: 'Orders', icon: ClipboardList },
+    { path: '/admin/users', label: 'Users', icon: Users },
   ];
 
   const isActive = (path: string, exact?: boolean) => {
