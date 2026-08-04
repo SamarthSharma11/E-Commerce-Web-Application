@@ -4,6 +4,7 @@ import categoryRoutes from './category.routes';
 import productRoutes from './product.routes';
 import reviewRoutes from './review.routes';
 import cartRoutes from './cart.routes';
+import orderRoutes from './order.routes';
 
 const router = Router();
 
@@ -32,5 +33,8 @@ router.use('/reviews', reviewRoutes);
 
 // Cart routes — /api/cart
 router.use('/cart', cartRoutes);
+
+// Order routes — /api/orders
+router.use('/orders', orderRoutes);
 
 export default router;
