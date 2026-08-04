@@ -3,6 +3,7 @@ import authRoutes from './auth.routes';
 import categoryRoutes from './category.routes';
 import productRoutes from './product.routes';
 import reviewRoutes from './review.routes';
+import cartRoutes from './cart.routes';
 
 const router = Router();
 
@@ -28,5 +29,8 @@ router.use('/products', productRoutes);
 // Review routes — nested under products and standalone
 router.use('/products/:productId/reviews', reviewRoutes);
 router.use('/reviews', reviewRoutes);
+
+// Cart routes — /api/cart
+router.use('/cart', cartRoutes);
 
 export default router;
