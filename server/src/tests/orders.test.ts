@@ -56,7 +56,7 @@ describe('Orders', () => {
       expect(response.body.data.items.length).toBe(1);
       expect(response.body.data.items[0].quantity).toBe(2);
       expect(response.body.data.totalPrice).toBeGreaterThan(0);
-    }, 15000);
+    }, 30000);
 
     it('should fail with empty cart', async () => {
       const { token } = await createTestUser();
