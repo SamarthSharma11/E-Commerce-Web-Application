@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import authRoutes from './auth.routes';
 import categoryRoutes from './category.routes';
 import productRoutes from './product.routes';
+import reviewRoutes from './review.routes';
 
 const router = Router();
 
@@ -23,5 +24,9 @@ router.use('/categories', categoryRoutes);
 
 // Product routes — /api/products
 router.use('/products', productRoutes);
+
+// Review routes — nested under products and standalone
+router.use('/products/:productId/reviews', reviewRoutes);
+router.use('/reviews', reviewRoutes);
 
 export default router;
