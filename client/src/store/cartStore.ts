@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import toast from 'react-hot-toast';
-import api, { setAccessToken } from '../api/axios';
+import api from '../api/axios';
 import type { ApiResponse } from '../types';
 import type { Product, CartItem, Cart } from '../types';
 import useAuthStore from './authStore';

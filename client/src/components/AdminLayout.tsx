@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Package, FolderTree, ShieldCheck, BarChart3, Users, ClipboardList } from 'lucide-react';
+import { ShoppingBag, Package, FolderTree, BarChart3, Users, ClipboardList } from 'lucide-react';
 
 // =====================================================
 // Admin Layout — Sidebar navigation for admin pages

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Package, ChevronRight, Clock, CheckCircle, XCircle, Truck } from 'lucide-react';
 import api from '../api/axios';
-import useAuthStore from '../store/authStore';
 import toast from 'react-hot-toast';
 import type { Order, PaginationMeta } from '../types';
 

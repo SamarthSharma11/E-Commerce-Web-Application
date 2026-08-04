@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Check, ChevronRight, CreditCard, Truck, User } from 'lucide-react';
 import api from '../api/axios';
 import useAuthStore from '../store/authStore';
@@ -14,7 +14,6 @@ import type { Address, Order, ApiResponse } from '../types';
 type CheckoutStep = 'shipping' | 'review' | 'payment';
 
 const CheckoutPage: React.FC = () => {
-  const navigate = useNavigate();
   const { user, isAuthenticated } = useAuthStore();
   const { items, clearCart } = useCartStore();
   const cartCount = useCartCount();
@@ -435,7 +434,6 @@ const CheckoutPage: React.FC = () => {
               {paymentMethod === 'razorpay' ? (
                 <PaymentButton
                   address={getSelectedAddress()!}
-                  amount={totalPrice}
                   onSuccess={(order) => {
                     setCreatedOrder(order);
                     clearCart();

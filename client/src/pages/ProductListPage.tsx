@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../api/axios';
 import ProductCard from '../components/ProductCard';
 import { ProductListSkeleton, CategoryNavSkeleton } from '../components/LoadingSkeleton';

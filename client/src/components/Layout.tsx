@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, LogOut, ShieldCheck, Search, Menu, X, ShoppingCart } from 'lucide-react';
+import { ShoppingBag, User, LogOut, Search, Menu, X, ShoppingCart } from 'lucide-react';
 import CategoryNav from './CategoryNav';
 import useAuthStore from '../store/authStore';
 import { useCartStore, useCartCount } from '../store/cartStore';

@@ -3,7 +3,6 @@ import { DollarSign, ShoppingCart, Users, Package, TrendingUp } from 'lucide-rea
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import type { Order, Product } from '../../types';
 
 // =====================================================
 // Dashboard Home Page

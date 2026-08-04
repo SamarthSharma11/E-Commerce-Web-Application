@@ -38,7 +38,7 @@ const AdminCategoriesPage: React.FC = () => {
       const response = await api.get(`/categories?${params.toString()}`);
       setCategories(response.data.data || []);
       setPagination(response.data.pagination || null);
-    } catch (error) {
+    } catch {
       toast.error('Failed to fetch categories');
     } finally {
       setLoading(false);

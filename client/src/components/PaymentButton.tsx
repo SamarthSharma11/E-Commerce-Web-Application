@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Loader2, ShieldCheck } from 'lucide-react';
 import api from '../api/axios';
 import useAuthStore from '../store/authStore';
-import { useCartStore, useCartSubtotal } from '../store/cartStore';
+import { useCartSubtotal } from '../store/cartStore';
 import toast from 'react-hot-toast';
 import type { Address, Order, ApiResponse } from '../types';
 
@@ -11,7 +11,6 @@ import type { Address, Order, ApiResponse } from '../types';
 // =====================================================
 interface PaymentButtonProps {
   address: Address;
-  amount: number;
   currency?: string;
   onSuccess: (order: Order) => void;
   onRetry?: () => void;
@@ -56,7 +55,6 @@ interface RazorpayResponse {
 
 const PaymentButton: React.FC<PaymentButtonProps> = ({
   address,
-  amount,
   currency = 'INR',
   onSuccess,
   onRetry,
@@ -131,7 +129,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         handler: async (response: RazorpayResponse) => {
           try {
             // Step 3: Verify payment signature
-            const verifyResponse = await api.post<ApiResponse<Order>>('/api/payments/verify', {
+            await api.post<ApiResponse<Order>>('/api/payments/verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,

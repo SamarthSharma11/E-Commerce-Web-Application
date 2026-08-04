@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { Plus, Pencil, Trash2, X, Upload, Image as ImageIcon, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Plus, Pencil, Trash2, X, Upload, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import type { Product, Category, PaginationMeta } from '../../types';
@@ -69,7 +68,7 @@ const AdminProductsPage: React.FC = () => {
       const response = await api.get(`/products?${params.toString()}`);
       setProducts(response.data.data || []);
       setPagination(response.data.pagination || null);
-    } catch (error) {
+    } catch {
       toast.error('Failed to fetch products');
     } finally {
       setLoading(false);
@@ -191,7 +190,7 @@ const AdminProductsPage: React.FC = () => {
       await api.delete(`/products/${id}`);
       toast.success('Product deleted successfully');
       fetchProducts();
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete product');
     }
   };
