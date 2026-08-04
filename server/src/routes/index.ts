@@ -6,6 +6,7 @@ import reviewRoutes from './review.routes';
 import cartRoutes from './cart.routes';
 import orderRoutes from './order.routes';
 import paymentRoutes from './payment.routes';
+import adminRoutes from './admin.routes';
 
 const router = Router();
 
@@ -40,5 +41,8 @@ router.use('/orders', orderRoutes);
 
 // Payment routes — /api/payments
 router.use('/payments', paymentRoutes);
+
+// Admin routes — /api/admin
+router.use('/admin', adminRoutes);
 
 export default router;
