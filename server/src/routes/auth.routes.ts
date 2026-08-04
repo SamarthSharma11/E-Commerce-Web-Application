@@ -7,10 +7,12 @@ import {
   getMe,
   forgotPassword,
   resetPassword,
+  updateAddresses,
   registerSchema,
   loginSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  updateAddressesSchema,
 } from '../controllers/auth.controller';
 import { validate } from '../middleware/validate';
 import { authenticate } from '../middleware/auth';
@@ -45,5 +47,8 @@ router.post('/reset-password', validate(resetPasswordSchema), resetPassword);
 
 // GET /api/auth/me — requires valid access token
 router.get('/me', authenticate, getMe);
+
+// PUT /api/auth/me/addresses — update saved addresses
+router.put('/me/addresses', authenticate, validate(updateAddressesSchema), updateAddresses);
 
 export default router;

@@ -12,9 +12,23 @@ export interface User {
   role: 'user' | 'admin';
   avatar?: string;
   phone?: string;
+  addresses: Address[];
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Address {
+  _id?: string;
+  label: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  pincode: string;
+  country?: string;
+  isDefault?: boolean;
+  phone?: string;
 }
 
 export interface AuthState {
@@ -115,10 +129,11 @@ export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
 
 export interface ShippingAddress {
   fullName: string;
-  address: string;
+  line1: string;
+  line2?: string;
   city: string;
   state: string;
-  postalCode: string;
+  pincode: string;
   country: string;
   phone: string;
 }
@@ -133,21 +148,26 @@ export interface OrderItem {
 
 export interface Order {
   _id: string;
+  orderNumber?: string;
   user: string | User;
   items: OrderItem[];
   shippingAddress: ShippingAddress;
   paymentMethod: string;
+  paymentInfo?: {
+    method: string;
+    status: string;
+    transactionId?: string;
+    paidAt?: string;
+  };
   itemsPrice: number;
   shippingPrice: number;
   taxPrice: number;
   totalPrice: number;
   orderStatus: OrderStatus;
-  paymentStatus: PaymentStatus;
-  isPaid: boolean;
-  paidAt?: string;
-  isDelivered: boolean;
+  placedAt: string;
   deliveredAt?: string;
-  stripePaymentIntentId?: string;
+  cancelledAt?: string;
+  cancelReason?: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -45,6 +45,23 @@ export const resetPasswordSchema = z.object({
   }),
 });
 
+export const updateAddressesSchema = z.object({
+  body: z.object({
+    addresses: z.array(
+      z.object({
+        label: z.string().min(1, 'Label is required'),
+        line1: z.string().min(1, 'Address line 1 is required'),
+        line2: z.string().optional(),
+        city: z.string().min(1, 'City is required'),
+        state: z.string().min(1, 'State is required'),
+        pincode: z.string().min(1, 'Pincode is required'),
+        country: z.string().optional(),
+        isDefault: z.boolean().optional(),
+      })
+    ),
+  }),
+});
+
 // =====================================================
 // Helper: Set Refresh Token Cookie
 // =====================================================
@@ -329,5 +346,39 @@ export const resetPassword = async (
     res,
     null,
     'Password reset successful. You can now login with your new password.'
+  );
+};
+
+/**
+ * @route   PUT /api/auth/me/addresses
+ * @desc    Update current user's saved addresses
+ * @access  Private
+ */
+export const updateAddresses = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  if (!req.user) {
+    throw new ApiError(401, 'Not authenticated');
+  }
+
+  const { addresses } = req.body;
+
+  if (!Array.isArray(addresses)) {
+    throw new ApiError(400, 'Addresses must be an array');
+  }
+
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    throw new ApiError(404, 'User not found');
+  }
+
+  user.addresses = addresses;
+  await user.save();
+
+  sendSuccess(
+    res,
+    { addresses: user.addresses },
+    'Addresses updated successfully'
   );
 };
