@@ -22,27 +22,22 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --workspaces
 
       - name: Lint Client
-        working-directory: ./client
-        run: npm run lint
+        run: npm run lint --workspace=client
 
       - name: Lint Server
-        working-directory: ./server
-        run: npm run lint
+        run: npm run lint --workspace=server
 
       - name: Run Server Tests
-        working-directory: ./server
-        run: npm test
+        run: npm test --workspace=server
         env:
           NODE_ENV: test
           MONGO_URI: mongodb://localhost:27017/ecommerce_test
 
       - name: Build Client
-        working-directory: ./client
-        run: npm run build
+        run: npm run build --workspace=client
 
       - name: Build Server
-        working-directory: ./server
-        run: npm run build
+        run: npm run build --workspace=server
