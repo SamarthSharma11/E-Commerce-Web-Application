@@ -58,10 +58,10 @@ export const buildPaginationMeta = (
   page: number,
   limit: number
 ): PaginationMeta => ({
-  page,
+  currentPage: page,
   limit,
-  total,
-  pages: Math.ceil(total / limit),
+  totalCount: total,
+  totalPages: Math.ceil(total / limit),
 });
 
 // =====================================================

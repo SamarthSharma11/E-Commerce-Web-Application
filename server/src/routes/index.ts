@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import authRoutes from './auth.routes';
 import categoryRoutes from './category.routes';
+import productRoutes from './product.routes';
 
 const router = Router();
 
@@ -19,5 +20,8 @@ router.use('/auth', authRoutes);
 
 // Category routes — /api/categories
 router.use('/categories', categoryRoutes);
+
+// Product routes — /api/products
+router.use('/products', productRoutes);
 
 export default router;

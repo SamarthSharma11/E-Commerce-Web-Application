@@ -1,3 +1,4 @@
+import path from 'path';
 import 'express-async-errors';
 import express, { Application } from 'express';
 import cors from 'cors';
@@ -49,6 +50,9 @@ app.use(
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(config.COOKIE_SECRET));
+
+// Serve local uploads folder for static assets
+app.use('/uploads', express.static(path.join(process.cwd(), 'public', 'uploads')));
 
 if (config.NODE_ENV === 'development') {
   app.use(morgan('dev'));
