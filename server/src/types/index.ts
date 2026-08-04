@@ -8,7 +8,7 @@ import { Document, Types } from 'mongoose';
 // ---------------------------
 // User Types
 // ---------------------------
-export type UserRole = 'user' | 'admin';
+export type UserRole = 'customer' | 'user' | 'admin';
 
 export interface IUser extends Document {
   _id: Types.ObjectId;
