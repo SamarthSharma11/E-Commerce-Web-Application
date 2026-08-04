@@ -419,6 +419,7 @@ const AdminProductsPage: React.FC = () => {
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     required
+                    disabled={categoriesLoading}
                     className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
                   >
                     <option value="">Select category</option>
