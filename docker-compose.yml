@@ -1,0 +1,81 @@
+# =====================================================
+# Docker Compose — Development & Production
+# =====================================================
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7
+    container_name: ecommerce-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: ecommerce
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API Server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: ecommerce-server
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://admin:admin123@mongodb:27017/ecommerce?authSource=admin
+      JWT_SECRET: ${JWT_SECRET:-your-strong-jwt-secret-min-32-chars}
+      JWT_EXPIRES_IN: 15m
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET:-your-strong-refresh-secret-min-32-chars}
+      REFRESH_TOKEN_EXPIRES_IN: 7d
+      COOKIE_SECRET: ${COOKIE_SECRET:-your-cookie-signing-secret}
+      CLIENT_URL: ${CLIENT_URL:-http://localhost}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+    volumes:
+      - uploads_data:/app/public/uploads
+
+  # Frontend Client (Static build served by nginx)
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: ecommerce-client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - ecommerce-network
+
+volumes:
+  mongodb_data:
+    driver: local
+  uploads_data:
+    driver: local
+
+networks:
+  ecommerce-network:
+    driver: bridge

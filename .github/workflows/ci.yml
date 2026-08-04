@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint Client
+        run: npm run lint --workspace=client
+        continue-on-error: false
+
+      - name: Lint Server
+        run: npm run lint --workspace=server
+        continue-on-error: false
+
+      - name: Run Server Tests
+        run: npm run test --workspace=server
+        continue-on-error: false
+
+      - name: Build Client
+        run: npm run build --workspace=client
+        continue-on-error: false
+
+      - name: Build Server
+        run: npm run build --workspace=server
+        continue-on-error: false
