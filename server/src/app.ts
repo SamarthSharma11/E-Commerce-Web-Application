@@ -10,7 +10,6 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 
 import { config } from './config/config';
-import { connectDB } from './config/db';
 import { errorHandler, notFound } from './middleware/errorHandler';
 import indexRouter from './routes/index';
 

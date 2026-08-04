@@ -220,7 +220,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
       { accessToken: newAccessToken },
       'Access token refreshed successfully'
     );
-  } catch (error) {
+  } catch {
     throw new ApiError(401, 'Invalid or expired refresh token');
   }
 };

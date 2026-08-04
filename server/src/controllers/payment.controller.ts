@@ -162,7 +162,7 @@ export const handleRazorpayWebhook = async (req: Request, res: Response): Promis
 async function handlePaymentCaptured(event: Record<string, unknown>): Promise<void> {
   const payment = event.payload as Record<string, unknown>;
   const paymentEntity = payment.payment as Record<string, unknown>;
-  const orderId = paymentEntity.order_id as string;
+  const _orderId = paymentEntity.order_id as string;
   const paymentId = paymentEntity.id as string;
 
   // Find order by razorpay order ID (stored in notes or receipt)
@@ -205,7 +205,7 @@ async function handlePaymentFailed(event: Record<string, unknown>): Promise<void
 async function handleOrderPaid(event: Record<string, unknown>): Promise<void> {
   const payment = event.payload as Record<string, unknown>;
   const paymentEntity = payment.payment as Record<string, unknown>;
-  const orderId = paymentEntity.order_id as string;
+  const _orderId = paymentEntity.order_id as string;
   const paymentId = paymentEntity.id as string;
 
   // Find order by razorpay order ID

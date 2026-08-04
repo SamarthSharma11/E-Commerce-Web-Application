@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import mongoose from 'mongoose';
 import Order from '../models/Order';
 import Cart from '../models/Cart';
 import Product from '../models/Product';
 import { AppError } from '../middleware/errorHandler';
-import { AuthenticatedRequest, UserRole } from '../types';
+import { AuthenticatedRequest } from '../types';
 import { sendSuccess, sendCreated, getPagination, buildPaginationMeta } from '../utils/helpers';
 
 // =====================================================
@@ -113,7 +113,6 @@ export const createOrder = async (req: AuthenticatedRequest, res: Response): Pro
 
   const bulkOps = products.map((product) => {
     const cartItem = cart.items.find((item) => (item.product._id || item.product).toString() === product._id.toString());
-    const newStock = Math.max(0, product.stock - (cartItem?.quantity || 0));
     return {
       updateOne: {
         filter: { _id: product._id },

@@ -1,4 +1,3 @@
-import path from 'path';
 import 'express-async-errors';
 import { config } from './config/config';
 import { connectDB, disconnectDB } from './config/db';
