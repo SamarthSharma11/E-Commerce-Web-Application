@@ -8,12 +8,17 @@ import { AuthenticatedRequest } from '../types';
 import { sendSuccess, sendCreated } from '../utils/helpers';
 
 // =====================================================
-// Razorpay Client Instance
+// Razorpay Client Instance (lazy to avoid crashing on import when env vars are missing)
 // =====================================================
-const razorpay = new Razorpay({
-  key_id: config.RAZORPAY_KEY_ID,
-  key_secret: config.RAZORPAY_KEY_SECRET,
-});
+const getRazorpay = (): Razorpay => {
+  if (!config.RAZORPAY_KEY_ID || !config.RAZORPAY_KEY_SECRET) {
+    throw new AppError(500, 'Razorpay credentials are not configured');
+  }
+  return new Razorpay({
+    key_id: config.RAZORPAY_KEY_ID,
+    key_secret: config.RAZORPAY_KEY_SECRET,
+  });
+};
 
 // =====================================================
 // Payment Controller
@@ -32,6 +37,7 @@ export const createRazorpayOrder = async (req: AuthenticatedRequest, res: Respon
   }
 
   try {
+    const razorpay = getRazorpay();
     const orderCreatePayload = {
       amount: Math.round(amount * 100), // Razorpay expects amount in paise
       currency,
