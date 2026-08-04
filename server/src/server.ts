@@ -6,6 +6,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 
 import { config } from './config/config';
 import { connectDB, disconnectDB } from './config/db';
@@ -61,18 +63,19 @@ if (config.NODE_ENV === 'development') {
 }
 
 // =====================================================
+// OpenAPI / Swagger Docs
+// =====================================================
+const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'openapi.yaml'));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+  customSiteTitle: 'ApexStore API Docs',
+  customCssUrl: '',
+  customfavIcon: '/favicon.ico',
+}));
+
+// =====================================================
 // API Routes
 // =====================================================
 app.use('/api', indexRouter);
-
-// Placeholder routes — to be expanded in subsequent tasks
-// app.use('/api/auth',     authRoutes);
-// app.use('/api/products', productRoutes);
-// app.use('/api/categories', categoryRoutes);
-// app.use('/api/cart',     cartRoutes);
-// app.use('/api/orders',   orderRoutes);
-// app.use('/api/admin',    adminRoutes);
-// app.use('/api/payments', paymentRoutes);
 
 // =====================================================
 // Error Handling
@@ -97,6 +100,7 @@ const startServer = async (): Promise<void> => {
       console.log(`🌍  Environment: ${config.NODE_ENV}`);
       console.log(`🔗  URL: http://localhost:${PORT}`);
       console.log(`💚  Health: http://localhost:${PORT}/api/health`);
+      console.log(`📄  API Docs: http://localhost:${PORT}/api/docs`);
       console.log('🚀 ========================================');
       console.log('');
     });
