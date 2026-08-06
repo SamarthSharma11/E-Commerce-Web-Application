@@ -8,6 +8,8 @@ import toast from 'react-hot-toast';
 import { ReviewSkeleton, ProductCardSkeleton } from '../components/LoadingSkeleton';
 import type { Product, Review, Category } from '../types';
 
+import { FALLBACK_PRODUCTS } from '../data/mockProducts';
+
 // =====================================================
 // ProductDetailPage
 // =====================================================
@@ -28,7 +30,7 @@ const ProductDetailPage: React.FC = () => {
   const addToCart = useCartStore((state) => state.addToCart);
   const { user, isAuthenticated } = useAuthStore();
 
-  // Fetch product
+  // Fetch product with fallback
   useEffect(() => {
     const fetchProduct = async () => {
       if (!slug) return;
@@ -37,17 +39,35 @@ const ProductDetailPage: React.FC = () => {
       try {
         const response = await api.get(`/products/${slug}`);
         const productData = response.data.data as Product;
-        setProduct(productData);
-        if (productData.category && typeof productData.category === 'object') {
-          setCategory(productData.category as Category);
+        if (productData) {
+          setProduct(productData);
+          if (productData.category && typeof productData.category === 'object') {
+            setCategory(productData.category as Category);
+          }
+        } else {
+          findFallbackProduct();
         }
       } catch (err: unknown) {
-        const message = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Product not found';
-        setError(message);
+        console.warn('Backend unavailable, searching fallback products:', err);
+        findFallbackProduct();
       } finally {
         setLoading(false);
       }
     };
+
+    const findFallbackProduct = () => {
+      const match = FALLBACK_PRODUCTS.find((p) => p.slug === slug || p._id === slug);
+      if (match) {
+        setProduct(match);
+        if (typeof match.category === 'object' && match.category) {
+          setCategory(match.category as Category);
+        }
+        setError(null);
+      } else {
+        setError('Product not found');
+      }
+    };
+
     fetchProduct();
   }, [slug]);
 

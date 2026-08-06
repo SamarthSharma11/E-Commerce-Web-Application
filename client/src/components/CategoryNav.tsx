@@ -4,6 +4,8 @@ import { ChevronDown, Grid3x3, Shield } from 'lucide-react';
 import api from '../api/axios';
 import type { Category } from '../types';
 
+import { FALLBACK_CATEGORIES } from '../data/mockProducts';
+
 // =====================================================
 // CategoryNav Component — Mega Menu / Dropdown
 // =====================================================
@@ -17,9 +19,14 @@ const CategoryNav: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get('/categories?isActive=true');
-        setCategories(response.data.data || []);
+        if (response.data?.data?.length > 0) {
+          setCategories(response.data.data);
+        } else {
+          setCategories(FALLBACK_CATEGORIES);
+        }
       } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.warn('Backend categories unavailable, using fallback categories:', error);
+        setCategories(FALLBACK_CATEGORIES);
       } finally {
         setLoading(false);
       }

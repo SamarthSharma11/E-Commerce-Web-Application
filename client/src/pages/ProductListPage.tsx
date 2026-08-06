@@ -6,6 +6,7 @@ import ProductCard from '../components/ProductCard';
 import PitchDivider from '../components/PitchDivider';
 import { ProductListSkeleton, CategoryNavSkeleton } from '../components/LoadingSkeleton';
 import type { Product, Category, PaginationMeta } from '../types';
+import { FALLBACK_CATEGORIES, FALLBACK_PRODUCTS } from '../data/mockProducts';
 
 // =====================================================
 // ProductListPage
@@ -28,14 +29,19 @@ const ProductListPage: React.FC = () => {
   const currentSearch   = searchParams.get('search') || '';
   const currentSort     = searchParams.get('sort') || 'newest';
 
-  // Fetch categories
+  // Fetch categories with fallback
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await api.get('/categories?isActive=true');
-        setCategories(response.data.data || []);
+        if (response.data?.data?.length > 0) {
+          setCategories(response.data.data);
+        } else {
+          setCategories(FALLBACK_CATEGORIES);
+        }
       } catch (err) {
-        console.error('Failed to fetch categories:', err);
+        console.warn('Backend unavailable, using fallback categories:', err);
+        setCategories(FALLBACK_CATEGORIES);
       } finally {
         setCategoriesLoading(false);
       }
@@ -43,7 +49,7 @@ const ProductListPage: React.FC = () => {
     fetchCategories();
   }, []);
 
-  // Fetch products
+  // Fetch products with fallback
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -59,15 +65,67 @@ const ProductListPage: React.FC = () => {
       params.set('isActive', 'true');
 
       const response = await api.get(`/products?${params.toString()}`);
-      setProducts(response.data.data || []);
-      setPagination(response.data.pagination || null);
+      if (response.data?.data?.length > 0) {
+        setProducts(response.data.data);
+        setPagination(response.data.pagination || null);
+      } else {
+        applyFallbackProducts();
+      }
     } catch (err: unknown) {
-      const message = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to fetch products';
-      setError(message);
+      console.warn('Backend API unavailable on Vercel, using fallback products:', err);
+      applyFallbackProducts();
     } finally {
       setLoading(false);
     }
   }, [currentPage, currentLimit, currentCategory, currentMinPrice, currentMaxPrice, currentSearch, currentSort]);
+
+  const applyFallbackProducts = () => {
+    let filtered = [...FALLBACK_PRODUCTS];
+
+    if (currentCategory) {
+      filtered = filtered.filter(
+        (p) =>
+          (typeof p.category === 'object' && p.category?.slug === currentCategory) ||
+          p.category === currentCategory
+      );
+    }
+
+    if (currentSearch) {
+      const query = currentSearch.toLowerCase();
+      filtered = filtered.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query)
+      );
+    }
+
+    if (currentMinPrice) {
+      const min = Number(currentMinPrice);
+      filtered = filtered.filter((p) => (p.discountPrice ?? p.price) >= min);
+    }
+
+    if (currentMaxPrice) {
+      const max = Number(currentMaxPrice);
+      filtered = filtered.filter((p) => (p.discountPrice ?? p.price) <= max);
+    }
+
+    if (currentSort === 'price_asc') {
+      filtered.sort((a, b) => (a.discountPrice ?? a.price) - (b.discountPrice ?? b.price));
+    } else if (currentSort === 'price_desc') {
+      filtered.sort((a, b) => (b.discountPrice ?? b.price) - (a.discountPrice ?? a.price));
+    } else if (currentSort === 'rating') {
+      filtered.sort((a, b) => b.ratingsAverage - a.ratingsAverage);
+    }
+
+    setProducts(filtered);
+    setPagination({
+      currentPage: 1,
+      limit: 12,
+      totalCount: filtered.length,
+      totalPages: 1,
+    });
+    setError(null);
+  };
 
   useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
