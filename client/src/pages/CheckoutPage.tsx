@@ -51,11 +51,11 @@ const CheckoutPage: React.FC = () => {
   if (items.length === 0 && !createdOrder) {
     return (
       <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-[var(--space-6)] py-[var(--space-6)]">
           <div className="flex flex-col items-center justify-center text-center">
-            <h1 className="text-3xl font-bold font-['Outfit'] mb-4">Your Cart is Empty</h1>
-            <p className="text-[var(--color-text-muted)] mb-8">Add some products before checking out.</p>
-            <Link to="/products" className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-colors">
+            <h1 className="text-3xl font-bold font-['Outfit'] mb-[var(--space-4)]">Your Cart is Empty</h1>
+            <p className="text-[var(--color-text-muted)] mb-[var(--space-6)]">Add some products before checking out.</p>
+            <Link to="/products" className="px-[var(--space-6)] py-[var(--space-3)] bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-colors">
               Browse Products
             </Link>
           </div>
@@ -148,12 +148,12 @@ const CheckoutPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-4xl mx-auto px-4 md:px-[var(--space-6)] py-[var(--space-6)]">
         {/* Header */}
-        <h1 className="text-3xl font-bold font-['Outfit'] mb-8">Checkout</h1>
+        <h1 className="text-3xl font-bold font-['Outfit'] mb-[var(--space-6)]">Checkout</h1>
 
         {/* Steps */}
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center justify-between mb-[var(--space-7)]">
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isActive = currentStep === step.key;
@@ -182,19 +182,19 @@ const CheckoutPage: React.FC = () => {
 
         {/* Step 1: Shipping Address */}
         {currentStep === 'shipping' && (
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8">
-            <h2 className="text-xl font-bold font-['Outfit'] mb-6">Shipping Address</h2>
+<div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)] sm:p-[var(--space-6)]">
+             <h2 className="text-xl font-bold font-['Outfit'] mb-[var(--space-5)]">Shipping Address</h2>
 
-            {/* Saved Addresses */}
-            {addresses.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+             {/* Saved Addresses */}
+             {addresses.length > 0 && (
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--space-4)] mb-[var(--space-5)]">
                 {addresses.map((addr) => {
                   const addrId = addr._id || addr.line1;
                   return (
-                    <button
-                      key={addrId}
-                      onClick={() => setSelectedAddressId(addrId)}
-                      className={`p-4 rounded-xl border-2 text-left transition-all ${
+<button
+                       key={addrId}
+                       onClick={() => setSelectedAddressId(addrId)}
+                       className={`p-[var(--space-4)] rounded-xl border-2 text-left transition-all ${
                         selectedAddressId === addrId
                           ? 'border-indigo-500 bg-indigo-500/10'
                           : 'border-[var(--color-border)] hover:border-indigo-500/50'
@@ -224,93 +224,93 @@ const CheckoutPage: React.FC = () => {
                 + Add New Address
               </button>
             ) : (
-              <form onSubmit={handleSaveAddress} className="space-y-4 mt-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Label (e.g. Home, Office)"
-                    value={newAddress.label}
-                    onChange={(e) => setNewAddress({ ...newAddress, label: e.target.value })}
-                    required
-                    className="px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+<form onSubmit={handleSaveAddress} className="space-y-[var(--space-4)] mt-[var(--space-4)]">
+                 <div className="grid grid-cols-2 gap-[var(--space-4)]">
+<input
+                     type="text"
+                     placeholder="Label (e.g. Home, Office)"
+                     value={newAddress.label}
+                     onChange={(e) => setNewAddress({ ...newAddress, label: e.target.value })}
+                     required
+                     className="px-[var(--space-4)] py-[var(--space-3)] bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
                   />
-                  <input
-                    type="text"
-                    placeholder="Address Line 1"
-                    value={newAddress.line1}
-                    onChange={(e) => setNewAddress({ ...newAddress, line1: e.target.value })}
-                    required
-                    className="px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+<input
+                     type="text"
+                     placeholder="Address Line 1"
+                     value={newAddress.line1}
+                     onChange={(e) => setNewAddress({ ...newAddress, line1: e.target.value })}
+                     required
+                     className="px-[var(--space-4)] py-[var(--space-3)] bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
                   />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Address Line 2 (optional)"
-                  value={newAddress.line2}
-                  onChange={(e) => setNewAddress({ ...newAddress, line2: e.target.value })}
-                  className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+<input
+                   type="text"
+                   placeholder="Address Line 2 (optional)"
+                   value={newAddress.line2}
+                   onChange={(e) => setNewAddress({ ...newAddress, line2: e.target.value })}
+                   className="w-full px-[var(--space-4)] py-[var(--space-3)] bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
                 />
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="City"
-                    value={newAddress.city}
-                    onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                    required
-                    className="px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+<div className="grid grid-cols-2 gap-[var(--space-4)]">
+                   <input
+                     type="text"
+                     placeholder="City"
+                     value={newAddress.city}
+                     onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
+                     required
+                     className="px-[var(--space-4)] py-[var(--space-3)] bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
                   />
-                  <input
-                    type="text"
-                    placeholder="State"
-                    value={newAddress.state}
-                    onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
-                    required
-                    className="px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Pincode"
-                    value={newAddress.pincode}
-                    onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })}
-                    required
-                    className="px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Country"
-                    value={newAddress.country}
-                    onChange={(e) => setNewAddress({ ...newAddress, country: e.target.value })}
-                    className="px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+<input
+                     type="text"
+                     placeholder="State"
+                     value={newAddress.state}
+                     onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
+                     required
+                     className="px-[var(--space-4)] py-[var(--space-3)] bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
                   />
                 </div>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    id="isDefault"
-                    checked={newAddress.isDefault}
-                    onChange={(e) => setNewAddress({ ...newAddress, isDefault: e.target.checked })}
-                    className="w-4 h-4 rounded border-[var(--color-border)] bg-[var(--color-surface-2)] text-indigo-600 focus:ring-indigo-500"
+<div className="grid grid-cols-2 gap-[var(--space-4)]">
+                   <input
+                     type="text"
+                     placeholder="Pincode"
+                     value={newAddress.pincode}
+                     onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })}
+                     required
+                     className="px-[var(--space-4)] py-[var(--space-3)] bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  />
+<input
+                     type="text"
+                     placeholder="Country"
+                     value={newAddress.country}
+                     onChange={(e) => setNewAddress({ ...newAddress, country: e.target.value })}
+                     className="px-[var(--space-4)] py-[var(--space-3)] bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+<div className="flex items-center gap-[var(--space-3)]">
+                   <input
+                     type="checkbox"
+                     id="isDefault"
+                     checked={newAddress.isDefault}
+                     onChange={(e) => setNewAddress({ ...newAddress, isDefault: e.target.checked })}
+                     className="w-4 h-4 rounded border-[var(--color-border)] bg-[var(--color-surface-2)] text-indigo-600 focus:ring-indigo-500"
                   />
                   <label htmlFor="isDefault" className="text-sm font-medium">Set as default address</label>
                 </div>
-                <div className="flex gap-3">
-                  <button type="submit" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors">
-                    Save Address
-                  </button>
-                  <button type="button" onClick={() => setShowAddressForm(false)} className="px-6 py-3 text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors">
-                    Cancel
-                  </button>
-                </div>
+<div className="flex gap-[var(--space-3)]">
+                   <button type="submit" className="px-[var(--space-4)] py-[var(--space-3)] bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors">
+                     Save Address
+                   </button>
+                   <button type="button" onClick={() => setShowAddressForm(false)} className="px-[var(--space-4)] py-[var(--space-3)] text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors">
+                     Cancel
+                   </button>
+                 </div>
               </form>
             )}
 
-            <div className="flex justify-end mt-8">
-              <button
-                onClick={() => setCurrentStep('review')}
-                disabled={!selectedAddressId}
-                className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors flex items-center gap-2"
+<div className="flex justify-end mt-[var(--space-6)]">
+               <button
+                 onClick={() => setCurrentStep('review')}
+                 disabled={!selectedAddressId}
+                 className="px-[var(--space-6)] py-[var(--space-3)] bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors flex items-center gap-2"
               >
                 Continue to Review
                 <ChevronRight className="w-5 h-5" />
@@ -321,12 +321,12 @@ const CheckoutPage: React.FC = () => {
 
         {/* Step 2: Order Review */}
         {currentStep === 'review' && (
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8">
-            <h2 className="text-xl font-bold font-['Outfit'] mb-6">Review Your Order</h2>
+<div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)] sm:p-[var(--space-6)]">
+             <h2 className="text-xl font-bold font-['Outfit'] mb-[var(--space-5)]">Review Your Order</h2>
 
-            {/* Selected Address */}
-            {getSelectedAddress() && (
-              <div className="mb-6 p-4 bg-[var(--color-surface-2)] rounded-xl">
+             {/* Selected Address */}
+             {getSelectedAddress() && (
+               <div className="mb-[var(--space-5)] p-[var(--space-4)] bg-[var(--color-surface-2)] rounded-xl">
                 <p className="text-sm font-medium text-[var(--color-text-muted)] mb-1">Shipping to:</p>
                 <p className="font-medium">{getSelectedAddress()?.label}</p>
                 <p className="text-sm text-[var(--color-text-muted)]">
@@ -336,9 +336,9 @@ const CheckoutPage: React.FC = () => {
             )}
 
             {/* Cart Items */}
-            <div className="space-y-4 mb-6">
-              {items.map((item) => (
-                <div key={item._id} className="flex items-center gap-4 p-4 bg-[var(--color-surface-2)] rounded-xl">
+<div className="space-y-[var(--space-4)] mb-[var(--space-5)]">
+                 {items.map((item) => (
+                   <div key={item._id} className="flex items-center gap-[var(--space-4)] p-[var(--space-4)] bg-[var(--color-surface-2)] rounded-xl">
                   <div className="w-16 h-16 rounded-lg overflow-hidden border border-[var(--color-border)]">
                     <img src={item.image || '/placeholder.png'} alt={item.name} className="w-full h-full object-cover" />
                   </div>
@@ -352,7 +352,7 @@ const CheckoutPage: React.FC = () => {
             </div>
 
             {/* Price Breakdown */}
-            <div className="border-t border-[var(--color-border)] pt-4 space-y-2">
+            <div className="border-t border-[var(--color-border)] pt-[var(--space-4)] space-y-[var(--space-2)]">
               <div className="flex justify-between text-sm">
                 <span className="text-[var(--color-text-muted)]">Subtotal ({cartCount} items)</span>
                 <span>₹{subtotal.toLocaleString()}</span>
@@ -365,17 +365,17 @@ const CheckoutPage: React.FC = () => {
                 <span className="text-[var(--color-text-muted)]">Tax</span>
                 <span>₹{taxPrice}</span>
               </div>
-              <div className="flex justify-between text-lg font-bold pt-2 border-t border-[var(--color-border)]">
+              <div className="flex justify-between text-lg font-bold pt-[var(--space-2)] border-t border-[var(--color-border)]">
                 <span>Total</span>
                 <span>₹{totalPrice.toLocaleString()}</span>
               </div>
             </div>
 
-            <div className="flex justify-between mt-8">
-              <button onClick={() => setCurrentStep('shipping')} className="px-6 py-3 text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors">
-                Back
-              </button>
-              <button onClick={() => setCurrentStep('payment')} className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-colors flex items-center gap-2">
+<div className="flex justify-between mt-[var(--space-6)]">
+               <button onClick={() => setCurrentStep('shipping')} className="px-[var(--space-4)] py-[var(--space-3)] text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors">
+                 Back
+               </button>
+               <button onClick={() => setCurrentStep('payment')} className="px-[var(--space-6)] py-[var(--space-3)] bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-colors flex items-center gap-2">
                 Continue to Payment
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -385,19 +385,19 @@ const CheckoutPage: React.FC = () => {
 
         {/* Step 3: Payment */}
         {currentStep === 'payment' && (
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8">
-            <h2 className="text-xl font-bold font-['Outfit'] mb-6">Payment Method</h2>
+<div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)] sm:p-[var(--space-6)]">
+             <h2 className="text-xl font-bold font-['Outfit'] mb-[var(--space-5)]">Payment Method</h2>
 
-            <div className="space-y-4 mb-8">
+             <div className="space-y-[var(--space-4)] mb-[var(--space-7)]">
               {[
                 { id: 'cod', label: 'Cash on Delivery', desc: 'Pay when you receive your order' },
                 { id: 'razorpay', label: 'Razorpay', desc: 'Pay securely with UPI, Card, or Wallet' },
                 { id: 'wallet', label: 'Wallet', desc: 'Pay using your wallet balance' },
               ].map((method) => (
-                <button
-                  key={method.id}
-                  onClick={() => setPaymentMethod(method.id as 'razorpay' | 'cod' | 'wallet')}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+<button
+                     key={method.id}
+                     onClick={() => setPaymentMethod(method.id as 'razorpay' | 'cod' | 'wallet')}
+                     className={`w-full p-[var(--space-4)] rounded-xl border-2 text-left transition-all ${
                     paymentMethod === method.id ? 'border-indigo-500 bg-indigo-500/10' : 'border-[var(--color-border)] hover:border-indigo-500/50'
                   }`}
                 >
@@ -408,9 +408,9 @@ const CheckoutPage: React.FC = () => {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-[var(--color-surface-2)] rounded-xl p-6 mb-8">
-              <h3 className="font-semibold mb-4">Order Summary</h3>
-              <div className="space-y-2 text-sm">
+<div className="bg-[var(--color-surface-2)] rounded-xl p-[var(--space-5)] mb-[var(--space-7)]">
+               <h3 className="font-semibold mb-[var(--space-4)]">Order Summary</h3>
+               <div className="space-y-[var(--space-2)] text-sm">
                 <div className="flex justify-between">
                   <span className="text-[var(--color-text-muted)]">Subtotal</span>
                   <span>₹{subtotal.toLocaleString()}</span>
@@ -419,7 +419,7 @@ const CheckoutPage: React.FC = () => {
                   <span className="text-[var(--color-text-muted)]">Shipping</span>
                   <span className={shippingPrice === 0 ? 'text-green-400' : ''}>{shippingPrice === 0 ? 'Free' : `₹${shippingPrice}`}</span>
                 </div>
-                <div className="flex justify-between font-bold text-lg pt-2 border-t border-[var(--color-border)]">
+                <div className="flex justify-between font-bold text-lg pt-[var(--space-2)] border-t border-[var(--color-border)]">
                   <span>Total</span>
                   <span>₹{totalPrice.toLocaleString()}</span>
                 </div>
@@ -427,7 +427,7 @@ const CheckoutPage: React.FC = () => {
             </div>
 
             <div className="flex justify-between">
-              <button onClick={() => setCurrentStep('review')} className="px-6 py-3 text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors">
+              <button onClick={() => setCurrentStep('review')} className="px-[var(--space-4)] py-[var(--space-3)] text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors">
                 Back
               </button>
 
@@ -470,14 +470,14 @@ interface OrderConfirmationPageProps {
 const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({ order }) => {
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center">
+      <div className="max-w-2xl mx-auto px-4 md:px-[var(--space-6)] py-[var(--space-6)] text-center">
         <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
           <Check className="w-10 h-10 text-green-400" />
         </div>
         <h1 className="text-3xl font-bold font-['Outfit'] mb-2">Order Confirmed!</h1>
         <p className="text-[var(--color-text-muted)] mb-8">Thank you for your purchase. Your order has been placed successfully.</p>
 
-        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 text-left mb-8">
+        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)] sm:p-[var(--space-6)] text-left mb-[var(--space-6)]">
           <div className="flex items-center justify-between mb-6">
             <div>
               <p className="text-sm text-[var(--color-text-muted)]">Order Number</p>

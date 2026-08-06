@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Package, FolderTree, BarChart3, Users, ClipboardList } from 'lucide-react';
+import { ShoppingBag, Package, FolderTree, BarChart3, Users, ClipboardList, Flag } from 'lucide-react';
 
 // =====================================================
 // Admin Layout — Sidebar navigation for admin pages
@@ -31,6 +31,7 @@ const AdminLayout: React.FC = () => {
               <ShoppingBag className="w-5 h-5 text-white" />
             </div>
             <span className="font-extrabold text-lg tracking-tight font-['Outfit']">Admin</span>
+            <Flag className="w-4 h-4 text-[var(--color-text-muted)] ml-auto" />
           </Link>
 
           <nav className="space-y-1">

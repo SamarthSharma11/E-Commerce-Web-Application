@@ -2,62 +2,76 @@
 @import "tailwindcss";
 
 /* =====================================================
-   E-Commerce App — Global CSS Design System
+   E-Commerce App — Global CSS Design System (Light)
    ===================================================== */
 
 :root {
-  /* Color Palette */
-  --color-primary: #6366f1;
-  --color-primary-dark: #4f46e5;
-  --color-primary-light: #818cf8;
-  --color-secondary: #f59e0b;
-  --color-accent: #ec4899;
+  /* ── Brand Palette ── */
+  --color-primary:        #1A6E37;   /* deep pitch-green */
+  --color-primary-dark:   #145429;
+  --color-primary-light:  #24A350;
+  --color-primary-subtle: #E6F4EC;   /* very light green tint */
+  --color-secondary:      #C8920E;   /* warm amber/gold */
+  --color-secondary-subtle: #FEF3D4;
 
-  /* Neutral */
-  --color-bg: #0f0f13;
-  --color-surface: #1a1a24;
-  --color-surface-2: #242432;
-  --color-border: #2e2e40;
-  --color-text: #f1f1f5;
-  --color-text-muted: #8b8ba7;
+  /* ── Neutral / Surface ── */
+  --color-bg:         #F4F7F5;   /* off-white with faint green */
+  --color-surface:    #FFFFFF;
+  --color-surface-2:  #EDF2EF;
+  --color-border:     #C8D8CC;
+  --color-border-subtle: #E0EAE3;
 
-  /* Status */
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-info: #3b82f6;
+  /* ── Typography ── */
+  --color-text:       #1C2B21;   /* very dark green-black */
+  --color-text-muted: #5C7063;   /* muted green-grey */
+  --color-text-light: #8FA996;
 
-  /* Fonts */
-  --font-sans: 'Inter', system-ui, sans-serif;
+  /* ── Status ── */
+  --color-success: #17A84A;
+  --color-warning: #D97706;
+  --color-error:   #DC2626;
+  --color-info:    #2563EB;
+
+  /* ── Fonts ── */
+  --font-sans:    'Inter', system-ui, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
 
-  /* Spacing */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  /* ── Spacing Scale (4px base) ── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+  --space-10: 128px;
+  --space-11: 160px;
+  --space-12: 192px;
+
+  /* ── Radius ── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
-  --shadow-glow: 0 0 24px rgba(99,102,241,0.3);
+  /* ── Shadows (lighter for light mode) ── */
+  --shadow-xs: 0 1px 2px rgba(26, 110, 55, 0.06);
+  --shadow-sm: 0 2px 8px rgba(26, 110, 55, 0.08);
+  --shadow-md: 0 4px 20px rgba(26, 110, 55, 0.12);
+  --shadow-lg: 0 8px 40px rgba(26, 110, 55, 0.15);
+  --shadow-glow: 0 0 28px rgba(26, 110, 55, 0.18);
 
-  /* Transitions */
-  --transition: all 0.2s ease;
+  /* ── Transitions ── */
+  --transition:      all 0.2s ease;
   --transition-slow: all 0.4s ease;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+/* ── Reset ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-sans);
@@ -68,15 +82,73 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--color-surface); }
-::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: var(--radius-full); }
+/* ── Scrollbar ── */
+::-webkit-scrollbar         { width: 6px; height: 6px; }
+::-webkit-scrollbar-track   { background: var(--color-surface-2); }
+::-webkit-scrollbar-thumb   { background: var(--color-border); border-radius: var(--radius-full); }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
 
-/* Selection */
-::selection { background: var(--color-primary); color: white; }
+/* ── Selection ── */
+::selection { background: var(--color-primary); color: #fff; }
 
-a { color: inherit; text-decoration: none; transition: var(--transition); }
-button { cursor: pointer; font-family: inherit; }
-img { max-width: 100%; height: auto; }
+/* ── Hero — light football pitch stripe pattern ── */
+.hero {
+  background-color: var(--color-primary);
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 32px,
+      rgba(255, 255, 255, 0.04) 32px,
+      rgba(255, 255, 255, 0.04) 64px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 32px,
+      rgba(20, 84, 41, 0.35) 32px,
+      rgba(20, 84, 41, 0.35) 64px
+    );
+}
+
+/* ── Chalk line — thin pitch-marking divider ── */
+.chalk-line {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--color-border) 20%,
+    var(--color-primary-light) 50%,
+    var(--color-border) 80%,
+    transparent 100%
+  );
+  opacity: 0.6;
+}
+
+/* ── Utility: card surface ── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Global Links & Buttons ── */
+a       { color: inherit; text-decoration: none; transition: var(--transition); }
+button  { cursor: pointer; font-family: inherit; }
+img     { max-width: 100%; height: auto; }
+
+/* ── Input base ── */
+input, select, textarea {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+input::placeholder, textarea::placeholder { color: var(--color-text-light); }
+
+/* ── Focus ring ── */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

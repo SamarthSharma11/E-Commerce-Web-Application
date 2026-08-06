@@ -126,8 +126,8 @@ const ProductDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="max-w-7xl mx-auto px-4 md:px-[var(--space-6)] py-[var(--space-6)]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--space-5)]">
             <ProductCardSkeleton />
             <div className="space-y-4">
               <div className="h-8 bg-[var(--color-surface-2)] rounded-lg w-3/4 animate-pulse" />
@@ -163,9 +163,9 @@ const ProductDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-[var(--space-6)] py-[var(--space-6)]">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] mb-6">
+        <nav className="flex items-center gap-[var(--space-2)] text-sm text-[var(--color-text-muted)] mb-[var(--space-5)]">
           <Link to="/products" className="hover:text-white transition-colors">Products</Link>
           {category && (
             <>
@@ -180,7 +180,7 @@ const ProductDetailPage: React.FC = () => {
         </nav>
 
         {/* Product Main */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--space-5)] mb-[var(--space-8)]">
           {/* Image Gallery */}
           <div className="space-y-4">
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-[var(--color-surface-2)] border border-[var(--color-border)]">
@@ -229,10 +229,10 @@ const ProductDetailPage: React.FC = () => {
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold font-['Outfit'] mb-2">{product.name}</h1>
-              <div className="flex items-center gap-3 mb-4">
+          <div className="space-y-[var(--space-4)]">
+            <div className="space-y-[var(--space-3)]">
+              <h1 className="text-3xl font-bold font-['Outfit'] mb-[var(--space-2)]">{product.name}</h1>
+              <div className="flex items-center gap-[var(--space-3)] mb-[var(--space-4)]">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
@@ -252,7 +252,7 @@ const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Price */}
-            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6">
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)]">
               <div className="flex items-end gap-3 mb-2">
                 <span className="text-4xl font-bold text-white">₹{effectivePrice.toLocaleString()}</span>
                 {hasDiscount && (
@@ -277,7 +277,7 @@ const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Quantity & Add to Cart */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-[var(--space-4)]">
               <div className="flex items-center border border-[var(--color-border)] rounded-xl overflow-hidden">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -286,7 +286,7 @@ const ProductDetailPage: React.FC = () => {
                 >
                   <Minus className="w-5 h-5" />
                 </button>
-                <span className="px-6 py-3 text-center font-semibold min-w-[60px]">{quantity}</span>
+                <span className="px-[var(--space-6)] py-[var(--space-3)] text-center font-semibold min-w-[60px]">{quantity}</span>
                 <button
                   onClick={() => setQuantity((q) => Math.min(product.stock, q + 1))}
                   className="p-3 hover:bg-[var(--color-surface-2)] transition-colors"
@@ -312,7 +312,7 @@ const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Features */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[var(--color-border)]">
+            <div className="grid grid-cols-3 gap-[var(--space-4)] pt-[var(--space-5)] border-t border-[var(--color-border)]">
               <div className="flex flex-col items-center text-center gap-2">
                 <Truck className="w-6 h-6 text-indigo-400" />
                 <span className="text-xs text-[var(--color-text-muted)]">Free Shipping</span>
@@ -328,16 +328,16 @@ const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Description */}
-            <div className="pt-6 border-t border-[var(--color-border)]">
-              <h3 className="text-lg font-semibold mb-3">Description</h3>
+            <div className="pt-[var(--space-5)] border-t border-[var(--color-border)]">
+              <h3 className="text-lg font-semibold mb-[var(--space-3)]">Description</h3>
               <p className="text-[var(--color-text-muted)] leading-relaxed whitespace-pre-line">{product.description}</p>
             </div>
           </div>
         </div>
 
         {/* Reviews Section */}
-        <div className="border-t border-[var(--color-border)] pt-12">
-          <div className="flex items-center justify-between mb-8">
+        <div className="border-t border-[var(--color-border)] pt-[var(--space-7)]">
+          <div className="flex items-center justify-between mb-[var(--space-6)]">
             <div>
               <h2 className="text-2xl font-bold font-['Outfit']">Customer Reviews</h2>
               <p className="text-[var(--color-text-muted)] mt-1">
@@ -346,13 +346,13 @@ const ProductDetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--space-6)]">
             {/* Reviews List */}
-            <div className="lg:col-span-2 space-y-4">
+            <div className="lg:col-span-2 space-y-[var(--space-4)]">
               {reviewsLoading ? (
                 Array.from({ length: 3 }).map((_, i) => <ReviewSkeleton key={i} />)
               ) : reviews.length === 0 ? (
-                <div className="text-center py-12 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl">
+                <div className="text-center py-[var(--space-8)] bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl">
                   <p className="text-[var(--color-text-muted)]">No reviews yet. Be the first to review!</p>
                 </div>
               ) : (
@@ -362,7 +362,7 @@ const ProductDetailPage: React.FC = () => {
                   const isAdmin = user?.role === 'admin';
 
                   return (
-                    <div key={review._id} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-5">
+                    <div key={review._id} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-[var(--space-5)]">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-sm">
@@ -404,7 +404,7 @@ const ProductDetailPage: React.FC = () => {
             {/* Review Form */}
             <div className="lg:col-span-1">
               {isAuthenticated ? (
-                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sticky top-24">
+                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)] sticky top-[var(--space-6)]">
                   <h3 className="text-lg font-semibold mb-4">Write a Review</h3>
                   <form onSubmit={handleSubmitReview} className="space-y-4">
                     <div>
@@ -450,7 +450,7 @@ const ProductDetailPage: React.FC = () => {
                   </form>
                 </div>
               ) : (
-                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 text-center sticky top-24">
+                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)] text-center sticky top-[var(--space-6)]">
                   <p className="text-[var(--color-text-muted)] mb-4">Please log in to write a review</p>
                   <Link
                     to="/login"

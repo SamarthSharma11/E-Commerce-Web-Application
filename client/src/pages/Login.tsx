@@ -47,30 +47,34 @@ export const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--color-bg)] relative overflow-hidden">
-      {/* Background Decorative Glow Gradients */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+      {/* Background decorations */}
+      <div className="absolute -top-48 -left-48 w-96 h-96 bg-[var(--color-primary)]/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-48 -right-48 w-96 h-96 bg-[var(--color-secondary)]/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: `repeating-linear-gradient(-45deg, transparent, transparent 40px, var(--color-primary) 40px, var(--color-primary) 41px)`
+      }} />
 
-      {/* Main Glass Card */}
-      <div className="w-full max-w-md bg-[var(--color-surface)]/80 backdrop-blur-xl border border-[var(--color-border)] rounded-2xl p-8 shadow-2xl relative z-10">
-        {/* Header Branding */}
+      {/* Card */}
+      <div className="w-full max-w-md bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 shadow-[var(--shadow-lg)] relative z-10">
+
+        {/* Header */}
         <div className="flex flex-col items-center text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform">
-              <ShoppingBag className="w-6 h-6 text-white" />
+          <Link to="/" className="inline-flex items-center gap-2 mb-5 group">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[var(--color-primary)] to-[var(--color-primary-light)] flex items-center justify-center shadow-[var(--shadow-md)] group-hover:scale-105 transition-transform">
+              <ShoppingBag className="w-7 h-7 text-white" />
             </div>
           </Link>
-          <h1 className="text-2xl font-extrabold tracking-tight text-white font-['Outfit']">
+          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--color-text)] font-['Outfit']">
             Welcome Back
           </h1>
-          <p className="text-sm text-[var(--color-text-muted)] mt-1">
+          <p className="text-sm text-[var(--color-text-muted)] mt-1.5">
             Sign in to access your account and orders
           </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Email Field */}
+          {/* Email */}
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">
               Email Address
@@ -84,16 +88,16 @@ export const Login: React.FC = () => {
                 type="email"
                 placeholder="name@example.com"
                 className={`w-full pl-10 pr-4 py-3 bg-[var(--color-surface-2)] border ${
-                  errors.email ? 'border-red-500' : 'border-[var(--color-border)]'
-                } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] text-sm transition-all`}
+                  errors.email ? 'border-red-400' : 'border-[var(--color-border)]'
+                } rounded-xl text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/10 text-sm transition-all`}
               />
             </div>
             {errors.email && (
-              <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.email.message}</p>
+              <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.email.message}</p>
             )}
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
@@ -101,7 +105,7 @@ export const Login: React.FC = () => {
               </label>
               <Link
                 to="/forgot-password"
-                className="text-xs font-medium text-[var(--color-primary-light)] hover:underline"
+                className="text-xs font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline transition-colors"
               >
                 Forgot Password?
               </Link>
@@ -115,30 +119,30 @@ export const Login: React.FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 className={`w-full pl-10 pr-11 py-3 bg-[var(--color-surface-2)] border ${
-                  errors.password ? 'border-red-500' : 'border-[var(--color-border)]'
-                } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] text-sm transition-all`}
+                  errors.password ? 'border-red-400' : 'border-[var(--color-border)]'
+                } rounded-xl text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/10 text-sm transition-all`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[var(--color-text-muted)] hover:text-white transition-colors"
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
             {errors.password && (
-              <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.password.message}</p>
+              <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.password.message}</p>
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 px-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-light)] hover:from-[var(--color-primary-dark)] hover:to-[var(--color-primary)] text-white font-semibold rounded-xl shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
             ) : (
               <>
                 <LogIn className="w-4 h-4" />
@@ -149,12 +153,12 @@ export const Login: React.FC = () => {
           </button>
         </form>
 
-        {/* Footer Link */}
+        {/* Footer */}
         <div className="mt-8 pt-6 border-t border-[var(--color-border)] text-center text-xs text-[var(--color-text-muted)]">
           Don't have an account?{' '}
           <Link
             to="/register"
-            className="font-semibold text-[var(--color-primary-light)] hover:underline ml-1"
+            className="font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline ml-1 transition-colors"
           >
             Create an Account
           </Link>

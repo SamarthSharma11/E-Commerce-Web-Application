@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight, Leaf } from 'lucide-react';
 import api from '../api/axios';
 import ProductCard from '../components/ProductCard';
+import PitchDivider from '../components/PitchDivider';
 import { ProductListSkeleton, CategoryNavSkeleton } from '../components/LoadingSkeleton';
 import type { Product, Category, PaginationMeta } from '../types';
 
@@ -19,15 +20,15 @@ const ProductListPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
-  const currentPage = Number(searchParams.get('page') || '1');
-  const currentLimit = Number(searchParams.get('limit') || '12');
+  const currentPage     = Number(searchParams.get('page') || '1');
+  const currentLimit    = Number(searchParams.get('limit') || '12');
   const currentCategory = searchParams.get('category') || '';
   const currentMinPrice = searchParams.get('minPrice') || '';
   const currentMaxPrice = searchParams.get('maxPrice') || '';
-  const currentSearch = searchParams.get('search') || '';
-  const currentSort = searchParams.get('sort') || 'newest';
+  const currentSearch   = searchParams.get('search') || '';
+  const currentSort     = searchParams.get('sort') || 'newest';
 
-  // Fetch categories for sidebar
+  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -68,9 +69,7 @@ const ProductListPage: React.FC = () => {
     }
   }, [currentPage, currentLimit, currentCategory, currentMinPrice, currentMaxPrice, currentSearch, currentSort]);
 
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+  useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
   const updateFilter = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -83,57 +82,71 @@ const ProductListPage: React.FC = () => {
     setSearchParams(newParams);
   };
 
-  const clearFilters = () => {
-    setSearchParams({});
-  };
+  const clearFilters = () => { setSearchParams({}); };
 
   const totalPages = pagination?.totalPages || 1;
   const hasActiveFilters = currentCategory || currentMinPrice || currentMaxPrice || currentSearch;
 
+  /* ── Sidebar ── */
   const SidebarContent = () => (
     <div className="space-y-6">
       {/* Categories */}
       <div>
-        <h3 className="text-sm font-semibold text-white mb-3 uppercase tracking-wider">Categories</h3>
-        <div className="space-y-2">
+        <h3 className="text-xs font-bold text-[var(--color-text)] mb-3 uppercase tracking-wider flex items-center gap-1.5">
+          <Leaf className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+          Categories
+        </h3>
+        <div className="space-y-1">
           {categoriesLoading ? (
             <CategoryNavSkeleton />
           ) : (
-            categories.map((cat) => (
+            <>
               <button
-                key={cat._id}
-                onClick={() => updateFilter('category', currentCategory === cat.slug ? '' : cat.slug)}
+                onClick={() => updateFilter('category', '')}
                 className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
-                  currentCategory === cat.slug
-                    ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'
-                    : 'text-[var(--color-text-muted)] hover:text-white hover:bg-[var(--color-surface-2)]'
+                  !currentCategory
+                    ? 'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] font-semibold border border-[var(--color-primary)]/20'
+                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-subtle)]'
                 }`}
               >
-                {cat.name}
+                All Products
               </button>
-            ))
+              {categories.map((cat) => (
+                <button
+                  key={cat._id}
+                  onClick={() => updateFilter('category', currentCategory === cat.slug ? '' : cat.slug)}
+                  className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
+                    currentCategory === cat.slug
+                      ? 'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] font-semibold border border-[var(--color-primary)]/20'
+                      : 'text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-subtle)]'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </>
           )}
         </div>
       </div>
 
       {/* Price Range */}
       <div>
-        <h3 className="text-sm font-semibold text-white mb-3 uppercase tracking-wider">Price Range</h3>
+        <h3 className="text-xs font-bold text-[var(--color-text)] mb-3 uppercase tracking-wider">Price Range (₹)</h3>
         <div className="flex items-center gap-2">
           <input
             type="number"
             placeholder="Min"
             value={currentMinPrice}
             onChange={(e) => updateFilter('minPrice', e.target.value)}
-            className="w-full px-3 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg text-sm text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-indigo-500"
+            className="w-full px-3 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] transition-colors"
           />
-          <span className="text-[var(--color-text-muted)]">-</span>
+          <span className="text-[var(--color-text-muted)] font-medium">–</span>
           <input
             type="number"
             placeholder="Max"
             value={currentMaxPrice}
             onChange={(e) => updateFilter('maxPrice', e.target.value)}
-            className="w-full px-3 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg text-sm text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-indigo-500"
+            className="w-full px-3 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] transition-colors"
           />
         </div>
       </div>
@@ -142,7 +155,7 @@ const ProductListPage: React.FC = () => {
       {hasActiveFilters && (
         <button
           onClick={clearFilters}
-          className="flex items-center gap-2 text-sm text-red-400 hover:text-red-300 transition-colors"
+          className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 transition-colors font-medium"
         >
           <X className="w-4 h-4" />
           Clear all filters
@@ -153,29 +166,51 @@ const ProductListPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold font-['Outfit'] mb-2">Products</h1>
-          <p className="text-[var(--color-text-muted)]">Discover our curated collection</p>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 md:px-[var(--space-6)] py-8">
 
-        {/* Search & Sort Bar */}
+        {/* ── Hero Banner ── */}
+        <section className="hero rounded-2xl px-8 py-14 md:px-12 md:py-20 mb-10 flex flex-col items-center text-center shadow-[var(--shadow-lg)] overflow-hidden">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/25 text-xs font-semibold text-white mb-4 backdrop-blur-sm">
+            ⚽ Football Equipment
+          </div>
+          <h1 className="font-display font-extrabold text-4xl md:text-5xl lg:text-6xl tracking-tight text-white mb-4 leading-tight">
+            Gear Up. Play Harder.
+          </h1>
+          <p className="text-white/80 text-lg md:text-xl max-w-2xl mb-8 leading-relaxed">
+            Premium sports gear for athletes who refuse to settle. Shop the latest collections.
+          </p>
+          <Link
+            to="/products"
+            className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--color-primary-dark)] font-bold text-sm rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-md"
+          >
+            Shop Now →
+          </Link>
+        </section>
+
+        {/* Divider */}
+        <hr className="chalk-line mb-8" />
+        <PitchDivider className="mb-8" />
+
+        {/* ── Search & Sort Bar ── */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-text-muted)]" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)]" />
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Search football products..."
               value={currentSearch}
               onChange={(e) => updateFilter('search', e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full pl-11 pr-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]/20 transition-all shadow-[var(--shadow-xs)]"
             />
           </div>
           <div className="flex gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="lg:hidden flex items-center gap-2 px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm font-medium hover:border-indigo-500/50 transition-colors"
+              className={`lg:hidden flex items-center gap-2 px-4 py-3 bg-[var(--color-surface)] border rounded-xl text-sm font-medium transition-all shadow-[var(--shadow-xs)] ${
+                showFilters
+                  ? 'border-[var(--color-primary)] text-[var(--color-primary)] bg-[var(--color-primary-subtle)]'
+                  : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-[var(--color-primary)]/50'
+              }`}
             >
               <SlidersHorizontal className="w-4 h-4" />
               Filters
@@ -183,7 +218,7 @@ const ProductListPage: React.FC = () => {
             <select
               value={currentSort}
               onChange={(e) => updateFilter('sort', e.target.value)}
-              className="px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
+              className="px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-primary)] cursor-pointer shadow-[var(--shadow-xs)] hover:border-[var(--color-primary)]/50 transition-all"
             >
               <option value="newest">Newest</option>
               <option value="price_asc">Price: Low to High</option>
@@ -193,10 +228,22 @@ const ProductListPage: React.FC = () => {
           </div>
         </div>
 
+        {/* ── Results count ── */}
+        {!loading && !error && (
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-sm text-[var(--color-text-muted)]">
+              {pagination?.total ?? products.length} product{(pagination?.total ?? products.length) !== 1 ? 's' : ''} found
+              {currentCategory && <span className="ml-1">in <span className="font-medium text-[var(--color-primary)]">{currentCategory}</span></span>}
+            </p>
+          </div>
+        )}
+
+        {/* ── Layout: Sidebar + Grid ── */}
         <div className="flex gap-8">
+
           {/* Desktop Sidebar */}
-          <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-24 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5">
+          <aside className="hidden lg:block w-60 flex-shrink-0">
+            <div className="sticky top-24 bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-2xl p-5 shadow-[var(--shadow-sm)]">
               <SidebarContent />
             </div>
           </aside>
@@ -204,11 +251,14 @@ const ProductListPage: React.FC = () => {
           {/* Mobile Filters Drawer */}
           {showFilters && (
             <div className="fixed inset-0 z-50 lg:hidden">
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowFilters(false)} />
-              <div className="absolute right-0 top-0 bottom-0 w-80 bg-[var(--color-bg)] border-l border-[var(--color-border)] p-6 overflow-y-auto">
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowFilters(false)} />
+              <div className="absolute right-0 top-0 bottom-0 w-80 bg-[var(--color-surface)] border-l border-[var(--color-border)] p-6 overflow-y-auto shadow-2xl">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold">Filters</h2>
-                  <button onClick={() => setShowFilters(false)} className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg">
+                  <h2 className="text-base font-bold">Filters</h2>
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg text-[var(--color-text-muted)] transition-colors"
+                  >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -217,35 +267,35 @@ const ProductListPage: React.FC = () => {
             </div>
           )}
 
-          {/* Product Grid */}
-          <main className="flex-1">
+          {/* ── Product Grid ── */}
+          <main className="flex-1 min-w-0">
             {loading ? (
               <ProductListSkeleton count={currentLimit} />
             ) : error ? (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <div className="w-16 h-16 rounded-full bg-red-50 border border-red-100 flex items-center justify-center mb-4">
                   <X className="w-8 h-8 text-red-400" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Something went wrong</h3>
-                <p className="text-[var(--color-text-muted)] mb-4">{error}</p>
+                <p className="text-[var(--color-text-muted)] mb-6 text-sm">{error}</p>
                 <button
                   onClick={fetchProducts}
-                  className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors"
+                  className="px-6 py-2.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-sm font-semibold rounded-xl transition-all shadow-[var(--shadow-sm)]"
                 >
                   Try Again
                 </button>
               </div>
             ) : products.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--color-surface-2)] flex items-center justify-center mb-4">
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <div className="w-16 h-16 rounded-full bg-[var(--color-surface-2)] border border-[var(--color-border)] flex items-center justify-center mb-4">
                   <Search className="w-8 h-8 text-[var(--color-text-muted)]" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">No products found</h3>
-                <p className="text-[var(--color-text-muted)] mb-4">Try adjusting your filters or search terms</p>
+                <p className="text-[var(--color-text-muted)] mb-6 text-sm">Try adjusting your filters or search terms</p>
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors"
+                    className="px-6 py-2.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-sm font-semibold rounded-xl transition-all shadow-[var(--shadow-sm)]"
                   >
                     Clear Filters
                   </button>
@@ -253,7 +303,7 @@ const ProductListPage: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {products.map((product) => (
                     <ProductCard key={product._id} product={product} />
                   ))}
@@ -261,11 +311,11 @@ const ProductListPage: React.FC = () => {
 
                 {/* Pagination */}
                 {pagination && totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-10">
+                  <div className="flex items-center justify-center gap-2 mt-12">
                     <button
                       onClick={() => updateFilter('page', String(Math.max(1, currentPage - 1)))}
                       disabled={currentPage === 1}
-                      className="p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/40 hover:bg-[var(--color-primary-subtle)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[var(--shadow-xs)]"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
@@ -274,10 +324,10 @@ const ProductListPage: React.FC = () => {
                       <button
                         key={page}
                         onClick={() => updateFilter('page', String(page))}
-                        className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
+                        className={`w-10 h-10 rounded-lg text-sm font-semibold transition-all ${
                           currentPage === page
-                            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                            : 'bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-indigo-500/50'
+                            ? 'bg-[var(--color-primary)] text-white shadow-[var(--shadow-sm)]'
+                            : 'bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/40 hover:bg-[var(--color-primary-subtle)] text-[var(--color-text-muted)]'
                         }`}
                       >
                         {page}
@@ -287,7 +337,7 @@ const ProductListPage: React.FC = () => {
                     <button
                       onClick={() => updateFilter('page', String(Math.min(totalPages, currentPage + 1)))}
                       disabled={currentPage === totalPages}
-                      className="p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/40 hover:bg-[var(--color-primary-subtle)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[var(--shadow-xs)]"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
