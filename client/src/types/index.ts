@@ -187,6 +187,7 @@ export interface PaginationMeta {
   currentPage: number;
   limit: number;
   totalCount: number;
+  total?: number;
   totalPages: number;
 }
 

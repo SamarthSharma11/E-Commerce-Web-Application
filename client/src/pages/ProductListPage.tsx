@@ -232,7 +232,7 @@ const ProductListPage: React.FC = () => {
         {!loading && !error && (
           <div className="mb-4 flex items-center justify-between">
             <p className="text-sm text-[var(--color-text-muted)]">
-              {pagination?.total ?? products.length} product{(pagination?.total ?? products.length) !== 1 ? 's' : ''} found
+              {pagination?.totalCount ?? pagination?.total ?? products.length} product{(pagination?.totalCount ?? pagination?.total ?? products.length) !== 1 ? 's' : ''} found
               {currentCategory && <span className="ml-1">in <span className="font-medium text-[var(--color-primary)]">{currentCategory}</span></span>}
             </p>
           </div>
