@@ -155,7 +155,7 @@ const PRODUCTS = [
     description: 'Lightweight match shorts designed for complete freedom of movement.',
     price: 799,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1593690401407-ff4ad0da0d1c?w=600&q=80'],
+    images: ['/products/match-shorts.jpg'],
     stock: 60, sku: 'GK-APP-008', brand: 'GoalKart', ratingsAverage: 4.6, ratingsCount: 88,
   },
   {
@@ -253,7 +253,7 @@ const PRODUCTS = [
     description: 'Lightweight tough shell shin guards tailored for youth players with padded backing.',
     price: 599,
     category: 'Shin Guards & GK Gear',
-    images: ['https://images.unsplash.com/photo-1555597673-b21d5c935865?w=600&q=80'],
+    images: ['/products/shin-guards-junior.jpg'],
     stock: 75, sku: 'GK-SHN-001', brand: 'GoalKart', ratingsAverage: 4.6, ratingsCount: 130,
   },
   {
@@ -261,7 +261,7 @@ const PRODUCTS = [
     description: 'Ergonomic high-impact hard shell guards with compression sleeves.',
     price: 899,
     category: 'Shin Guards & GK Gear',
-    images: ['https://images.unsplash.com/photo-1609205807999-75a20b2bc9d3?w=600&q=80'],
+    images: ['/products/shin-guards-senior.jpg'],
     stock: 65, sku: 'GK-SHN-002', brand: 'GoalKart', ratingsAverage: 4.7, ratingsCount: 175,
   },
   {
@@ -269,7 +269,7 @@ const PRODUCTS = [
     description: '3mm latex palm goalkeeper gloves suitable for synthetic turf and practice.',
     price: 1299,
     category: 'Shin Guards & GK Gear',
-    images: ['https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=600&q=80'],
+    images: ['/products/goalkeeper-gloves-training.jpg'],
     stock: 45, sku: 'GK-GKG-001', brand: 'GoalKart', ratingsAverage: 4.5, ratingsCount: 110,
   },
   {
@@ -327,7 +327,7 @@ const PRODUCTS = [
     description: 'Speed ball-bearing jump rope for conditioning and footwork sharpness.',
     price: 499,
     category: 'Training Equipment',
-    images: ['https://images.unsplash.com/photo-1562771242-a02d9090c90c?w=600&q=80'],
+    images: ['/products/jump-rope.jpg'],
     stock: 90, sku: 'GK-TRN-006', brand: 'GoalKart', ratingsAverage: 4.3, ratingsCount: 112,
   },
 
