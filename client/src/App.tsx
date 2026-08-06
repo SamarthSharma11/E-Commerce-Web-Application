@@ -22,12 +22,9 @@ import DashboardHome from './pages/admin/DashboardHome';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import GoalKartLogo from './components/GoalKartLogo';
-import { useCartCount } from './store/cartStore';
-
 // ── Shared Home Layout (Header, Hero, Products grid) ─────
 const Home = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
-  const cartCount = useCartCount();
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex flex-col">

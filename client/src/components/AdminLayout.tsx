@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Package, FolderTree, BarChart3, Users, ClipboardList, Flag } from 'lucide-react';
+import { Package, FolderTree, BarChart3, Users, ClipboardList } from 'lucide-react';
 
 import GoalKartLogo from './GoalKartLogo';
 
@@ -60,9 +60,8 @@ const AdminLayout: React.FC = () => {
         {/* Mobile Header */}
         <header className="md:hidden border-b border-[var(--color-border)] bg-[var(--color-surface)]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="px-6 h-14 flex items-center justify-between">
-            <Link to="/admin" className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-indigo-400" />
-              <span className="font-bold font-['Outfit']">Admin</span>
+            <Link to="/admin" className="flex items-center">
+              <GoalKartLogo size="sm" />
             </Link>
           </div>
         </header>

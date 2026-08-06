@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import {
-  ShoppingBag, User, LogOut, Search, Menu, X, ShoppingCart, Mail,
+  User, LogOut, Search, Menu, X, ShoppingCart, Mail,
 } from 'lucide-react';
 
 // Simple social icon SVGs (lucide-react doesn't export Twitter/FB/IG/YT in this version)
