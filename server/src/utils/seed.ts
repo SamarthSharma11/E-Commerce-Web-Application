@@ -163,7 +163,7 @@ const PRODUCTS = [
     description: 'Tapered slim-fit track pants with ankle zips for easy removal over boots.',
     price: 1299,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&q=80'],
+    images: ['/products/track-pants.jpg'],
     stock: 45, sku: 'GK-APP-009', brand: 'GoalKart', ratingsAverage: 4.7, ratingsCount: 115,
   },
   {
@@ -171,7 +171,7 @@ const PRODUCTS = [
     description: 'Full-zip sidelines track jacket with wind-resistant fabric.',
     price: 2499, discountPrice: 2199,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1544441893-675973e31985?w=600&q=80'],
+    images: ['/products/training-jacket.jpg'],
     stock: 30, sku: 'GK-APP-010', brand: 'GoalKart', ratingsAverage: 4.8, ratingsCount: 92,
   },
   {
@@ -195,7 +195,7 @@ const PRODUCTS = [
     description: 'Base layer compression shorts providing muscle support and preventing chafing.',
     price: 999,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=600&q=80'],
+    images: ['/products/compression-shorts.jpg'],
     stock: 50, sku: 'GK-APP-013', brand: 'GoalKart', ratingsAverage: 4.5, ratingsCount: 105,
   },
   {
@@ -203,7 +203,7 @@ const PRODUCTS = [
     description: 'Graduated compression calf sleeves to reduce leg fatigue and boost blood flow.',
     price: 799,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?w=600&q=80'],
+    images: ['/products/compression-calf-sleeves.jpg'],
     stock: 55, sku: 'GK-APP-014', brand: 'GoalKart', ratingsAverage: 4.4, ratingsCount: 72,
   },
   {
@@ -211,7 +211,7 @@ const PRODUCTS = [
     description: 'Knee-high cushioned football socks with arch support.',
     price: 349,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=600&q=80'],
+    images: ['/products/football-socks.jpg'],
     stock: 120, sku: 'GK-APP-015', brand: 'GoalKart', ratingsAverage: 4.5, ratingsCount: 280,
   },
   {
