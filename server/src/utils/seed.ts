@@ -287,7 +287,7 @@ const PRODUCTS = [
     description: 'Set of 5 high-visibility mesh bibs for team scrimmages and tactical training.',
     price: 1299,
     category: 'Training Equipment',
-    images: ['https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&q=80'],
+    images: ['/products/training-bib-set-5.jpg'],
     stock: 40, sku: 'GK-TRN-001', brand: 'GoalKart', ratingsAverage: 4.6, ratingsCount: 85,
   },
   {
@@ -295,7 +295,7 @@ const PRODUCTS = [
     description: 'Pack of 20 flexible disc cones with carry strap for field marking and dribbling drills.',
     price: 899,
     category: 'Training Equipment',
-    images: ['https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80'],
+    images: ['/products/speed-training-cones-20.jpg'],
     stock: 85, sku: 'GK-TRN-002', brand: 'GoalKart', ratingsAverage: 4.7, ratingsCount: 140,
   },
   {
@@ -303,7 +303,7 @@ const PRODUCTS = [
     description: '6m heavy-duty agility speed ladder with adjustable rungs for footwork speed.',
     price: 1499,
     category: 'Training Equipment',
-    images: ['https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&q=80'],
+    images: ['/products/agility-ladder.jpg'],
     stock: 50, sku: 'GK-TRN-003', brand: 'GoalKart', ratingsAverage: 4.8, ratingsCount: 195,
   },
   {
@@ -311,7 +311,7 @@ const PRODUCTS = [
     description: 'Set of 5 loop bands for leg strength, hip mobility, and injury prevention.',
     price: 799,
     category: 'Training Equipment',
-    images: ['https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=600&q=80'],
+    images: ['/products/resistance-bands.jpg'],
     stock: 75, sku: 'GK-TRN-004', brand: 'GoalKart', ratingsAverage: 4.5, ratingsCount: 98,
   },
   {
@@ -319,7 +319,7 @@ const PRODUCTS = [
     description: '54-inch chute providing progressive resistance to improve sprint acceleration.',
     price: 999,
     category: 'Training Equipment',
-    images: ['https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80'],
+    images: ['/products/speed-parachute.jpg'],
     stock: 35, sku: 'GK-TRN-005', brand: 'GoalKart', ratingsAverage: 4.4, ratingsCount: 64,
   },
   {
