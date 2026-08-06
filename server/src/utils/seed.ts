@@ -417,7 +417,7 @@ const PRODUCTS = [
     description: 'Red and yellow penalty cards with score notebook and pencil.',
     price: 399,
     category: 'Bags & Pitch Accessories',
-    images: ['https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80'],
+    images: ['/products/referee-card-set.jpg'],
     stock: 80, sku: 'GK-ACC-011', brand: 'GoalKart', ratingsAverage: 4.4, ratingsCount: 76,
   },
   {
@@ -425,7 +425,7 @@ const PRODUCTS = [
     description: 'Complete team medical kit with ice packs, bandages, antiseptic spray, and strapping tape.',
     price: 1499,
     category: 'Bags & Pitch Accessories',
-    images: ['https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=600&q=80'],
+    images: ['/products/first-aid-sports-kit.jpg'],
     stock: 35, sku: 'GK-ACC-012', brand: 'GoalKart', ratingsAverage: 4.9, ratingsCount: 130,
   },
 ];
