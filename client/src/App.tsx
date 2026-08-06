@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { ShoppingBag, User, LogOut, ShieldCheck, ArrowRight, Trophy, Zap } from 'lucide-react';
+import { ShoppingBag, User, LogOut, ShieldCheck, ArrowRight, Trophy, Zap, Star, Flame, Crown } from 'lucide-react';
+import { FALLBACK_PRODUCTS } from './data/mockProducts';
 
 import useAuthStore from './store/authStore';
 import Login from './pages/Login';
@@ -173,6 +174,221 @@ const Home = () => {
             </Link>
           </div>
         </section>
+
+        {/* ── Best Sellers ── */}
+        {(() => {
+          const bestSellerSlugs = [
+            'football-boots-academy',
+            'goalkart-pro-match-football',
+            'premium-club-jersey',
+            'goalkeeper-gloves-professional',
+            'grip-football-socks',
+            'agility-ladder',
+          ];
+          const bestSellers = bestSellerSlugs
+            .map((slug) => FALLBACK_PRODUCTS.find((p) => p.slug === slug))
+            .filter(Boolean) as typeof FALLBACK_PRODUCTS;
+
+          return (
+            <section className="max-w-7xl mx-auto w-full px-6 py-16">
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+                    <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold font-['Outfit'] text-[var(--color-text)]">Best Sellers</h2>
+                    <p className="text-sm text-[var(--color-text-muted)]">Our most loved products</p>
+                  </div>
+                </div>
+                <Link
+                  to="/products"
+                  className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors"
+                >
+                  View All <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                {bestSellers.map((product, i) => (
+                  <Link
+                    key={product._id}
+                    to={`/products/${product.slug}`}
+                    className="group bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-2xl overflow-hidden hover:shadow-[var(--shadow-md)] hover:-translate-y-1 transition-all flex flex-col"
+                  >
+                    <div className="relative">
+                      <div className="aspect-square overflow-hidden bg-[var(--color-surface-2)]">
+                        <img
+                          src={product.images[0]}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      {i === 0 && (
+                        <span className="absolute top-2 left-2 text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">#1 Pick</span>
+                      )}
+                    </div>
+                    <div className="p-3 flex flex-col flex-1">
+                      <p className="text-xs font-semibold text-[var(--color-text)] line-clamp-2 leading-snug mb-1.5 flex-1">{product.name}</p>
+                      <div className="flex items-center gap-1 mb-1">
+                        {[1, 2, 3, 4, 5].map((s) => (
+                          <Star key={s} className={`w-3 h-3 ${s <= Math.round(product.ratingsAverage) ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
+                        ))}
+                      </div>
+                      <p className="text-sm font-bold text-[var(--color-primary)]">
+                        ₹{(product.discountPrice ?? product.price).toLocaleString()}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          );
+        })()}
+
+        {/* ── Budget Collection ── */}
+        {(() => {
+          const budgetSlugs = [
+            'mini-football',
+            'football-pump-with-needle',
+            'football-socks',
+            'captain-armband',
+            'jump-rope',
+            'shin-guards-junior',
+            'training-shorts',
+            'training-t-shirt',
+          ];
+          const budgetItems = budgetSlugs
+            .map((slug) => FALLBACK_PRODUCTS.find((p) => p.slug === slug))
+            .filter(Boolean) as typeof FALLBACK_PRODUCTS;
+
+          return (
+            <section className="w-full bg-[var(--color-primary-subtle)] border-y border-[var(--color-border-subtle)] py-16">
+              <div className="max-w-7xl mx-auto px-6">
+                <div className="flex items-center justify-between mb-10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+                      <Flame className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold font-['Outfit'] text-[var(--color-text)]">Budget Collection</h2>
+                      <p className="text-sm text-[var(--color-text-muted)]">Great gear under ₹1,000</p>
+                    </div>
+                  </div>
+                  <Link
+                    to="/products?maxPrice=1000"
+                    className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors"
+                  >
+                    See all under ₹1,000 <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                  {budgetItems.map((product) => (
+                    <Link
+                      key={product._id}
+                      to={`/products/${product.slug}`}
+                      className="group bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl overflow-hidden hover:shadow-[var(--shadow-md)] hover:-translate-y-1 transition-all flex flex-col"
+                    >
+                      <div className="aspect-square overflow-hidden bg-[var(--color-surface-2)]">
+                        <img
+                          src={product.images[0]}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="p-2.5 flex flex-col flex-1">
+                        <p className="text-[11px] font-semibold text-[var(--color-text)] line-clamp-2 leading-snug mb-1.5 flex-1">{product.name}</p>
+                        <div className="flex items-center justify-between mt-auto">
+                          <p className="text-sm font-bold text-[var(--color-primary)]">
+                            ₹{(product.discountPrice ?? product.price).toLocaleString()}
+                          </p>
+                          <span className="text-[9px] font-bold bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">DEAL</span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        })()}
+
+        {/* ── Premium Collection ── */}
+        {(() => {
+          const premiumSlugs = [
+            'football-boots-elite',
+            'goalkeeper-gloves-professional',
+            'training-jacket',
+            'windbreaker',
+            'goal-net',
+          ];
+          const premiumItems = premiumSlugs
+            .map((slug) => FALLBACK_PRODUCTS.find((p) => p.slug === slug))
+            .filter(Boolean) as typeof FALLBACK_PRODUCTS;
+
+          return (
+            <section className="max-w-7xl mx-auto w-full px-6 py-16">
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--color-primary)] flex items-center justify-center">
+                    <Crown className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold font-['Outfit'] text-[var(--color-text)]">Premium Collection</h2>
+                    <p className="text-sm text-[var(--color-text-muted)]">Professional-grade equipment</p>
+                  </div>
+                </div>
+                <Link
+                  to="/products?minPrice=2000&sort=price_desc"
+                  className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors"
+                >
+                  Shop Premium <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+                {premiumItems.map((product, i) => (
+                  <Link
+                    key={product._id}
+                    to={`/products/${product.slug}`}
+                    className={`group relative rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col ${i === 0 ? 'sm:col-span-2 lg:col-span-2' : ''}`}
+                  >
+                    {/* Background image */}
+                    <div className={`relative overflow-hidden bg-[var(--color-primary-dark)] ${i === 0 ? 'h-72' : 'h-52'}`}>
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-70 group-hover:scale-105 transition-all duration-300"
+                      />
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary-dark)]/90 via-transparent to-transparent" />
+
+                      {/* Crown badge */}
+                      <span className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center">
+                        <Crown className="w-3.5 h-3.5 text-white" />
+                      </span>
+
+                      {/* Content */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <p className="text-white font-bold text-sm leading-snug mb-1">{product.name}</p>
+                        <div className="flex items-center justify-between">
+                          <p className="text-white/90 font-black text-lg font-['Outfit']">
+                            ₹{(product.discountPrice ?? product.price).toLocaleString()}
+                          </p>
+                          <span className="flex items-center gap-1 text-white/80 text-xs font-semibold bg-white/10 border border-white/20 rounded-full px-2.5 py-1 backdrop-blur-sm">
+                            Shop <ArrowRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          );
+        })()}
+
       </main>
 
       {/* ── Footer ── */}
