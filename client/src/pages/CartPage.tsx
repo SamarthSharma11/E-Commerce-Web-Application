@@ -12,8 +12,9 @@ const CartPage: React.FC = () => {
   const cartCount = useCartCount();
   const subtotal = useCartSubtotal();
 
-  const getProductId = (product: string | { _id: string }): string => {
-    return typeof product === 'string' ? product : product._id;
+  const getProductId = (product: string | { _id: string } | null | undefined): string => {
+    if (!product) return '';
+    return typeof product === 'string' ? product : product._id || '';
   };
 
   if (items.length === 0) {
@@ -28,10 +29,10 @@ const CartPage: React.FC = () => {
             <p className="text-[var(--color-text-muted)] mb-[var(--space-7)] max-w-md">
               Looks like you haven't added any items to your cart yet. Browse our products and find something you love!
             </p>
-<Link
-                to="/products"
-                className="px-[var(--space-6)] py-[var(--space-3)] bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-colors flex items-center gap-2"
-              >
+            <Link
+              to="/products"
+              className="px-[var(--space-6)] py-[var(--space-3)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white font-semibold rounded-xl transition-colors flex items-center gap-2"
+            >
               Browse Products
               <ArrowRight className="w-5 h-5" />
             </Link>
@@ -50,18 +51,22 @@ const CartPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--space-6)]">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-[var(--space-4)]">
-            {items.map((item) => {
+            {items.map((item, idx) => {
               const productId = getProductId(item.product);
-              const productSlug = typeof item.product === 'object' && 'slug' in item.product ? item.product.slug : '#';
+              const productSlug = typeof item.product === 'object' && item.product && 'slug' in item.product ? item.product.slug : '#';
+              const itemPrice = item.price ?? 0;
+              const itemQty = item.quantity ?? 1;
+              const itemKey = item._id || productId || `cart-page-item-${idx}`;
+
               return (
-<div key={item._id} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-4)] sm:p-[var(--space-5)]">
-                   <div className="flex gap-[var(--space-4)] sm:gap-[var(--space-5)]">
+                <div key={itemKey} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-4)] sm:p-[var(--space-5)]">
+                  <div className="flex gap-[var(--space-4)] sm:gap-[var(--space-5)]">
                     {/* Product Image */}
                     <Link to={`/products/${productSlug}`} className="flex-shrink-0">
                       <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden border border-[var(--color-border)]">
                         <img
                           src={item.image || '/placeholder.png'}
-                          alt={item.name}
+                          alt={item.name || 'Product'}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -73,12 +78,12 @@ const CartPage: React.FC = () => {
                         <div>
                           <Link
                             to={`/products/${productSlug}`}
-                            className="text-lg font-semibold text-white hover:text-indigo-400 transition-colors line-clamp-2"
+                            className="text-lg font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors line-clamp-2"
                           >
-                            {item.name}
+                            {item.name || 'Product'}
                           </Link>
                           <p className="text-sm text-[var(--color-text-muted)] mt-1">
-                            ₹{item.price.toLocaleString()} each
+                            ₹{itemPrice.toLocaleString()} each
                           </p>
                         </div>
                         <button
@@ -94,26 +99,24 @@ const CartPage: React.FC = () => {
                       <div className="flex items-center justify-between mt-[var(--space-4)]">
                         <div className="flex items-center border border-[var(--color-border)] rounded-xl overflow-hidden">
                           <button
-                            onClick={() => updateQuantity(productId, item.quantity - 1)}
+                            onClick={() => updateQuantity(productId, itemQty - 1)}
                             className="p-3 hover:bg-[var(--color-surface-2)] transition-colors"
                           >
                             <Minus className="w-4 h-4" />
                           </button>
-                          <span className="px-[var(--space-6)] py-[var(--space-3)] text-center font-semibold min-w-[60px]">
-                            {item.quantity}
+                          <span className="px-4 py-2 font-semibold text-sm">
+                            {itemQty}
                           </span>
                           <button
-                            onClick={() => updateQuantity(productId, item.quantity + 1)}
+                            onClick={() => updateQuantity(productId, itemQty + 1)}
                             className="p-3 hover:bg-[var(--color-surface-2)] transition-colors"
                           >
                             <Plus className="w-4 h-4" />
                           </button>
                         </div>
-                        <div className="text-right">
-                          <p className="text-lg font-bold text-white">
-                            ₹{(item.price * item.quantity).toLocaleString()}
-                          </p>
-                        </div>
+                        <span className="text-lg font-bold font-['Outfit'] text-[var(--color-primary)]">
+                          ₹{(itemPrice * itemQty).toLocaleString()}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -124,7 +127,7 @@ const CartPage: React.FC = () => {
 
           {/* Cart Summary */}
           <div className="lg:col-span-1">
-<div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)] sticky top-[var(--space-6)]">
+            <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-[var(--space-5)] sticky top-[var(--space-6)]">
                <h2 className="text-xl font-bold font-['Outfit'] mb-[var(--space-5)]">Order Summary</h2>
 
                <div className="space-y-[var(--space-4)] mb-[var(--space-5)]">

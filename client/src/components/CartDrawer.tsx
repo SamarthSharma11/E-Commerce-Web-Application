@@ -12,8 +12,9 @@ const CartDrawer: React.FC = () => {
   const cartCount = useCartCount();
   const subtotal = useCartSubtotal();
 
-  const getProductId = (product: string | { _id: string }): string => {
-    return typeof product === 'string' ? product : product._id;
+  const getProductId = (product: string | { _id: string } | null | undefined): string => {
+    if (!product) return '';
+    return typeof product === 'string' ? product : product._id || '';
   };
 
   if (!isOpen) return null;
@@ -66,15 +67,19 @@ const CartDrawer: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-3">
-              {items.map((item) => {
+              {items.map((item, idx) => {
                 const productId = getProductId(item.product);
+                const itemPrice = item.price ?? 0;
+                const itemQty = item.quantity ?? 1;
+                const itemKey = item._id || productId || `cart-item-${idx}`;
+
                 return (
-                  <div key={item._id} className="bg-[var(--color-surface-2)] border border-[var(--color-border-subtle)] rounded-xl p-4 flex gap-4">
+                  <div key={itemKey} className="bg-[var(--color-surface-2)] border border-[var(--color-border-subtle)] rounded-xl p-4 flex gap-4">
                     {/* Product Image */}
                     <div className="w-18 h-18 min-w-[72px] min-h-[72px] rounded-lg overflow-hidden border border-[var(--color-border)] flex-shrink-0">
                       <img
                         src={item.image || '/placeholder.png'}
-                        alt={item.name}
+                        alt={item.name || 'Product'}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -82,7 +87,7 @@ const CartDrawer: React.FC = () => {
                     {/* Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between mb-1.5">
-                        <h4 className="text-sm font-medium text-[var(--color-text)] line-clamp-2 pr-2 leading-snug">{item.name}</h4>
+                        <h4 className="text-sm font-medium text-[var(--color-text)] line-clamp-2 pr-2 leading-snug">{item.name || 'Product'}</h4>
                         <button
                           onClick={() => removeFromCart(productId)}
                           className="p-1.5 hover:bg-red-50 rounded-lg text-[var(--color-text-muted)] hover:text-red-500 transition-colors flex-shrink-0 border border-transparent hover:border-red-100"
@@ -93,30 +98,30 @@ const CartDrawer: React.FC = () => {
                       </div>
 
                       <p className="text-sm font-bold text-[var(--color-primary)] mb-2.5">
-                        ₹{item.price.toLocaleString()}
+                        ₹{itemPrice.toLocaleString()}
                       </p>
 
                       {/* Quantity Stepper */}
                       <div className="flex items-center gap-3">
                         <div className="flex items-center border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-surface)]">
                           <button
-                            onClick={() => updateQuantity(productId, item.quantity - 1)}
+                            onClick={() => updateQuantity(productId, itemQty - 1)}
                             className="px-2.5 py-1.5 hover:bg-[var(--color-primary-subtle)] hover:text-[var(--color-primary)] text-[var(--color-text-muted)] transition-colors"
                           >
                             <Minus className="w-3.5 h-3.5" />
                           </button>
                           <span className="px-3 py-1.5 text-center text-sm font-semibold text-[var(--color-text)] min-w-[36px] border-x border-[var(--color-border)]">
-                            {item.quantity}
+                            {itemQty}
                           </span>
                           <button
-                            onClick={() => updateQuantity(productId, item.quantity + 1)}
+                            onClick={() => updateQuantity(productId, itemQty + 1)}
                             className="px-2.5 py-1.5 hover:bg-[var(--color-primary-subtle)] hover:text-[var(--color-primary)] text-[var(--color-text-muted)] transition-colors"
                           >
                             <Plus className="w-3.5 h-3.5" />
                           </button>
                         </div>
                         <span className="text-xs font-medium text-[var(--color-text-muted)]">
-                          = ₹{(item.price * item.quantity).toLocaleString()}
+                          = ₹{(itemPrice * itemQty).toLocaleString()}
                         </span>
                       </div>
                     </div>

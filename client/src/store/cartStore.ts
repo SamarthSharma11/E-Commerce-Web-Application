@@ -45,6 +45,7 @@ export const useCartStore = create<CartState>()(
         } else {
           (get() as any).addToCartLocal(product, quantity);
         }
+        set({ isOpen: true });
       },
 
       removeFromCart: async (productId: string) => {
@@ -296,5 +297,7 @@ export const useCartStore = create<CartState>()(
 // =====================================================
 // Selectors
 // =====================================================
-export const useCartCount = () => useCartStore((state) => state.items.reduce((sum, item) => sum + item.quantity, 0));
-export const useCartSubtotal = () => useCartStore((state) => state.items.reduce((sum, item) => sum + item.price * item.quantity, 0));
+export const useCartCount = () =>
+  useCartStore((state) => (state.items || []).reduce((sum, item) => sum + (item?.quantity ?? 0), 0));
+export const useCartSubtotal = () =>
+  useCartStore((state) => (state.items || []).reduce((sum, item) => sum + ((item?.price ?? 0) * (item?.quantity ?? 0)), 0));
