@@ -139,7 +139,7 @@ export const useCartStore = create<CartState>()(
       fetchCart: async () => {
         set({ isLoading: true });
         try {
-          const response = await api.get<ApiResponse<Cart>>('/api/cart');
+          const response = await api.get<ApiResponse<Cart>>('/cart');
           const cart = response.data.data;
           if (cart) {
             set({
@@ -161,7 +161,7 @@ export const useCartStore = create<CartState>()(
       addToCartBackend: async (productId: string, quantity: number) => {
         set({ isLoading: true });
         try {
-          const response = await api.post<ApiResponse<Cart>>('/api/cart', {
+          const response = await api.post<ApiResponse<Cart>>('/cart', {
             productId,
             quantity,
           });
@@ -187,7 +187,7 @@ export const useCartStore = create<CartState>()(
       updateCartItemBackend: async (productId: string, quantity: number) => {
         set({ isLoading: true });
         try {
-          const response = await api.put<ApiResponse<Cart>>(`/api/cart/${productId}`, {
+          const response = await api.put<ApiResponse<Cart>>(`/cart/${productId}`, {
             quantity,
           });
           const cart = response.data.data;
@@ -211,7 +211,7 @@ export const useCartStore = create<CartState>()(
       removeFromCartBackend: async (productId: string) => {
         set({ isLoading: true });
         try {
-          const response = await api.delete<ApiResponse<Cart>>(`/api/cart/${productId}`);
+          const response = await api.delete<ApiResponse<Cart>>(`/cart/${productId}`);
           const cart = response.data.data;
           if (cart) {
             set({
@@ -234,7 +234,7 @@ export const useCartStore = create<CartState>()(
       clearCartBackend: async () => {
         set({ isLoading: true });
         try {
-          const response = await api.delete<ApiResponse<Cart>>('/api/cart');
+          const response = await api.delete<ApiResponse<Cart>>('/cart');
           const cart = response.data.data;
           if (cart) {
             set({

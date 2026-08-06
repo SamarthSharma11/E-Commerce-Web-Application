@@ -37,7 +37,7 @@ const AdminUsersPage: React.FC = () => {
       if (roleFilter !== 'all') params.set('role', roleFilter);
       if (search) params.set('search', search);
 
-      const response = await api.get(`/api/admin/users?${params.toString()}`);
+      const response = await api.get(`/admin/users?${params.toString()}`);
       setUsers(response.data.data || []);
       setPagination(response.data.pagination || null);
     } catch (error: unknown) {
@@ -50,7 +50,7 @@ const AdminUsersPage: React.FC = () => {
 
   const handleRoleChange = async (userId: string, newRole: 'customer' | 'admin') => {
     try {
-      await api.put(`/api/admin/users/${userId}/role`, { role: newRole });
+      await api.put(`/admin/users/${userId}/role`, { role: newRole });
       toast.success('User role updated');
       setUsers(users.map((u) => (u._id === userId ? { ...u, role: newRole } : u)));
     } catch (error: unknown) {
@@ -61,7 +61,7 @@ const AdminUsersPage: React.FC = () => {
 
   const handleStatusToggle = async (userId: string, currentStatus: boolean) => {
     try {
-      await api.put(`/api/admin/users/${userId}/status`, { isActive: !currentStatus });
+      await api.put(`/admin/users/${userId}/status`, { isActive: !currentStatus });
       toast.success(`User ${!currentStatus ? 'activated' : 'deactivated'}`);
       setUsers(users.map((u) => (u._id === userId ? { ...u, isActive: !currentStatus } : u)));
     } catch (error: unknown) {

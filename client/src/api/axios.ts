@@ -47,10 +47,14 @@ const processQueue = (error: unknown, token: string | null = null): void => {
 };
 
 // =====================================================
-// Request Interceptor — Attach Bearer Token
+// Request Interceptor — Attach Bearer Token & Normalise URL
 // =====================================================
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    // Prevent double /api/api if URL starts with /api/
+    if (config.url?.startsWith('/api/')) {
+      config.url = config.url.slice(4);
+    }
     const token = getAccessToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;

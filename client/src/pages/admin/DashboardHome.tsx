@@ -46,9 +46,9 @@ const DashboardHome: React.FC = () => {
     setLoading(true);
     try {
       const [summaryRes, salesRes, topProductsRes] = await Promise.all([
-        api.get('/api/admin/stats/summary'),
-        api.get(`/api/admin/stats/sales-over-time?period=${period}&days=${days}`),
-        api.get('/api/admin/stats/top-products?limit=10'),
+        api.get('/admin/stats/summary'),
+        api.get(`/admin/stats/sales-over-time?period=${period}&days=${days}`),
+        api.get('/admin/stats/top-products?limit=10'),
       ]);
 
       setSummary(summaryRes.data.data);

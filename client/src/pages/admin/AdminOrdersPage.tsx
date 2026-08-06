@@ -30,7 +30,7 @@ const AdminOrdersPage: React.FC = () => {
       if (statusFilter !== 'all') params.set('status', statusFilter);
       if (search) params.set('search', search);
 
-      const response = await api.get(`/api/orders?${params.toString()}`);
+      const response = await api.get(`/orders?${params.toString()}`);
       setOrders(response.data.data || []);
       setPagination(response.data.pagination || null);
     } catch (error: unknown) {
@@ -48,7 +48,7 @@ const AdminOrdersPage: React.FC = () => {
 
   const handleStatusUpdate = async (orderId: string, newStatus: string) => {
     try {
-      await api.put(`/api/orders/${orderId}/status`, { orderStatus: newStatus });
+      await api.put(`/orders/${orderId}/status`, { orderStatus: newStatus });
       toast.success('Order status updated');
       fetchOrders();
       if (selectedOrder && selectedOrder._id === orderId) {

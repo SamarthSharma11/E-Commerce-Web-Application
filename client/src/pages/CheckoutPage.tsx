@@ -117,7 +117,7 @@ const CheckoutPage: React.FC = () => {
 
     setIsPlacingOrder(true);
     try {
-      const response = await api.post<ApiResponse<Order>>('/api/orders', {
+      const response = await api.post<ApiResponse<Order>>('/orders', {
         shippingAddress: {
           fullName: user?.name || '',
           line1: selectedAddress.line1,

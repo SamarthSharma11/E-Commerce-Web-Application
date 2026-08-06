@@ -106,7 +106,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         currency: string;
         key: string;
         receipt: string;
-      }>>('/api/payments/create-order', {
+      }>>('/payments/create-order', {
         amount: totalPrice,
         currency,
         receipt: `order_${Date.now()}`,
@@ -129,7 +129,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         handler: async (response: RazorpayResponse) => {
           try {
             // Step 3: Verify payment signature
-            await api.post<ApiResponse<Order>>('/api/payments/verify', {
+            await api.post<ApiResponse<Order>>('/payments/verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
@@ -137,7 +137,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
             });
 
             // Step 4: Create actual order with payment info
-            const orderResponse = await api.post<ApiResponse<Order>>('/api/orders', {
+            const orderResponse = await api.post<ApiResponse<Order>>('/orders', {
               shippingAddress: {
                 fullName: user?.name || '',
                 line1: address.line1,

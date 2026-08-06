@@ -21,7 +21,7 @@ const OrderHistoryPage: React.FC = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/api/orders/my-orders?page=${currentPage}&limit=10`);
+      const response = await api.get(`/orders/my-orders?page=${currentPage}&limit=10`);
       setOrders(response.data.data || []);
       setPagination(response.data.pagination || null);
     } catch (error: unknown) {

@@ -18,7 +18,7 @@ const OrderDetailPage: React.FC = () => {
       if (!id) return;
       setLoading(true);
       try {
-        const response = await api.get(`/api/orders/${id}`);
+        const response = await api.get(`/orders/${id}`);
         setOrder(response.data.data as Order);
       } catch (error: unknown) {
         const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to fetch order';
