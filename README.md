@@ -1,4 +1,4 @@
-# 🛒 ApexStore — E-Commerce Platform
+# 🛒 GoalKart — E-Commerce Platform
 
 A full-stack e-commerce web application built with modern technologies, featuring a complete shopping experience with product management, cart functionality, secure payments via Razorpay, and an admin dashboard.
 
