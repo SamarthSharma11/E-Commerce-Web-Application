@@ -21,10 +21,13 @@ import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import DashboardHome from './pages/admin/DashboardHome';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
+import GoalKartLogo from './components/GoalKartLogo';
+import { useCartCount } from './store/cartStore';
 
-// ── Home Page ─────────────────────────────────────────────
+// ── Shared Home Layout (Header, Hero, Products grid) ─────
 const Home = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
+  const cartCount = useCartCount();
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex flex-col">
@@ -32,13 +35,8 @@ const Home = () => {
       {/* ── Header ── */}
       <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]/90 backdrop-blur-md sticky top-0 z-50 shadow-[var(--shadow-xs)]">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[var(--color-primary)] to-[var(--color-primary-light)] flex items-center justify-center shadow-[var(--shadow-sm)]">
-              <ShoppingBag className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-extrabold text-xl tracking-tight font-['Outfit'] text-[var(--color-primary)]">
-              ApexStore
-            </span>
+          <Link to="/" className="flex items-center">
+            <GoalKartLogo size="md" />
           </Link>
 
           <div className="flex items-center gap-4">
@@ -152,7 +150,7 @@ const Home = () => {
         {/* ── Feature cards ── */}
         <section className="max-w-7xl mx-auto w-full px-6 py-16">
           <h2 className="text-2xl font-bold font-['Outfit'] text-[var(--color-text)] text-center mb-10">
-            Why Choose ApexStore?
+            Why Choose GoalKart?
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
@@ -182,7 +180,7 @@ const Home = () => {
 
       {/* ── Footer ── */}
       <footer className="border-t border-[var(--color-border)] py-6 bg-[var(--color-surface)] text-center text-xs text-[var(--color-text-muted)]">
-        © {new Date().getFullYear()} ApexStore — Football Equipment Store. Built with React + Vite + Express + MongoDB.
+        © {new Date().getFullYear()} GoalKart — Football Equipment Store. Built with React + Vite + Express + MongoDB.
       </footer>
     </div>
   );

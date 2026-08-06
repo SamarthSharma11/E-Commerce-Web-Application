@@ -1,0 +1,34 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dynamic Green Motion Streaks -->
+  <path d="M45 42L72 20M35 55L78 26M55 48L84 32" stroke="#22C55E" stroke-width="4" stroke-linecap="round" />
+  <path d="M42 45L68 25" stroke="#16A34A" stroke-width="3" stroke-linecap="round" />
+
+  <!-- 'G' Character -->
+  <path
+    d="M52 35C48 27 37 25 27 31C16 38 14 53 20 63C27 74 44 76 53 67C57 63 58 57 58 52H38"
+    stroke="#1C2B21"
+    stroke-width="10"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- 'K' Diagonal Green Leg -->
+  <path
+    d="M38 67L64 35M47 52L68 67"
+    stroke="#22C55E"
+    stroke-width="10"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Flying Soccer Ball -->
+  <g transform="translate(68, 12) scale(0.75)">
+    <circle cx="15" cy="15" r="14" fill="#FFFFFF" stroke="#1C2B21" stroke-width="2" />
+    <polygon points="15,6 20,10 18,16 12,16 10,10" fill="#1C2B21" />
+    <line x1="15" y1="6" x2="15" y2="1" stroke="#1C2B21" stroke-width="1.5" />
+    <line x1="20" y1="10" x2="26" y2="8" stroke="#1C2B21" stroke-width="1.5" />
+    <line x1="18" y1="16" x2="22" y2="23" stroke="#1C2B21" stroke-width="1.5" />
+    <line x1="12" y1="16" x2="8" y2="23" stroke="#1C2B21" stroke-width="1.5" />
+    <line x1="10" y1="10" x2="4" y2="8" stroke="#1C2B21" stroke-width="1.5" />
+  </g>
+</svg>

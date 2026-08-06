@@ -2,6 +2,8 @@ import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { ShoppingBag, Package, FolderTree, BarChart3, Users, ClipboardList, Flag } from 'lucide-react';
 
+import GoalKartLogo from './GoalKartLogo';
+
 // =====================================================
 // Admin Layout — Sidebar navigation for admin pages
 // =====================================================
@@ -26,12 +28,8 @@ const AdminLayout: React.FC = () => {
       {/* Sidebar */}
       <aside className="w-64 border-r border-[var(--color-border)] bg-[var(--color-surface)] flex-shrink-0 hidden md:flex flex-col">
         <div className="p-6">
-          <Link to="/admin" className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
-              <ShoppingBag className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-extrabold text-lg tracking-tight font-['Outfit']">Admin</span>
-            <Flag className="w-4 h-4 text-[var(--color-text-muted)] ml-auto" />
+          <Link to="/admin" className="flex items-center mb-8">
+            <GoalKartLogo size="sm" />
           </Link>
 
           <nav className="space-y-1">

@@ -123,7 +123,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         key: razorpayOrder.key,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency,
-        name: 'ApexStore',
+        name: 'GoalKart',
         description: `Order Payment - ₹${totalPrice.toLocaleString()}`,
         order_id: razorpayOrder.orderId,
         handler: async (response: RazorpayResponse) => {
