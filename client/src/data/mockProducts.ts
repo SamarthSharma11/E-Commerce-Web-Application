@@ -864,7 +864,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Set of 4 flexible corner flags with ground spikes and carry bag.',
     price: 2499,
     category: FALLBACK_CATEGORIES[5],
-    images: ['https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786555065/ChatGPT_Image_Aug_6_2026_06_06_52_PM.png'],
     stock: 25,
     sku: 'GK-ACC-009',
     brand: 'GoalKart',
