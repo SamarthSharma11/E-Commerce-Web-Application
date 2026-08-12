@@ -312,7 +312,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Smart casual team polo shirt with embroidered GoalKart crest.',
     price: 1199,
     category: FALLBACK_CATEGORIES[2],
-    images: ['https://images.unsplash.com/photo-1625910513413-10de9f6e9855?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786556172/ChatGPT_Image_Aug_12_2026_11_05_54_PM.png'],
     stock: 40,
     sku: 'GK-APP-006',
     brand: 'GoalKart',
