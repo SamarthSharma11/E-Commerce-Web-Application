@@ -295,7 +295,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Lightweight performance t-shirt for gym sessions and pre-match warmups.',
     price: 799,
     category: FALLBACK_CATEGORIES[2],
-    images: ['https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786556643/ChatGPT_Image_Aug_12_2026_11_13_44_PM.png'],
     stock: 65,
     sku: 'GK-APP-005',
     brand: 'GoalKart',
