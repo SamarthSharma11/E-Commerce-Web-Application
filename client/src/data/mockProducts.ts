@@ -329,7 +329,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Flexible football training shorts with elastic waistband and zip pockets.',
     price: 699,
     category: FALLBACK_CATEGORIES[2],
-    images: ['https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786556172/ChatGPT_Image_Aug_12_2026_11_05_54_PM.png'],
     stock: 70,
     sku: 'GK-APP-007',
     brand: 'GoalKart',
