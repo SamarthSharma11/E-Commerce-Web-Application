@@ -415,7 +415,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Water-repellent lightweight jacket for stormy match days and rain training.',
     price: 2999,
     category: FALLBACK_CATEGORIES[2],
-    images: ['https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786555871/ChatGPT_Image_Aug_12_2026_11_00_50_PM.png'],
     stock: 25,
     sku: 'GK-APP-012',
     brand: 'GoalKart',
