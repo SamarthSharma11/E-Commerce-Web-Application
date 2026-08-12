@@ -1,0 +1,36 @@
+/* client/src/styles/landing.css — Scoped marketing landing page styles */
+
+.landing-page {
+  --landing-neon: #C6FF00;
+  --landing-black: #0A0A0A;
+  --landing-surface: #141414;
+  --landing-surface-2: #1e1e1e;
+  --landing-white: #ffffff;
+  --landing-gray: #8a8a8a;
+  --landing-border: rgba(255, 255, 255, 0.1);
+  --landing-font-display: 'Archivo Black', sans-serif;
+  --landing-font-body: 'Inter', sans-serif;
+
+  background-color: var(--landing-black);
+  color: var(--landing-white);
+  font-family: var(--landing-font-body);
+}
+
+.landing-display-text {
+  font-family: var(--landing-font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.landing-neon-glow {
+  text-shadow: 0 0 20px rgba(198, 255, 0, 0.4);
+}
+
+.landing-card-glow {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(198, 255, 0, 0.05);
+}
+
+.landing-border-glow:hover {
+  border-color: var(--landing-neon);
+  box-shadow: 0 0 15px rgba(198, 255, 0, 0.2);
+}

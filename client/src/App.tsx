@@ -23,6 +23,7 @@ import DashboardHome from './pages/admin/DashboardHome';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import GoalKartLogo from './components/GoalKartLogo';
+import LandingPage from './pages/LandingPage';
 
 // ── Shared Home Layout (Header, Hero, Products grid) ─────
 const Home = () => {
@@ -418,7 +419,8 @@ function App() {
 
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/shop-home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
