@@ -99,7 +99,7 @@ const PRODUCTS = [
     description: 'Official GoalKart home match jersey with breathable dry-fit mesh panels.',
     price: 999,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1580087256394-dc596e1c8f4f?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786558014/ChatGPT_Image_Aug_12_2026_11_36_28_PM.png'],
     stock: 55, sku: 'GK-APP-001', brand: 'GoalKart', ratingsAverage: 4.7, ratingsCount: 165,
   },
   {
