@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, ShoppingCart, Trophy } from 'lucide-react';
+import { Star, ShoppingBag } from 'lucide-react';
 import type { Product } from '../types';
 import { useCartStore } from '../store/cartStore';
 
 // =====================================================
-// ProductCard Component
+// ProductCard Component — White-Canvas Floating Product Card
 // =====================================================
 interface ProductCardProps {
   product: Product;
@@ -29,21 +29,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link
       to={`/products/${product.slug}`}
-      className="group bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-[var(--radius-lg)] overflow-hidden hover:-translate-y-1.5 hover:shadow-[var(--shadow-glow)] hover:border-[var(--color-primary)]/30 transition-all duration-300 flex flex-col shadow-[var(--shadow-xs)]"
+      className="group bg-white rounded-[28px] border-none shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] hover:shadow-[rgba(0,0,0,0.14)_0px_8px_16px_-2px] transition-shadow duration-200 flex flex-col p-2.5 overflow-hidden"
     >
-      {/* Image */}
-      <div className="relative w-full aspect-square overflow-hidden bg-[var(--color-surface-2)]">
+      {/* 1:1 Image Area with 20px inner radius creating ~8px white frame */}
+      <div className="relative w-full aspect-square rounded-[20px] overflow-hidden bg-[#f2f4f5] flex-shrink-0">
         <img
           src={product.images[0] || '/placeholder.png'}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover"
           loading="lazy"
         />
 
-        {/* Sale Badge */}
+        {/* Discount Badge */}
         {hasDiscount && (
-          <div className="absolute top-3 right-3">
-            <span className="block px-3 py-1 bg-[var(--color-secondary)] text-white text-xs font-bold rounded-full shadow-sm">
+          <div className="absolute top-2.5 right-2.5">
+            <span className="block px-2.5 py-0.5 bg-[#000000] text-white text-[10px] font-normal rounded-full">
               -{discountPercent}%
             </span>
           </div>
@@ -51,64 +51,56 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* Stock Badge */}
         {product.stock === 0 && (
-          <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
-            <span className="text-[var(--color-text-muted)] font-semibold text-sm">Out of Stock</span>
-          </div>
-        )}
-        {product.stock > 0 && product.stock <= 5 && (
-          <div className="absolute top-3 left-3">
-            <span className="block px-2.5 py-1 bg-[var(--color-warning)] text-white text-xs font-bold rounded-full shadow-sm">
-              Low Stock
-            </span>
-          </div>
-        )}
-        {product.stock > 5 && (
-          <div className="absolute top-3 left-3">
-            <span className="block px-2.5 py-1 bg-[var(--color-success)] text-white text-xs font-bold rounded-full shadow-sm">
-              In Stock
-            </span>
+          <div className="absolute inset-0 bg-white/85 backdrop-blur-[1px] flex items-center justify-center">
+            <span className="text-[#787574] text-[12px] font-normal tracking-[-0.017em]">Out of Stock</span>
           </div>
         )}
       </div>
 
-      {/* Content */}
-      <div className="p-4 flex flex-col flex-1 gap-2">
-        <h3 className="font-semibold text-sm text-[var(--color-text)] line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors leading-snug">
-          {product.name}
-        </h3>
-
-        {/* Rating */}
-        <div className="flex items-center gap-1.5">
-          <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
-          <span className="text-xs text-[var(--color-text-muted)]">
-            {product.ratingsAverage.toFixed(1)} ({product.ratingsCount})
-          </span>
-          {product.ratingsAverage >= 4.5 && (
-            <Trophy className="w-3.5 h-3.5 text-[var(--color-secondary)] fill-[var(--color-secondary)]" />
-          )}
-        </div>
-
-        {/* Price */}
-        <div className="flex items-end gap-2 mt-auto pt-1">
-          <span className="text-xl font-bold font-['Outfit'] text-[var(--color-text)]">
-            ₹{effectivePrice.toLocaleString()}
-          </span>
-          {hasDiscount && (
-            <span className="text-xs text-[var(--color-text-muted)] line-through mb-0.5">
-              ₹{product.price.toLocaleString()}
+      {/* Content Text Block (12-16px gap below image) */}
+      <div className="pt-3.5 px-1.5 pb-1 flex flex-col flex-1 gap-1.5 text-left">
+        <div>
+          {product.brand && (
+            <span className="block text-[11px] text-[#787574] tracking-[-0.058em] uppercase mb-0.5">
+              {product.brand}
             </span>
           )}
+          <h3 className="text-[14px] font-normal text-[#000000] tracking-[-0.014em] line-clamp-2 leading-snug">
+            {product.name}
+          </h3>
         </div>
 
-        {/* Add to Cart */}
-        <button
-          onClick={handleAddToCart}
-          disabled={product.stock === 0}
-          className="mt-2 w-full py-2.5 px-4 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] disabled:bg-[var(--color-surface-2)] disabled:text-[var(--color-text-muted)] disabled:cursor-not-allowed text-white text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-2 shadow-[var(--shadow-xs)] hover:shadow-[var(--shadow-sm)]"
-        >
-          <ShoppingCart className="w-4 h-4" />
-          {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-        </button>
+        {/* Star Rating Row */}
+        <div className="flex items-center gap-1 mt-0.5">
+          <Star className="w-3 h-3 text-amber-400 fill-amber-400 flex-shrink-0" />
+          <span className="text-[11px] text-[#787574] tracking-[-0.017em]">
+            {product.ratingsAverage.toFixed(1)} ({product.ratingsCount})
+          </span>
+        </div>
+
+        {/* Price & Add Action */}
+        <div className="mt-auto pt-2 flex items-center justify-between gap-2">
+          <div>
+            <span className="text-[16px] font-normal text-[#000000] tracking-[-0.031em]">
+              ₹{effectivePrice.toLocaleString()}
+            </span>
+            {hasDiscount && (
+              <span className="ml-1.5 text-[12px] text-[#787574] line-through">
+                ₹{product.price.toLocaleString()}
+              </span>
+            )}
+          </div>
+
+          <button
+            onClick={handleAddToCart}
+            disabled={product.stock === 0}
+            className="rounded-full bg-[#000000] text-white hover:opacity-90 disabled:bg-[#cccccc] disabled:text-[#787574] disabled:cursor-not-allowed px-3.5 py-1.5 text-[12px] font-normal tracking-[-0.017em] flex items-center gap-1.5 transition-opacity cursor-pointer"
+            aria-label="Add to Cart"
+          >
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>Add</span>
+          </button>
+        </div>
       </div>
     </Link>
   );

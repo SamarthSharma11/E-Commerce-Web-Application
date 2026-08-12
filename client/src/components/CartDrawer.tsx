@@ -5,7 +5,7 @@ import { useCartStore, useCartCount, useCartSubtotal } from '../store/cartStore'
 import toast from 'react-hot-toast';
 
 // =====================================================
-// CartDrawer Component
+// CartDrawer Component — White Canvas Floating Panel
 // =====================================================
 const CartDrawer: React.FC = () => {
   const { items, isOpen, setCartOpen, removeFromCart, updateQuantity, clearCart } = useCartStore();
@@ -23,29 +23,27 @@ const CartDrawer: React.FC = () => {
     <div className="fixed inset-0 z-50">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"
         onClick={() => setCartOpen(false)}
       />
 
-      {/* Drawer */}
-      <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[var(--color-surface)] border-l border-[var(--color-border)] shadow-2xl flex flex-col">
+      {/* Drawer Panel */}
+      <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white flex flex-col shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px]">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#ebebeb]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[var(--color-primary-subtle)] flex items-center justify-center">
-              <ShoppingBag className="w-4 h-4 text-[var(--color-primary)]" />
-            </div>
-            <h2 className="text-base font-bold font-['Outfit'] text-[var(--color-text)]">Your Cart</h2>
-            <span className="px-2.5 py-0.5 bg-[var(--color-primary)] text-white text-xs rounded-full font-semibold">
+            <ShoppingBag className="w-5 h-5 text-[#000000]" />
+            <h2 className="text-[16px] font-normal text-[#000000]">Your Cart</h2>
+            <span className="px-2.5 py-0.5 bg-[#f2f4f5] text-[#000000] text-[12px] font-normal rounded-full border border-[#ebebeb]">
               {cartCount}
             </span>
           </div>
           <button
             onClick={() => setCartOpen(false)}
-            className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)] border border-transparent hover:border-[var(--color-border)]"
+            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] transition-colors text-[#787574] hover:text-[#000000] cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -53,14 +51,14 @@ const CartDrawer: React.FC = () => {
         <div className="flex-1 overflow-y-auto p-6">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="w-20 h-20 rounded-full bg-[var(--color-primary-subtle)] border border-[var(--color-primary)]/20 flex items-center justify-center mb-5">
-                <ShoppingBag className="w-10 h-10 text-[var(--color-primary)]/50" />
+              <div className="w-16 h-16 rounded-full bg-[#f2f4f5] flex items-center justify-center mb-4">
+                <ShoppingBag className="w-7 h-7 text-[#cccccc]" />
               </div>
-              <h3 className="text-base font-semibold text-[var(--color-text)] mb-1.5">Your cart is empty</h3>
-              <p className="text-sm text-[var(--color-text-muted)] mb-6">Looks like you haven't added any items yet.</p>
+              <h3 className="text-[16px] font-normal text-[#000000] mb-1.5">Your cart is empty</h3>
+              <p className="text-[14px] text-[#787574] mb-6">Looks like you haven't added any items yet.</p>
               <button
                 onClick={() => setCartOpen(false)}
-                className="px-6 py-2.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-sm font-semibold rounded-xl transition-all shadow-[var(--shadow-sm)]"
+                className="px-6 py-2.5 bg-[#000000] hover:opacity-90 text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
               >
                 Continue Shopping
               </button>
@@ -74,9 +72,9 @@ const CartDrawer: React.FC = () => {
                 const itemKey = item._id || productId || `cart-item-${idx}`;
 
                 return (
-                  <div key={itemKey} className="bg-[var(--color-surface-2)] border border-[var(--color-border-subtle)] rounded-xl p-4 flex gap-4">
+                  <div key={itemKey} className="bg-[#f2f4f5] rounded-[20px] p-4 flex gap-3">
                     {/* Product Image */}
-                    <div className="w-18 h-18 min-w-[72px] min-h-[72px] rounded-lg overflow-hidden border border-[var(--color-border)] flex-shrink-0">
+                    <div className="w-16 h-16 min-w-[64px] rounded-[16px] overflow-hidden border border-[#ebebeb] flex-shrink-0 bg-white">
                       <img
                         src={item.image || '/placeholder.png'}
                         alt={item.name || 'Product'}
@@ -87,40 +85,40 @@ const CartDrawer: React.FC = () => {
                     {/* Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between mb-1.5">
-                        <h4 className="text-sm font-medium text-[var(--color-text)] line-clamp-2 pr-2 leading-snug">{item.name || 'Product'}</h4>
+                        <h4 className="text-[14px] font-normal text-[#000000] line-clamp-2 pr-2 leading-snug">{item.name || 'Product'}</h4>
                         <button
                           onClick={() => removeFromCart(productId)}
-                          className="p-1.5 hover:bg-red-50 rounded-lg text-[var(--color-text-muted)] hover:text-red-500 transition-colors flex-shrink-0 border border-transparent hover:border-red-100"
+                          className="w-6 h-6 flex items-center justify-center hover:bg-white rounded-full text-[#787574] hover:text-red-500 transition-colors flex-shrink-0 cursor-pointer"
                           title="Remove item"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
 
-                      <p className="text-sm font-bold text-[var(--color-primary)] mb-2.5">
+                      <p className="text-[14px] font-normal text-[#000000] mb-2.5">
                         ₹{itemPrice.toLocaleString()}
                       </p>
 
                       {/* Quantity Stepper */}
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-surface)]">
+                        <div className="flex items-center border border-[#ebebeb] rounded-full overflow-hidden bg-white">
                           <button
                             onClick={() => updateQuantity(productId, itemQty - 1)}
-                            className="px-2.5 py-1.5 hover:bg-[var(--color-primary-subtle)] hover:text-[var(--color-primary)] text-[var(--color-text-muted)] transition-colors"
+                            className="px-2.5 py-1.5 hover:bg-[#f2f4f5] text-[#787574] transition-colors cursor-pointer"
                           >
                             <Minus className="w-3.5 h-3.5" />
                           </button>
-                          <span className="px-3 py-1.5 text-center text-sm font-semibold text-[var(--color-text)] min-w-[36px] border-x border-[var(--color-border)]">
+                          <span className="px-3 py-1.5 text-center text-[14px] font-normal text-[#000000] min-w-[36px] border-x border-[#ebebeb]">
                             {itemQty}
                           </span>
                           <button
                             onClick={() => updateQuantity(productId, itemQty + 1)}
-                            className="px-2.5 py-1.5 hover:bg-[var(--color-primary-subtle)] hover:text-[var(--color-primary)] text-[var(--color-text-muted)] transition-colors"
+                            className="px-2.5 py-1.5 hover:bg-[#f2f4f5] text-[#787574] transition-colors cursor-pointer"
                           >
                             <Plus className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                        <span className="text-xs font-medium text-[var(--color-text-muted)]">
+                        <span className="text-[12px] font-normal text-[#787574]">
                           = ₹{(itemPrice * itemQty).toLocaleString()}
                         </span>
                       </div>
@@ -134,34 +132,35 @@ const CartDrawer: React.FC = () => {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-[var(--color-border)] px-6 py-5 space-y-4 bg-[var(--color-surface)]">
+          <div className="border-t border-[#ebebeb] px-6 py-5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[var(--color-text-muted)]">Subtotal ({cartCount} items)</span>
-              <span className="text-xl font-bold text-[var(--color-text)] font-['Outfit']">₹{subtotal.toLocaleString()}</span>
+              <span className="text-[14px] text-[#787574]">Subtotal ({cartCount} items)</span>
+              <span className="text-xl font-normal text-[#000000]">₹{subtotal.toLocaleString()}</span>
             </div>
-            <p className="text-xs text-[var(--color-text-muted)]">Shipping and taxes calculated at checkout.</p>
+            <p className="text-[12px] text-[#787574]">Shipping and taxes calculated at checkout.</p>
             <div className="flex gap-3">
               <Link
                 to="/cart"
                 onClick={() => setCartOpen(false)}
-                className="flex-1 py-3 px-4 bg-[var(--color-surface-2)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/40 hover:bg-[var(--color-primary-subtle)] text-[var(--color-text)] text-sm font-semibold rounded-xl transition-all text-center"
+                className="flex-1 py-3 px-4 bg-white border border-[#ebebeb] hover:bg-[#f2f4f5] text-[#000000] text-[14px] font-normal rounded-full transition-colors text-center"
               >
                 View Cart
               </Link>
-              <button
+              <Link
+                to="/checkout"
                 onClick={() => {
                   toast.success('Proceeding to checkout...');
                   setCartOpen(false);
                 }}
-                className="flex-1 py-3 px-4 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-sm font-semibold rounded-xl transition-all flex items-center justify-center gap-2 shadow-[var(--shadow-sm)]"
+                className="flex-1 py-3 px-4 bg-[#000000] hover:opacity-90 text-white text-[14px] font-normal rounded-full transition-opacity flex items-center justify-center gap-2"
               >
                 Checkout
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Link>
             </div>
             <button
               onClick={() => { clearCart(); toast.success('Cart cleared'); }}
-              className="w-full py-2 text-xs text-red-500 hover:text-red-600 transition-colors font-medium"
+              className="w-full py-2 text-[12px] text-red-500 hover:text-red-600 transition-colors font-normal cursor-pointer"
             >
               Clear Cart
             </button>

@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import type { PaginationMeta } from '../../types';
 
 // =====================================================
-// Admin Users Page
+// Admin Users Page — White Canvas
 // =====================================================
 interface User {
   _id: string;
@@ -74,27 +74,27 @@ const AdminUsersPage: React.FC = () => {
     <div className="min-h-screen">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold font-['Outfit']">Users Management</h1>
-        <p className="text-[var(--color-text-muted)] mt-1">Manage user accounts and permissions</p>
+        <h1 className="text-3xl font-normal tracking-[-0.05em] text-[#000000]">Users Management</h1>
+        <p className="text-[#787574] text-[14px] mt-1">Manage user accounts and permissions</p>
       </div>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-text-muted)]" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#787574]" />
           <input
             type="text"
             placeholder="Search users by name or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-indigo-500"
+            className="w-full pl-11 pr-4 py-3 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]"
           />
         </div>
         <div className="flex items-center gap-3">
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+            className="px-4 py-3 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] focus:outline-none shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px] cursor-pointer"
           >
             <option value="all">All Roles</option>
             <option value="customer">Customers</option>
@@ -104,76 +104,72 @@ const AdminUsersPage: React.FC = () => {
       </div>
 
       {/* Users Table */}
-      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl overflow-hidden">
+      <div className="bg-white border-none rounded-[28px] overflow-hidden shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
         {loading ? (
           <div className="p-8 text-center">
-            <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-[var(--color-text-muted)]">Loading users...</p>
+            <div className="w-8 h-8 border-2 border-[#000000] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-[#787574] text-[14px]">Loading users...</p>
           </div>
         ) : users.length === 0 ? (
-          <div className="p-8 text-center text-[var(--color-text-muted)]">No users found</div>
+          <div className="p-8 text-center text-[#787574] text-[14px]">No users found</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-[var(--color-surface-2)] text-[var(--color-text-muted)] uppercase text-xs">
+            <table className="w-full text-[14px] text-left">
+              <thead className="bg-[#f2f4f5] text-[#787574] uppercase text-[12px]">
                 <tr>
-                  <th className="px-6 py-4">User</th>
-                  <th className="px-6 py-4">Email</th>
-                  <th className="px-6 py-4">Role</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Joined</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+                  <th className="px-6 py-4 font-normal">User</th>
+                  <th className="px-6 py-4 font-normal">Email</th>
+                  <th className="px-6 py-4 font-normal">Role</th>
+                  <th className="px-6 py-4 font-normal">Status</th>
+                  <th className="px-6 py-4 font-normal">Joined</th>
+                  <th className="px-6 py-4 text-right font-normal">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--color-border)]">
+              <tbody className="divide-y divide-[#ebebeb]">
                 {users.map((user) => (
-                  <tr key={user._id} className="hover:bg-[var(--color-surface-2)]/50 transition-colors">
+                  <tr key={user._id} className="hover:bg-[#f2f4f5]/60 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-sm">
+                        <div className="w-9 h-9 rounded-full bg-[#f2f4f5] border border-[#ebebeb] flex items-center justify-center text-[#000000] font-normal text-[12px]">
                           {user.name.charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-medium text-white">{user.name}</span>
+                        <span className="font-normal text-[#000000]">{user.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-[var(--color-text-muted)]">{user.email}</td>
+                    <td className="px-6 py-4 text-[#787574]">{user.email}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      <span className={`px-3 py-1 rounded-full text-[12px] font-normal border ${
                         user.role === 'admin'
-                          ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
-                          : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                          ? 'bg-[#f2f4f5] text-[#000000] border-[#ebebeb]'
+                          : 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]'
                       }`}>
                         {user.role}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      <span className={`px-3 py-1 rounded-full text-[12px] font-normal border ${
                         user.isActive
-                          ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                          : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                          ? 'bg-[#000000] text-white border-[#000000]'
+                          : 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]'
                       }`}>
                         {user.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-[var(--color-text-muted)]">
+                    <td className="px-6 py-4 text-[#787574] text-[12px]">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleRoleChange(user._id, user.role === 'admin' ? 'customer' : 'admin')}
-                          className="p-2 hover:bg-purple-500/10 rounded-lg text-purple-400 transition-colors"
+                          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
                           title={user.role === 'admin' ? 'Demote to Customer' : 'Promote to Admin'}
                         >
                           {user.role === 'admin' ? <ShieldOff className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
                         </button>
                         <button
                           onClick={() => handleStatusToggle(user._id, user.isActive)}
-                          className={`p-2 rounded-lg transition-colors ${
-                            user.isActive
-                              ? 'hover:bg-red-500/10 text-red-400'
-                              : 'hover:bg-green-500/10 text-green-400'
-                          }`}
+                          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
                           title={user.isActive ? 'Deactivate User' : 'Activate User'}
                         >
                           {user.isActive ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
@@ -189,15 +185,15 @@ const AdminUsersPage: React.FC = () => {
 
         {/* Pagination */}
         {pagination && pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-[var(--color-border)]">
-            <p className="text-sm text-[var(--color-text-muted)]">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-[#ebebeb]">
+            <p className="text-[12px] text-[#787574]">
               Page {pagination.currentPage} of {pagination.totalPages}
             </p>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="p-2 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)] hover:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-8 h-8 rounded-full bg-white border border-[#ebebeb] hover:border-[#000000] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer text-[14px]"
               >
                 ←
               </button>
@@ -205,8 +201,8 @@ const AdminUsersPage: React.FC = () => {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
-                    currentPage === page ? 'bg-indigo-600 text-white' : 'bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-indigo-500/50'
+                  className={`w-8 h-8 rounded-full text-[12px] font-normal transition-all cursor-pointer ${
+                    currentPage === page ? 'bg-[#000000] text-white border-none' : 'bg-white border border-[#ebebeb] hover:border-[#000000] text-[#000000]'
                   }`}
                 >
                   {page}
@@ -215,7 +211,7 @@ const AdminUsersPage: React.FC = () => {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(pagination!.totalPages, p + 1))}
                 disabled={currentPage === pagination.totalPages}
-                className="p-2 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)] hover:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-8 h-8 rounded-full bg-white border border-[#ebebeb] hover:border-[#000000] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer text-[14px]"
               >
                 →
               </button>

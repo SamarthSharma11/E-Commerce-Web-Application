@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Mail, ArrowLeft, KeyRound, CheckCircle2, ShoppingBag } from 'lucide-react';
+import { Mail, ArrowLeft, KeyRound, CheckCircle2 } from 'lucide-react';
 import api from '../api/axios';
 
 const forgotPasswordSchema = z.object({
@@ -42,40 +42,35 @@ export const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--color-bg)] relative overflow-hidden">
-      {/* Decorations */}
-      <div className="absolute -top-48 -left-48 w-96 h-96 bg-[var(--color-primary)]/8 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-48 -right-48 w-96 h-96 bg-[var(--color-secondary)]/8 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Card */}
-      <div className="w-full max-w-md bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 shadow-[var(--shadow-lg)] relative z-10">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--color-canvas-mist)] select-none">
+      {/* Floating Card */}
+      <div className="w-full max-w-md bg-white border-none rounded-[28px] p-8 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
 
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-5 group">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[var(--color-primary)] to-[var(--color-primary-light)] flex items-center justify-center shadow-[var(--shadow-md)] group-hover:scale-105 transition-transform">
-              <ShoppingBag className="w-7 h-7 text-white" />
-            </div>
+          <Link to="/" className="inline-flex items-center gap-1 mb-4">
+            <span className="text-2xl font-normal tracking-[-0.05em] text-[#000000]">goalkart</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#5433eb]" />
           </Link>
 
           {isSubmitted ? (
-            <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-500 flex items-center justify-center mb-3 animate-bounce">
+            <div className="w-12 h-12 rounded-full bg-[#f2f4f5] text-[#000000] flex items-center justify-center mb-3">
               <CheckCircle2 className="w-6 h-6" />
             </div>
           ) : (
-            <div className="w-12 h-12 rounded-full bg-[var(--color-primary-subtle)] border border-[var(--color-primary)]/20 text-[var(--color-primary)] flex items-center justify-center mb-3">
+            <div className="w-12 h-12 rounded-full bg-[#f2f4f5] text-[#000000] flex items-center justify-center mb-3">
               <KeyRound className="w-6 h-6" />
             </div>
           )}
 
-          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--color-text)] font-['Outfit']">
+          <h1 className="text-2xl font-normal tracking-[-0.05em] text-[#000000]">
             {isSubmitted ? 'Check Your Email' : 'Reset Password'}
           </h1>
-          <p className="text-sm text-[var(--color-text-muted)] mt-1.5 leading-relaxed max-w-xs">
+          <p className="text-[14px] text-[#787574] mt-1.5 leading-relaxed max-w-xs">
             {isSubmitted ? (
               <>
                 We sent reset instructions to{' '}
-                <span className="font-semibold text-[var(--color-text)]">{submittedEmail}</span>.
+                <span className="font-normal text-[#000000]">{submittedEmail}</span>.
               </>
             ) : (
               'Enter your registered email and we\'ll send you a reset link.'
@@ -85,12 +80,12 @@ export const ForgotPassword: React.FC = () => {
 
         {isSubmitted ? (
           <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-[var(--color-surface-2)] border border-[var(--color-border)] text-xs text-[var(--color-text-muted)] leading-relaxed">
-              💡 <span className="font-medium text-[var(--color-text)]">Development note:</span> Check your server terminal console log for the stubbed password reset token.
+            <div className="p-4 rounded-[20px] bg-[#f2f4f5] text-[12px] text-[#787574] leading-relaxed">
+              Check your server terminal console log for the stubbed password reset token.
             </div>
             <button
               onClick={() => setIsSubmitted(false)}
-              className="w-full py-3 bg-[var(--color-surface-2)] hover:bg-[var(--color-border)] text-[var(--color-text)] text-sm font-semibold rounded-xl border border-[var(--color-border)] transition-all"
+              className="w-full py-3 bg-white hover:bg-[#f2f4f5] text-[#000000] text-[14px] font-normal rounded-full border border-[#ebebeb] transition-colors cursor-pointer"
             >
               Try Another Email
             </button>
@@ -98,31 +93,31 @@ export const ForgotPassword: React.FC = () => {
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">
+              <label className="block text-[12px] font-normal uppercase tracking-wider text-[#787574] mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[var(--color-text-muted)]">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#787574]">
                   <Mail className="w-4 h-4" />
                 </div>
                 <input
                   {...register('email')}
                   type="email"
                   placeholder="name@example.com"
-                  className={`w-full pl-10 pr-4 py-3 bg-[var(--color-surface-2)] border ${
-                    errors.email ? 'border-red-400' : 'border-[var(--color-border)]'
-                  } rounded-xl text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/10 text-sm transition-all`}
+                  className={`w-full pl-11 pr-4 py-3 bg-white border ${
+                    errors.email ? 'border-red-400' : 'border-[#ebebeb]'
+                  } rounded-full text-[#000000] placeholder-[#787574] text-[14px] focus:outline-none`}
                 />
               </div>
               {errors.email && (
-                <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.email.message}</p>
+                <p className="mt-1.5 text-[12px] text-red-500 font-normal">{errors.email.message}</p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 px-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-light)] hover:from-[var(--color-primary-dark)] hover:to-[var(--color-primary)] text-white font-semibold rounded-xl shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 px-6 bg-[#000000] hover:opacity-90 text-white font-normal text-[14px] rounded-full transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -134,10 +129,10 @@ export const ForgotPassword: React.FC = () => {
         )}
 
         {/* Back to Login */}
-        <div className="mt-8 pt-6 border-t border-[var(--color-border)] text-center">
+        <div className="mt-8 pt-6 border-t border-[#ebebeb] text-center">
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 text-xs font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
+            className="inline-flex items-center gap-2 text-[12px] font-normal text-[#787574] hover:text-[#000000] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Sign In</span>

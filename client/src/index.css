@@ -1,154 +1,272 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap');
 @import "tailwindcss";
 
 /* =====================================================
-   E-Commerce App — Global CSS Design System (Light)
+   Shop — Global CSS Design System (White-Canvas Floating Product Card)
    ===================================================== */
 
 :root {
-  /* ── Brand Palette ── */
-  --color-primary:        #1A6E37;   /* deep pitch-green */
-  --color-primary-dark:   #145429;
-  --color-primary-light:  #24A350;
-  --color-primary-subtle: #E6F4EC;   /* very light green tint */
-  --color-secondary:      #C8920E;   /* warm amber/gold */
-  --color-secondary-subtle: #FEF3D4;
+  /* ── Color Tokens ── */
+  --color-canvas-mist: #f2f4f5;
+  --color-pure-white: #ffffff;
+  --color-ink-black: #000000;
+  --color-faint-border: #ebebeb;
+  --color-muted-gray: #787574;
+  --color-cool-stone: #cccccc;
+  --color-warm-fog: #acb0aa;
+  --color-shop-violet: #5433eb;
+  --color-violet-wash: #c0b5f3;
+  --color-slate-ink: #332f2d;
 
-  /* ── Neutral / Surface ── */
-  --color-bg:         #F4F7F5;   /* off-white with faint green */
-  --color-surface:    #FFFFFF;
-  --color-surface-2:  #EDF2EF;
-  --color-border:     #C8D8CC;
-  --color-border-subtle: #E0EAE3;
+  /* ── Typography Tokens ── */
+  --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400;
 
-  /* ── Typography ── */
-  --color-text:       #1C2B21;   /* very dark green-black */
-  --color-text-muted: #5C7063;   /* muted green-grey */
-  --color-text-light: #8FA996;
+  /* Letter Spacing Tokens */
+  --tracking-lg: -0.05em;
+  --tracking-body: -0.031em;
+  --tracking-sm: -0.017em;
+  --tracking-xs: -0.058em;
 
-  /* ── Status ── */
-  --color-success: #17A84A;
-  --color-warning: #D97706;
-  --color-error:   #DC2626;
-  --color-info:    #2563EB;
+  /* Type Scale Tokens */
+  --text-caption: 11px;
+  --leading-caption: 1.33;
+  --text-body-sm: 12px;
+  --leading-body-sm: 1.33;
+  --text-body: 14px;
+  --leading-body: 1.33;
+  --text-body-lg: 16px;
+  --leading-body-lg: 1.33;
 
-  /* ── Fonts ── */
-  --font-sans:    'Inter', system-ui, sans-serif;
-  --font-display: 'Outfit', system-ui, sans-serif;
+  /* ── Spacing Scale Tokens ── */
+  --spacing-4: 4px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-11: 11px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-38: 38px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
 
-  /* ── Spacing Scale (4px base) ── */
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-5:  24px;
-  --space-6:  32px;
-  --space-7:  48px;
-  --space-8:  64px;
-  --space-9:  96px;
-  --space-10: 128px;
-  --space-11: 160px;
-  --space-12: 192px;
+  /* ── Border Radius Tokens ── */
+  --radius-cards: 28px;
+  --radius-image-inner: 20px;
+  --radius-pills: 9999px;
+  --radius-label-chip: 12px;
 
-  /* ── Radius ── */
-  --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   16px;
-  --radius-xl:   24px;
-  --radius-full: 9999px;
-
-  /* ── Shadows (lighter for light mode) ── */
-  --shadow-xs: 0 1px 2px rgba(26, 110, 55, 0.06);
-  --shadow-sm: 0 2px 8px rgba(26, 110, 55, 0.08);
-  --shadow-md: 0 4px 20px rgba(26, 110, 55, 0.12);
-  --shadow-lg: 0 8px 40px rgba(26, 110, 55, 0.15);
-  --shadow-glow: 0 0 28px rgba(26, 110, 55, 0.18);
+  /* ── Shadow Tokens ── */
+  --shadow-card: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px;
+  --shadow-pill: rgba(0, 0, 0, 0.06) 0px 2px 8px 0px;
+  --shadow-carousel: rgba(0, 0, 0, 0.12) 0px 4px 24px 0px;
+  --shadow-violet: rgba(69, 36, 219, 0.34) 0px 4px 24px 0px;
 
   /* ── Transitions ── */
-  --transition:      all 0.2s ease;
+  --transition: all 0.2s ease;
   --transition-slow: all 0.4s ease;
 }
 
-/* ── Reset ── */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* ── Reset & Global Typography ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-weight: 400 !important; /* Strict spec rule: weight stays 400 everywhere, no bold */
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-canvas-mist);
+}
 
 body {
-  font-family: var(--font-sans);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  line-height: 1.6;
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-regular);
+  background-color: var(--color-canvas-mist);
+  color: var(--color-ink-black);
+  line-height: var(--leading-body);
+  font-size: var(--text-body);
+  letter-spacing: var(--tracking-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Headings & Type Scale Hierarchy (Driven by size + negative letter-spacing) ── */
+h1, h2, .text-display {
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-lg);
+}
+
+h3, h4, .text-heading {
+  font-size: 16px;
+  line-height: var(--leading-body-lg);
+  letter-spacing: var(--tracking-body);
+}
+
+h5, h6, .text-subheading {
+  font-size: 14px;
+  line-height: var(--leading-body);
+  letter-spacing: -0.014em;
+}
+
+.text-caption {
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  letter-spacing: var(--tracking-xs);
+}
+
+.text-body-sm {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  letter-spacing: var(--tracking-sm);
+}
+
+.text-body {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+}
+
+.text-body-lg {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body-lg);
+  letter-spacing: var(--tracking-body);
+}
+
 /* ── Scrollbar ── */
-::-webkit-scrollbar         { width: 6px; height: 6px; }
-::-webkit-scrollbar-track   { background: var(--color-surface-2); }
-::-webkit-scrollbar-thumb   { background: var(--color-border); border-radius: var(--radius-full); }
-::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-canvas-mist); }
+::-webkit-scrollbar-thumb { background: var(--color-cool-stone); border-radius: var(--radius-pills); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-muted-gray); }
 
 /* ── Selection ── */
-::selection { background: var(--color-primary); color: #fff; }
+::selection { background: var(--color-shop-violet); color: var(--color-pure-white); }
 
-/* ── Hero — light football pitch stripe pattern ── */
-.hero {
-  background-color: var(--color-primary);
-  background-image:
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 32px,
-      rgba(255, 255, 255, 0.04) 32px,
-      rgba(255, 255, 255, 0.04) 64px
-    ),
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 32px,
-      rgba(20, 84, 41, 0.35) 32px,
-      rgba(20, 84, 41, 0.35) 64px
-    );
+/* ── Surface Cards (Elevated Cards: white surface, NO border, shadow separation) ── */
+.card, .elevated-card {
+  background: var(--color-pure-white);
+  border: none !important; /* Separation comes from shadow alone */
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
 }
 
-/* ── Chalk line — thin pitch-marking divider ── */
-.chalk-line {
-  border: none;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    var(--color-border) 20%,
-    var(--color-primary-light) 50%,
-    var(--color-border) 80%,
-    transparent 100%
-  );
-  opacity: 0.6;
+/* ── Dark Product Cards ── */
+.card-dark, .slate-card {
+  background: var(--color-slate-ink);
+  color: var(--color-pure-white);
+  border: none !important;
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-card);
 }
 
-/* ── Utility: card surface ── */
-.card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+/* ── Hairline Borders on Pills, Chips, and Inputs specifically ── */
+.pill, .chip, input, select, textarea {
+  border: 1px solid var(--color-faint-border);
+  border-radius: var(--radius-pills);
+  background: var(--color-pure-white);
 }
 
-/* ── Global Links & Buttons ── */
-a       { color: inherit; text-decoration: none; transition: var(--transition); }
-button  { cursor: pointer; font-family: inherit; }
-img     { max-width: 100%; height: auto; }
-
-/* ── Input base ── */
 input, select, textarea {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+  color: var(--color-ink-black);
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  letter-spacing: var(--tracking-body);
+  padding: 10px 16px;
+  outline: none;
+  transition: var(--transition);
 }
-input::placeholder, textarea::placeholder { color: var(--color-text-light); }
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-muted-gray);
+}
+
+/* ── Buttons (Pill-shaped by default, weight 400) ── */
+button, .btn {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  border-radius: var(--radius-pills);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  border: none;
+  outline: none;
+}
+
+/* Primary Action Button (e.g. Add to Cart) - Black fill, White text */
+.btn-primary {
+  background-color: var(--color-ink-black);
+  color: var(--color-pure-white);
+  border: none;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Secondary Button - White fill, Black text, Soft shadow */
+.btn-secondary {
+  background-color: var(--color-pure-white);
+  color: var(--color-ink-black);
+  border: none;
+  box-shadow: var(--shadow-pill);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-canvas-mist);
+}
+
+/* Ghost / Cookie / Outline Button - White fill, Hairline #ebebeb border */
+.btn-ghost, .btn-outline {
+  background-color: var(--color-pure-white);
+  color: var(--color-ink-black);
+  border: 1px solid var(--color-faint-border) !important;
+  box-shadow: var(--shadow-pill);
+}
+
+.btn-ghost:hover, .btn-outline:hover {
+  background-color: var(--color-canvas-mist);
+}
+
+/* Search Submit Button - THE single violet accent button in the entire app */
+.btn-search-submit {
+  background-color: var(--color-shop-violet);
+  color: var(--color-pure-white);
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  box-shadow: var(--shadow-violet);
+}
+
+.btn-search-submit:hover {
+  opacity: 0.95;
+  box-shadow: 0 6px 28px rgba(69, 36, 219, 0.45);
+}
+
+/* ── Global Links ── */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
 
 /* ── Focus ring ── */
 *:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-shop-violet);
   outline-offset: 2px;
 }
+

@@ -32,34 +32,31 @@ const OrderDetailPage: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending': return <Clock className="w-5 h-5 text-yellow-400" />;
-      case 'processing': return <Package className="w-5 h-5 text-blue-400" />;
-      case 'shipped': return <Truck className="w-5 h-5 text-purple-400" />;
-      case 'delivered': return <CheckCircle className="w-5 h-5 text-green-400" />;
-      case 'cancelled': return <XCircle className="w-5 h-5 text-red-400" />;
-      default: return <Clock className="w-5 h-5 text-gray-400" />;
+      case 'pending': return <Clock className="w-5 h-5 text-[#787574]" />;
+      case 'processing': return <Package className="w-5 h-5 text-[#787574]" />;
+      case 'shipped': return <Truck className="w-5 h-5 text-[#787574]" />;
+      case 'delivered': return <CheckCircle className="w-5 h-5 text-[#000000]" />;
+      case 'cancelled': return <XCircle className="w-5 h-5 text-[#787574]" />;
+      default: return <Clock className="w-5 h-5 text-[#cccccc]" />;
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusStyle = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
-      case 'processing': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-      case 'shipped': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
-      case 'delivered': return 'bg-green-500/10 text-green-400 border-green-500/20';
-      case 'cancelled': return 'bg-red-500/10 text-red-400 border-red-500/20';
-      default: return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+      case 'delivered': return 'bg-[#000000] text-white border-[#000000]';
+      case 'cancelled': return 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]';
+      default: return 'bg-[#f2f4f5] text-[#000000] border-[#ebebeb]';
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-          <div className="h-8 bg-[var(--color-surface-2)] rounded w-1/4 mb-8 animate-pulse" />
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 animate-pulse">
-            <div className="h-6 bg-[var(--color-surface-2)] rounded w-1/2 mb-4" />
-            <div className="h-4 bg-[var(--color-surface-2)] rounded w-3/4" />
+      <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
+        <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-8">
+          <div className="h-6 bg-white rounded-full w-1/4 mb-8 animate-pulse shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]" />
+          <div className="bg-white border-none rounded-[28px] p-8 animate-pulse shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+            <div className="h-6 bg-[#f2f4f5] rounded-full w-1/2 mb-4" />
+            <div className="h-4 bg-[#f2f4f5] rounded-full w-3/4" />
           </div>
         </div>
       </div>
@@ -68,11 +65,11 @@ const OrderDetailPage: React.FC = () => {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2">Order Not Found</h2>
-          <p className="text-[var(--color-text-muted)] mb-6">The order you're looking for doesn't exist or you don't have access to it.</p>
-          <Link to="/orders" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-colors">
+          <h2 className="text-2xl font-normal tracking-[-0.05em] mb-2">Order Not Found</h2>
+          <p className="text-[#787574] text-[14px] mb-6">The order you're looking for doesn't exist or you don't have access to it.</p>
+          <Link to="/orders" className="px-8 py-3.5 bg-[#000000] hover:opacity-90 text-white font-normal text-[14px] rounded-full transition-opacity">
             Back to Orders
           </Link>
         </div>
@@ -81,37 +78,37 @@ const OrderDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
+      <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] mb-6">
-          <Link to="/orders" className="hover:text-white transition-colors">Orders</Link>
+        <div className="flex items-center gap-2 text-[14px] text-[#787574] mb-6">
+          <Link to="/orders" className="hover:text-[#000000] transition-colors">Orders</Link>
           <span>/</span>
-          <span className="text-white">#{order._id.slice(-8).toUpperCase()}</span>
+          <span className="text-[#000000]">#{order._id.slice(-8).toUpperCase()}</span>
         </div>
 
-        {/* Order Header */}
-        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 mb-6">
+        {/* Order Header Card */}
+        <div className="bg-white border-none rounded-[28px] p-6 sm:p-8 mb-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl font-bold font-['Outfit']">Order #{order._id.slice(-8).toUpperCase()}</h1>
-              <p className="text-sm text-[var(--color-text-muted)] mt-1">
+              <h1 className="text-2xl font-normal tracking-[-0.05em]">Order #{order._id.slice(-8).toUpperCase()}</h1>
+              <p className="text-[14px] text-[#787574] mt-1">
                 Placed on {new Date(order.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
             </div>
-            <span className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border w-fit ${getStatusColor(order.orderStatus)}`}>
+            <span className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-normal border w-fit ${getStatusStyle(order.orderStatus)}`}>
               {getStatusIcon(order.orderStatus)}
               {order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1)}
             </span>
           </div>
 
           {/* Order Items */}
-          <div className="border-t border-[var(--color-border)] pt-6">
-            <h2 className="text-lg font-semibold mb-4">Order Items</h2>
-            <div className="space-y-4">
+          <div className="border-t border-[#ebebeb] pt-6">
+            <h2 className="text-[16px] font-normal mb-4">Order Items</h2>
+            <div className="space-y-3">
               {order.items.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-4 bg-[var(--color-surface-2)] rounded-xl">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden border border-[var(--color-border)]">
+                <div key={idx} className="flex items-center gap-4 p-4 bg-[#f2f4f5] rounded-[20px]">
+                  <div className="w-16 h-16 rounded-[16px] overflow-hidden border border-[#ebebeb]">
                     <img
                       src={typeof item.product === 'object' ? item.product.images?.[0] || '/placeholder.png' : item.image || '/placeholder.png'}
                       alt={item.name}
@@ -119,10 +116,10 @@ const OrderDetailPage: React.FC = () => {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm line-clamp-1">{item.name}</p>
-                    <p className="text-xs text-[var(--color-text-muted)]">Qty: {item.quantity} × ₹{item.price.toLocaleString()}</p>
+                    <p className="font-normal text-[14px] text-[#000000] line-clamp-1">{item.name}</p>
+                    <p className="text-[12px] text-[#787574]">Qty: {item.quantity} × ₹{item.price.toLocaleString()}</p>
                   </div>
-                  <p className="font-semibold text-sm">₹{(item.quantity * item.price).toLocaleString()}</p>
+                  <p className="font-normal text-[14px] text-[#000000]">₹{(item.quantity * item.price).toLocaleString()}</p>
                 </div>
               ))}
             </div>
@@ -131,9 +128,9 @@ const OrderDetailPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Shipping Address */}
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6">
-            <h3 className="font-semibold mb-3">Shipping Address</h3>
-            <p className="text-sm text-[var(--color-text-muted)]">
+          <div className="bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+            <h3 className="text-[16px] font-normal mb-3">Shipping Address</h3>
+            <p className="text-[14px] text-[#787574] leading-relaxed">
               {order.shippingAddress.fullName}<br />
               {order.shippingAddress.line1}<br />
               {order.shippingAddress.line2 && <>{order.shippingAddress.line2}<br /></>}
@@ -144,39 +141,39 @@ const OrderDetailPage: React.FC = () => {
           </div>
 
           {/* Payment & Totals */}
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6">
-            <h3 className="font-semibold mb-3">Payment & Totals</h3>
-            <div className="space-y-2 text-sm">
+          <div className="bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+            <h3 className="text-[16px] font-normal mb-3">Payment & Totals</h3>
+            <div className="space-y-2 text-[14px]">
               <div className="flex justify-between">
-                <span className="text-[var(--color-text-muted)]">Payment Method</span>
-                <span className="capitalize">{order.paymentMethod}</span>
+                <span className="text-[#787574]">Payment Method</span>
+                <span className="capitalize text-[#000000]">{order.paymentMethod}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--color-text-muted)]">Payment Status</span>
-                <span className="capitalize">{order.paymentInfo?.status || 'pending'}</span>
+                <span className="text-[#787574]">Payment Status</span>
+                <span className="capitalize text-[#000000]">{order.paymentInfo?.status || 'pending'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--color-text-muted)]">Subtotal</span>
-                <span>₹{order.itemsPrice.toLocaleString()}</span>
+                <span className="text-[#787574]">Subtotal</span>
+                <span className="text-[#000000]">₹{order.itemsPrice.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--color-text-muted)]">Shipping</span>
-                <span className={order.shippingPrice === 0 ? 'text-green-400' : ''}>{order.shippingPrice === 0 ? 'Free' : `₹${order.shippingPrice}`}</span>
+                <span className="text-[#787574]">Shipping</span>
+                <span className="text-[#000000]">{order.shippingPrice === 0 ? 'Free' : `₹${order.shippingPrice}`}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[var(--color-text-muted)]">Tax</span>
-                <span>₹{order.taxPrice}</span>
+                <span className="text-[#787574]">Tax</span>
+                <span className="text-[#000000]">₹{order.taxPrice}</span>
               </div>
-              <div className="flex justify-between font-bold text-lg pt-2 border-t border-[var(--color-border)]">
-                <span>Total</span>
-                <span>₹{order.totalPrice.toLocaleString()}</span>
+              <div className="flex justify-between font-normal text-[16px] pt-2 border-t border-[#ebebeb]">
+                <span className="text-[#000000]">Total</span>
+                <span className="text-[#000000]">₹{order.totalPrice.toLocaleString()}</span>
               </div>
             </div>
           </div>
         </div>
 
         <div className="mt-8">
-          <Link to="/orders" className="inline-flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-white transition-colors">
+          <Link to="/orders" className="inline-flex items-center gap-2 text-[14px] text-[#787574] hover:text-[#000000] transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back to Orders
           </Link>

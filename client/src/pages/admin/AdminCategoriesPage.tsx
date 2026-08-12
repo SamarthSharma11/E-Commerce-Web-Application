@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import type { Category, PaginationMeta } from '../../types';
 
 // =====================================================
-// Admin Categories Page
+// Admin Categories Page — White Canvas
 // =====================================================
 const AdminCategoriesPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -117,213 +117,212 @@ const AdminCategoriesPage: React.FC = () => {
     }
   };
 
+  const inputClass = `w-full px-4 py-3 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none`;
+
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold font-['Outfit']">Categories</h1>
-            <p className="text-[var(--color-text-muted)] mt-1">Manage product categories</p>
-          </div>
-          <button
-            onClick={openCreateModal}
-            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-indigo-500/20"
-          >
-            <Plus className="w-5 h-5" />
-            Add Category
-          </button>
+    <div className="min-h-screen">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-normal tracking-[-0.05em] text-[#000000]">Categories</h1>
+          <p className="text-[#787574] text-[14px] mt-1">Manage product categories</p>
         </div>
-
-        {/* Search */}
-        <div className="relative mb-6 max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-text-muted)]" />
-          <input
-            type="text"
-            placeholder="Search categories..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPagination((prev) => prev ? { ...prev, currentPage: 1 } : null);
-            }}
-            className="w-full pl-12 pr-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-indigo-500"
-          />
-        </div>
-
-        {/* Table */}
-        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center">
-              <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-[var(--color-text-muted)]">Loading categories...</p>
-            </div>
-          ) : categories.length === 0 ? (
-            <div className="p-8 text-center">
-              <p className="text-[var(--color-text-muted)]">No categories found</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-[var(--color-surface-2)] text-[var(--color-text-muted)] uppercase text-xs">
-                  <tr>
-                    <th className="px-6 py-4">Category</th>
-                    <th className="px-6 py-4">Slug</th>
-                    <th className="px-6 py-4">Parent</th>
-                    <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--color-border)]">
-                  {categories.map((category) => (
-                    <tr key={category._id} className="hover:bg-[var(--color-surface-2)]/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          {category.image && (
-                            <img
-                              src={category.image}
-                              alt={category.name}
-                              className="w-10 h-10 rounded-lg object-cover border border-[var(--color-border)]"
-                            />
-                          )}
-                          <div>
-                            <p className="font-medium text-white">{category.name}</p>
-                            <p className="text-xs text-[var(--color-text-muted)] line-clamp-1">{category.description}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-[var(--color-text-muted)] font-mono text-xs">
-                        {category.slug}
-                      </td>
-                      <td className="px-6 py-4 text-[var(--color-text-muted)]">
-                        {category.parentCategory && typeof category.parentCategory === 'object'
-                          ? category.parentCategory.name
-                          : category.parentCategory
-                            ? '-'
-                            : '-'}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                            category.isActive
-                              ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                              : 'bg-red-500/10 text-red-400 border border-red-500/20'
-                          }`}
-                        >
-                          {category.isActive ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEditModal(category)}
-                            className="p-2 hover:bg-indigo-500/10 rounded-lg text-indigo-400 transition-colors"
-                            title="Edit"
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(category._id)}
-                            className="p-2 hover:bg-red-500/10 rounded-lg text-red-400 transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Pagination */}
-          {pagination && totalPages > 1 && (
-            <div className="flex items-center justify-between px-6 py-4 border-t border-[var(--color-border)]">
-              <p className="text-sm text-[var(--color-text-muted)]">
-                Showing page {currentPage} of {totalPages}
-              </p>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setPagination((prev) => prev ? { ...prev, currentPage: Math.max(1, currentPage - 1) } : null)}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)] hover:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <span className="text-sm font-medium px-4">
-                  {currentPage} / {totalPages}
-                </span>
-                <button
-                  onClick={() => setPagination((prev) => prev ? { ...prev, currentPage: Math.min(totalPages, currentPage + 1) } : null)}
-                  disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)] hover:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <button
+          onClick={openCreateModal}
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#000000] hover:opacity-90 text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
+        >
+          <Plus className="w-4 h-4" />
+          Add Category
+        </button>
       </div>
 
-      {/* Modal */}
+      {/* Search */}
+      <div className="relative mb-6 max-w-md">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#787574]" />
+        <input
+          type="text"
+          placeholder="Search categories..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPagination((prev) => prev ? { ...prev, currentPage: 1 } : null);
+          }}
+          className="w-full pl-11 pr-4 py-3 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]"
+        />
+      </div>
+
+      {/* Table */}
+      <div className="bg-white border-none rounded-[28px] overflow-hidden shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+        {loading ? (
+          <div className="p-8 text-center">
+            <div className="w-8 h-8 border-2 border-[#000000] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-[#787574] text-[14px]">Loading categories...</p>
+          </div>
+        ) : categories.length === 0 ? (
+          <div className="p-8 text-center">
+            <p className="text-[#787574] text-[14px]">No categories found</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-[14px] text-left">
+              <thead className="bg-[#f2f4f5] text-[#787574] uppercase text-[12px]">
+                <tr>
+                  <th className="px-6 py-4 font-normal">Category</th>
+                  <th className="px-6 py-4 font-normal">Slug</th>
+                  <th className="px-6 py-4 font-normal">Parent</th>
+                  <th className="px-6 py-4 font-normal">Status</th>
+                  <th className="px-6 py-4 text-right font-normal">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#ebebeb]">
+                {categories.map((category) => (
+                  <tr key={category._id} className="hover:bg-[#f2f4f5]/60 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        {category.image && (
+                          <img
+                            src={category.image}
+                            alt={category.name}
+                            className="w-10 h-10 rounded-[14px] object-cover border border-[#ebebeb]"
+                          />
+                        )}
+                        <div>
+                          <p className="font-normal text-[#000000]">{category.name}</p>
+                          <p className="text-[12px] text-[#787574] line-clamp-1">{category.description}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-[#787574] font-mono text-[12px]">
+                      {category.slug}
+                    </td>
+                    <td className="px-6 py-4 text-[#787574]">
+                      {category.parentCategory && typeof category.parentCategory === 'object'
+                        ? category.parentCategory.name
+                        : '-'}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2.5 py-1 rounded-full text-[12px] font-normal border ${
+                        category.isActive
+                          ? 'bg-[#000000] text-white border-[#000000]'
+                          : 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]'
+                      }`}>
+                        {category.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => openEditModal(category)}
+                          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
+                          title="Edit"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(category._id)}
+                          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-red-500 transition-colors cursor-pointer"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {pagination && totalPages > 1 && (
+          <div className="flex items-center justify-between px-6 py-4 border-t border-[#ebebeb]">
+            <p className="text-[12px] text-[#787574]">
+              Showing page {currentPage} of {totalPages}
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPagination((prev) => prev ? { ...prev, currentPage: Math.max(1, currentPage - 1) } : null)}
+                disabled={currentPage === 1}
+                className="w-8 h-8 rounded-full bg-white border border-[#ebebeb] hover:border-[#000000] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer flex items-center justify-center"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="text-[12px] font-normal text-[#787574] px-2">
+                {currentPage} / {totalPages}
+              </span>
+              <button
+                onClick={() => setPagination((prev) => prev ? { ...prev, currentPage: Math.min(totalPages, currentPage + 1) } : null)}
+                disabled={currentPage === totalPages}
+                className="w-8 h-8 rounded-full bg-white border border-[#ebebeb] hover:border-[#000000] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer flex items-center justify-center"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Create/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowModal(false)} />
-          <div className="relative bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl w-full max-w-lg shadow-2xl">
-            <div className="border-b border-[var(--color-border)] px-6 py-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold font-['Outfit']">
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" onClick={() => setShowModal(false)} />
+          <div className="relative bg-white border-none rounded-[28px] w-full max-w-lg shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px]">
+            <div className="border-b border-[#ebebeb] px-6 py-4 flex items-center justify-between">
+              <h2 className="text-xl font-normal tracking-[-0.05em] text-[#000000]">
                 {editingCategory ? 'Edit Category' : 'Create Category'}
               </h2>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg transition-colors">
-                <X className="w-5 h-5" />
+              <button
+                onClick={() => setShowModal(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium mb-2">Category Name</label>
+                <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Category Name</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className={inputClass}
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium mb-2">Description</label>
+                <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Description</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500 resize-none"
+                  className="w-full px-4 py-3 bg-white border border-[#ebebeb] rounded-[20px] text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none resize-none"
                 />
               </div>
 
               {/* Image URL */}
               <div>
-                <label className="block text-sm font-medium mb-2">Image URL</label>
+                <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Image URL</label>
                 <input
                   type="text"
                   value={formData.image}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                   placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-indigo-500"
+                  className={inputClass}
                 />
               </div>
 
               {/* Parent Category */}
               <div>
-                <label className="block text-sm font-medium mb-2">Parent Category</label>
+                <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Parent Category</label>
                 <select
                   value={formData.parentCategory}
                   onChange={(e) => setFormData({ ...formData, parentCategory: e.target.value })}
-                  className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-4 py-3 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] focus:outline-none cursor-pointer appearance-none"
                 >
                   <option value="">None (Root Category)</option>
                   {categories
@@ -341,24 +340,24 @@ const AdminCategoriesPage: React.FC = () => {
                   id="isActive"
                   checked={formData.isActive}
                   onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                  className="w-4 h-4 rounded border-[var(--color-border)] bg-[var(--color-surface-2)] text-indigo-600 focus:ring-indigo-500"
+                  className="w-4 h-4 rounded border-[#ebebeb]"
                 />
-                <label htmlFor="isActive" className="text-sm font-medium">Active</label>
+                <label htmlFor="isActive" className="text-[14px] font-normal text-[#000000]">Active</label>
               </div>
 
               {/* Submit */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--color-border)]">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#ebebeb]">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-2.5 text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors"
+                  className="px-5 py-2.5 text-[14px] font-normal text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors"
+                  className="px-6 py-2.5 bg-[#000000] hover:opacity-90 disabled:bg-[#cccccc] disabled:cursor-not-allowed text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
                 >
                   {submitting ? 'Saving...' : editingCategory ? 'Update Category' : 'Create Category'}
                 </button>

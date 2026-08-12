@@ -1,10 +1,13 @@
 import React from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  User, LogOut, Search, Menu, X, ShoppingCart, Mail,
+  Home, Search, ShoppingBag, Heart, User, LogOut,
 } from 'lucide-react';
+import useAuthStore from '../store/authStore';
+import { useCartStore, useCartCount } from '../store/cartStore';
+import CartDrawer from './CartDrawer';
 
-// Simple social icon SVGs (lucide-react doesn't export Twitter/FB/IG/YT in this version)
+// Social icon SVGs
 const IconTwitter = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.264 5.634 5.9-5.634zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -25,20 +28,14 @@ const IconYoutube = () => (
     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
   </svg>
 );
-import GoalKartLogo from './GoalKartLogo';
-import CategoryNav from './CategoryNav';
-import useAuthStore from '../store/authStore';
-import { useCartStore, useCartCount } from '../store/cartStore';
-import CartDrawer from './CartDrawer';
-import { useState } from 'react';
 
 // =====================================================
-// Layout Component — Shared header, CategoryNav, footer
+// Layout Component — Persistent Left Sidebar Rail + Full-Width Dark Footer
 // =====================================================
 const Layout: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const cartCount = useCartCount();
 
   const handleLogout = async () => {
@@ -46,242 +43,270 @@ const Layout: React.FC = () => {
     navigate('/');
   };
 
+  const navItems = [
+    { label: 'Home', path: '/', icon: Home },
+    { label: 'Search', path: '/products', icon: Search },
+    {
+      label: 'Cart',
+      path: '#cart',
+      icon: ShoppingBag,
+      onClick: (e: React.MouseEvent) => {
+        e.preventDefault();
+        useCartStore.getState().setCartOpen(true);
+      },
+      badge: cartCount,
+    },
+    { label: 'Wishlist', path: '/products', icon: Heart },
+  ];
+
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex flex-col">
+    <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[var(--color-ink-black)] flex flex-col md:pl-16 pb-16 md:pb-0">
+      
+      {/* ── Persistent Desktop Left Sidebar Rail (~64px / w-16, fixed, white, no border) ── */}
+      <aside className="hidden md:flex flex-col items-center justify-between py-5 fixed left-0 top-0 bottom-0 w-16 bg-white z-50 select-none">
+        
+        {/* Navigation Rail Items */}
+        <div className="flex flex-col items-center gap-3 w-full">
+          {navItems.map((item) => {
+            const IconComponent = item.icon;
+            const isActive = item.path !== '#cart' && (
+              item.path === '/' 
+                ? location.pathname === '/' 
+                : location.pathname.startsWith(item.path)
+            );
 
-      {/* ── Header ── */}
-      <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]/95 backdrop-blur-md sticky top-0 z-50 shadow-[var(--shadow-xs)]">
-        <div className="max-w-7xl mx-auto px-4 md:px-[var(--space-6)] h-16 flex items-center justify-between">
-
-          {/* Logo */}
-          <Link to="/" className="flex items-center flex-shrink-0">
-            <GoalKartLogo size="md" />
-          </Link>
-
-          {/* Right section */}
-          <div className="flex items-center gap-3">
-            {/* Shop link */}
-            <Link
-              to="/products"
-              className="hidden sm:flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors px-3 py-2 rounded-lg hover:bg-[var(--color-primary-subtle)]"
-            >
-              <Search className="w-4 h-4" />
-              Shop
-            </Link>
-
-            {/* Category Nav */}
-            <CategoryNav />
-
-            {/* Cart Icon */}
-            <button
-              onClick={() => useCartStore.getState().setCartOpen(true)}
-              className="relative p-2.5 rounded-xl hover:bg-[var(--color-primary-subtle)] border border-transparent hover:border-[var(--color-border)] transition-all"
-              aria-label="Open cart"
-            >
-              <ShoppingCart className="w-5 h-5 text-[var(--color-text-muted)]" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--color-primary)] text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
-                  {cartCount > 99 ? '99+' : cartCount}
-                </span>
-              )}
-            </button>
-
-            {/* Auth */}
-            {isAuthenticated ? (
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--color-primary-subtle)] border border-[var(--color-border)] text-xs font-medium">
-                  <User className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-                  <span className="text-[var(--color-text)]">{user?.name}</span>
-                  {user?.role === 'admin' && (
-                    <span className="px-2 py-0.5 rounded-full bg-[var(--color-primary)] text-white text-[10px] uppercase tracking-wider font-bold">
-                      Admin
-                    </span>
-                  )}
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="p-2 rounded-xl bg-[var(--color-surface-2)] hover:bg-red-50 hover:text-red-600 border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all flex items-center gap-1.5 text-xs font-semibold"
-                  title="Logout"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span className="hidden sm:inline">Logout</span>
-                </button>
-              </div>
+            return item.onClick ? (
+              <button
+                key={item.label}
+                onClick={item.onClick}
+                className={`relative w-12 h-12 rounded-[20px] flex items-center justify-center transition-colors ${
+                  isActive ? 'bg-[var(--color-canvas-mist)]' : 'hover:bg-[var(--color-canvas-mist)]'
+                }`}
+                title={item.label}
+                aria-label={item.label}
+              >
+                <IconComponent className="w-6 h-6 text-[#000000]" />
+                {item.badge ? (
+                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[var(--color-shop-violet)] text-white text-[9px] font-normal rounded-full flex items-center justify-center">
+                    {item.badge > 99 ? '99+' : item.badge}
+                  </span>
+                ) : null}
+              </button>
             ) : (
-              <div className="flex items-center gap-3">
-                <Link
-                  to="/login"
-                  className="px-4 py-2 text-xs font-semibold text-[var(--color-text)] bg-[var(--color-surface-2)] hover:bg-[var(--color-border)] border border-[var(--color-border)] rounded-xl transition-all"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-4 py-2 text-xs font-semibold text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] rounded-xl shadow-[var(--shadow-sm)] transition-all"
-                >
-                  Get Started
-                </Link>
-              </div>
-            )}
-
-            {/* Mobile hamburger */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl hover:bg-[var(--color-surface-2)] transition-colors border border-[var(--color-border)]"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+              <Link
+                key={item.label}
+                to={item.path}
+                className={`relative w-12 h-12 rounded-[20px] flex items-center justify-center transition-colors ${
+                  isActive ? 'bg-[var(--color-canvas-mist)]' : 'hover:bg-[var(--color-canvas-mist)]'
+                }`}
+                title={item.label}
+                aria-label={item.label}
+              >
+                <IconComponent className="w-6 h-6 text-[#000000]" />
+              </Link>
+            );
+          })}
         </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-4 space-y-1">
-            <Link
-              to="/products"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm font-medium py-2.5 px-3 rounded-lg hover:bg-[var(--color-primary-subtle)] hover:text-[var(--color-primary)] transition-colors"
+        {/* Bottom Profile Avatar (32px circle, 1px #ebebeb ring) */}
+        <div className="flex flex-col items-center gap-3">
+          {isAuthenticated && (
+            <button
+              onClick={handleLogout}
+              className="w-12 h-12 rounded-[20px] flex items-center justify-center hover:bg-[var(--color-canvas-mist)] text-[#787574] hover:text-[#000000] transition-colors"
+              title="Logout"
             >
-              Shop All
-            </Link>
-            {isAuthenticated && user?.role === 'admin' && (
-              <Link
-                to="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm font-medium py-2.5 px-3 rounded-lg text-[var(--color-primary)] hover:bg-[var(--color-primary-subtle)] transition-colors"
-              >
-                Admin Dashboard
-              </Link>
-            )}
-          </div>
-        )}
-      </header>
+              <LogOut className="w-5 h-5" />
+            </button>
+          )}
 
-      {/* ── Main Content ── */}
-      <main className="flex-1">
+          <Link
+            to={isAuthenticated ? (user?.role === 'admin' ? '/admin' : '/orders') : '/login'}
+            className="w-8 h-8 rounded-full border border-[#ebebeb] flex items-center justify-center bg-white text-[#000000] text-[12px] overflow-hidden hover:opacity-80 transition-opacity"
+            title={isAuthenticated ? user?.name : 'Account / Login'}
+          >
+            {isAuthenticated ? (
+              <span className="font-normal uppercase">{user?.name?.[0] || 'U'}</span>
+            ) : (
+              <User className="w-4 h-4 text-[#000000]" />
+            )}
+          </Link>
+        </div>
+      </aside>
+
+      {/* ── Mobile Bottom Navigation Bar (collapsed rail under 768px) ── */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white z-50 flex items-center justify-around px-2 border-t border-[#ebebeb]">
+        {navItems.map((item) => {
+          const IconComponent = item.icon;
+          const isActive = item.path !== '#cart' && (
+            item.path === '/' 
+              ? location.pathname === '/' 
+              : location.pathname.startsWith(item.path)
+          );
+
+          return item.onClick ? (
+            <button
+              key={item.label}
+              onClick={item.onClick}
+              className={`relative w-12 h-12 rounded-[20px] flex items-center justify-center transition-colors ${
+                isActive ? 'bg-[var(--color-canvas-mist)]' : ''
+              }`}
+              aria-label={item.label}
+            >
+              <IconComponent className="w-6 h-6 text-[#000000]" />
+              {item.badge ? (
+                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[var(--color-shop-violet)] text-white text-[9px] font-normal rounded-full flex items-center justify-center">
+                  {item.badge > 99 ? '99+' : item.badge}
+                </span>
+              ) : null}
+            </button>
+          ) : (
+            <Link
+              key={item.label}
+              to={item.path}
+              className={`relative w-12 h-12 rounded-[20px] flex items-center justify-center transition-colors ${
+                isActive ? 'bg-[var(--color-canvas-mist)]' : ''
+              }`}
+              aria-label={item.label}
+            >
+              <IconComponent className="w-6 h-6 text-[#000000]" />
+            </Link>
+          );
+        })}
+
+        {/* Account Link Mobile */}
+        <Link
+          to={isAuthenticated ? (user?.role === 'admin' ? '/admin' : '/orders') : '/login'}
+          className="w-8 h-8 rounded-full border border-[#ebebeb] flex items-center justify-center bg-white text-[#000000] text-[12px] overflow-hidden"
+          aria-label="Account"
+        >
+          {isAuthenticated ? (
+            <span className="font-normal uppercase">{user?.name?.[0] || 'U'}</span>
+          ) : (
+            <User className="w-4 h-4 text-[#000000]" />
+          )}
+        </Link>
+      </nav>
+
+      {/* ── Main Content Area ── */}
+      <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 md:px-8 py-6">
         <Outlet />
       </main>
 
-      {/* ── Footer ── */}
-      <footer className="bg-[var(--color-surface)] border-t border-[var(--color-border)] mt-auto">
-        <div className="max-w-7xl mx-auto px-4 md:px-[var(--space-6)] py-[var(--space-8)]">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[var(--space-7)]">
-
-            {/* Brand */}
-            <div className="lg:col-span-1">
-              <Link to="/" className="flex items-center mb-4">
-                <GoalKartLogo size="md" showTagline />
-              </Link>
-              <p className="text-sm text-[var(--color-text-muted)] mb-5 leading-relaxed">
-                Premium football gear for athletes who refuse to settle. Gear up, play more, win.
-              </p>
-              <div className="flex items-center gap-2">
-                {[
-                  { label: 'Twitter', Icon: IconTwitter },
-                  { label: 'Instagram', Icon: IconInstagram },
-                  { label: 'Facebook', Icon: IconFacebook },
-                  { label: 'YouTube', Icon: IconYoutube },
-                ].map(({ label, Icon }) => (
-                  <a
-                    key={label}
-                    href="#"
-                    aria-label={label}
-                    className="p-2 rounded-lg bg-[var(--color-surface-2)] hover:bg-[var(--color-primary-subtle)] hover:text-[var(--color-primary)] text-[var(--color-text-muted)] border border-[var(--color-border-subtle)] transition-colors"
-                  >
-                    <Icon />
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h4 className="text-xs font-bold text-[var(--color-text)] mb-4 uppercase tracking-wider">Quick Links</h4>
-              <ul className="space-y-2.5">
-                {[
-                  { label: 'Shop All', to: '/products' },
-                  { label: 'Jerseys', to: '/products?category=jerseys' },
-                  { label: 'Football Boots', to: '/products?category=football-boots' },
-                  { label: 'Match Balls', to: '/products?category=match-balls' },
-                  { label: 'Training Gear', to: '/products?category=training-gear' },
-                ].map((l) => (
-                  <li key={l.label}>
-                    <Link
-                      to={l.to}
-                      className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Categories */}
-            <div>
-              <h4 className="text-xs font-bold text-[var(--color-text)] mb-4 uppercase tracking-wider">Categories</h4>
-              <ul className="space-y-2.5">
-                {[
-                  { label: 'Jerseys', to: '/products?category=jerseys' },
-                  { label: 'Football Boots', to: '/products?category=football-boots' },
-                  { label: 'Match Balls', to: '/products?category=match-balls' },
-                  { label: 'Shin Guards', to: '/products?category=shin-guards-protection' },
-                  { label: 'Goalkeeper Gear', to: '/products?category=goalkeeper-equipment' },
-                  { label: 'Club Accessories', to: '/products?category=club-accessories' },
-                ].map((l) => (
-                  <li key={l.label}>
-                    <Link
-                      to={l.to}
-                      className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Newsletter */}
-            <div>
-              <h4 className="text-xs font-bold text-[var(--color-text)] mb-4 uppercase tracking-wider">Newsletter</h4>
-              <p className="text-sm text-[var(--color-text-muted)] mb-4 leading-relaxed">
-                Get the latest deals and new arrivals straight to your inbox.
-              </p>
-              <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  className="flex-1 px-3 py-2.5 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] transition-colors"
-                />
-                <button
-                  type="submit"
-                  className="px-3 py-2.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white font-semibold rounded-xl transition-colors shadow-[var(--shadow-sm)]"
-                  aria-label="Subscribe"
-                >
-                  <Mail className="w-4 h-4" />
-                </button>
-              </form>
-            </div>
+      {/* ── Full-Width Dark Band Footer (#000000) ── */}
+      <footer className="bg-[#000000] text-white border-none mt-auto w-full py-14 px-4 md:px-12 select-none">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+          
+          {/* Column 1: Shop */}
+          <div>
+            <h4 className="text-[12px] font-normal text-white uppercase tracking-wider mb-4">Shop</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Shop All', to: '/products' },
+                { label: 'Match Balls', to: '/products?category=match-balls-footballs' },
+                { label: 'Football Boots', to: '/products?category=football-boots-shoes' },
+                { label: 'Jerseys & Apparel', to: '/products?category=jerseys-apparel' },
+                { label: 'Training Gear', to: '/products?category=training-equipment' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.to} className="text-[14px] text-[#acb0aa] hover:text-white transition-colors tracking-[-0.014em]">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="mt-10 pt-6 border-t border-[var(--color-border)] flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-[var(--color-text-muted)]">
-              © {new Date().getFullYear()} GoalKart. Built with React + Vite + Express + MongoDB.
-            </p>
-            <div className="flex items-center gap-6">
-              {['Privacy', 'Terms', 'Contact'].map((item) => (
-                <Link
-                  key={item}
-                  to={`/${item.toLowerCase()}`}
-                  className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
+          {/* Column 2: Company */}
+          <div>
+            <h4 className="text-[12px] font-normal text-white uppercase tracking-wider mb-4">Company</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'About Us', to: '/about' },
+                { label: 'Featured Merchants', to: '/merchants' },
+                { label: 'Sustainability', to: '/sustainability' },
+                { label: 'Careers', to: '/careers' },
+                { label: 'Press & Media', to: '/press' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.to} className="text-[14px] text-[#acb0aa] hover:text-white transition-colors tracking-[-0.014em]">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Support */}
+          <div>
+            <h4 className="text-[12px] font-normal text-white uppercase tracking-wider mb-4">Support</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Help Center', to: '/help' },
+                { label: 'Shipping & Delivery', to: '/shipping' },
+                { label: 'Returns & Refunds', to: '/returns' },
+                { label: 'Order History', to: '/orders' },
+                { label: 'Contact Us', to: '/contact' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.to} className="text-[14px] text-[#acb0aa] hover:text-white transition-colors tracking-[-0.014em]">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Legal */}
+          <div>
+            <h4 className="text-[12px] font-normal text-white uppercase tracking-wider mb-4">Legal</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Privacy Policy', to: '/privacy' },
+                { label: 'Terms of Service', to: '/terms' },
+                { label: 'Cookie Preferences', to: '/cookies' },
+                { label: 'Accessibility', to: '/accessibility' },
+                { label: 'IP Policy', to: '/ip-policy' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.to} className="text-[14px] text-[#acb0aa] hover:text-white transition-colors tracking-[-0.014em]">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Footer Bottom Bar */}
+        <div className="max-w-[1200px] mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <Link to="/" className="flex items-center gap-1">
+              <span className="text-xl font-normal tracking-[-0.05em] text-white">goalkart</span>
+              <span className="w-2 h-2 rounded-full bg-[#5433eb]" />
+            </Link>
+            <div className="flex items-center gap-3">
+              {[
+                { label: 'Twitter', Icon: IconTwitter },
+                { label: 'Instagram', Icon: IconInstagram },
+                { label: 'Facebook', Icon: IconFacebook },
+                { label: 'YouTube', Icon: IconYoutube },
+              ].map(({ label, Icon }) => (
+                <a
+                  key={label}
+                  href="#"
+                  aria-label={label}
+                  className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-[#acb0aa] hover:text-white transition-colors"
                 >
-                  {item}
-                </Link>
+                  <Icon />
+                </a>
               ))}
             </div>
           </div>
+
+          <p className="text-[11px] text-[#acb0aa] tracking-[-0.058em]">
+            © {new Date().getFullYear()} Shop. All rights reserved. Floating discovery constellation on white canvas.
+          </p>
         </div>
       </footer>
 

@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { UserPlus, Mail, Lock, User as UserIcon, Eye, EyeOff, ShoppingBag, ArrowRight } from 'lucide-react';
+import { UserPlus, Mail, Lock, User as UserIcon, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 
 const registerSchema = z
@@ -51,33 +51,25 @@ export const Register: React.FC = () => {
   };
 
   const inputClass = (hasError: boolean) =>
-    `w-full pl-10 pr-4 py-2.5 bg-[var(--color-surface-2)] border ${
-      hasError ? 'border-red-400' : 'border-[var(--color-border)]'
-    } rounded-xl text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/10 text-sm transition-all`;
+    `w-full pl-11 pr-4 py-3 bg-white border ${
+      hasError ? 'border-red-400' : 'border-[#ebebeb]'
+    } rounded-full text-[#000000] placeholder-[#787574] text-[14px] focus:outline-none`;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--color-bg)] relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute -top-48 -right-48 w-96 h-96 bg-[var(--color-primary)]/8 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-48 -left-48 w-96 h-96 bg-[var(--color-secondary)]/8 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 40px, var(--color-primary) 40px, var(--color-primary) 41px)`
-      }} />
-
-      {/* Card */}
-      <div className="w-full max-w-md bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 shadow-[var(--shadow-lg)] relative z-10">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--color-canvas-mist)] select-none">
+      {/* Floating Card */}
+      <div className="w-full max-w-md bg-white border-none rounded-[28px] p-8 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
 
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-7">
-          <Link to="/" className="inline-flex items-center gap-2 mb-5 group">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[var(--color-primary)] to-[var(--color-primary-light)] flex items-center justify-center shadow-[var(--shadow-md)] group-hover:scale-105 transition-transform">
-              <ShoppingBag className="w-7 h-7 text-white" />
-            </div>
+        <div className="flex flex-col items-center text-center mb-6">
+          <Link to="/" className="inline-flex items-center gap-1 mb-3">
+            <span className="text-2xl font-normal tracking-[-0.05em] text-[#000000]">goalkart</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#5433eb]" />
           </Link>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--color-text)] font-['Outfit']">
+          <h1 className="text-2xl font-normal tracking-[-0.05em] text-[#000000]">
             Create Account
           </h1>
-          <p className="text-sm text-[var(--color-text-muted)] mt-1.5">
+          <p className="text-[14px] text-[#787574] mt-1">
             Join thousands of football enthusiasts today
           </p>
         </div>
@@ -86,33 +78,33 @@ export const Register: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Full Name */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-1.5">Full Name</label>
+            <label className="block text-[12px] font-normal uppercase tracking-wider text-[#787574] mb-1.5">Full Name</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[var(--color-text-muted)]">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#787574]">
                 <UserIcon className="w-4 h-4" />
               </div>
               <input {...register('name')} type="text" placeholder="John Doe" className={inputClass(!!errors.name)} />
             </div>
-            {errors.name && <p className="mt-1 text-xs text-red-500 font-medium">{errors.name.message}</p>}
+            {errors.name && <p className="mt-1 text-[12px] text-red-500 font-normal">{errors.name.message}</p>}
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-1.5">Email Address</label>
+            <label className="block text-[12px] font-normal uppercase tracking-wider text-[#787574] mb-1.5">Email Address</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[var(--color-text-muted)]">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#787574]">
                 <Mail className="w-4 h-4" />
               </div>
               <input {...register('email')} type="email" placeholder="name@example.com" className={inputClass(!!errors.email)} />
             </div>
-            {errors.email && <p className="mt-1 text-xs text-red-500 font-medium">{errors.email.message}</p>}
+            {errors.email && <p className="mt-1 text-[12px] text-red-500 font-normal">{errors.email.message}</p>}
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-1.5">Password</label>
+            <label className="block text-[12px] font-normal uppercase tracking-wider text-[#787574] mb-1.5">Password</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[var(--color-text-muted)]">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#787574]">
                 <Lock className="w-4 h-4" />
               </div>
               <input
@@ -124,19 +116,19 @@ export const Register: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
-            {errors.password && <p className="mt-1 text-xs text-red-500 font-medium">{errors.password.message}</p>}
+            {errors.password && <p className="mt-1 text-[12px] text-red-500 font-normal">{errors.password.message}</p>}
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-1.5">Confirm Password</label>
+            <label className="block text-[12px] font-normal uppercase tracking-wider text-[#787574] mb-1.5">Confirm Password</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[var(--color-text-muted)]">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#787574]">
                 <Lock className="w-4 h-4" />
               </div>
               <input
@@ -148,19 +140,19 @@ export const Register: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
               >
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
-            {errors.confirmPassword && <p className="mt-1 text-xs text-red-500 font-medium">{errors.confirmPassword.message}</p>}
+            {errors.confirmPassword && <p className="mt-1 text-[12px] text-red-500 font-normal">{errors.confirmPassword.message}</p>}
           </div>
 
           {/* Submit */}
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 px-4 mt-2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-light)] hover:from-[var(--color-primary-dark)] hover:to-[var(--color-primary)] text-white font-semibold rounded-xl shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 px-6 mt-2 bg-[#000000] hover:opacity-90 text-white font-normal text-[14px] rounded-full transition-opacity flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -168,18 +160,18 @@ export const Register: React.FC = () => {
               <>
                 <UserPlus className="w-4 h-4" />
                 <span>Create Account</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="w-4 h-4" />
               </>
             )}
           </button>
         </form>
 
         {/* Footer */}
-        <div className="mt-6 pt-5 border-t border-[var(--color-border)] text-center text-xs text-[var(--color-text-muted)]">
+        <div className="mt-6 pt-5 border-t border-[#ebebeb] text-center text-[12px] text-[#787574]">
           Already have an account?{' '}
           <Link
             to="/login"
-            className="font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] hover:underline ml-1 transition-colors"
+            className="font-normal text-[#000000] hover:underline ml-1 transition-colors"
           >
             Sign In
           </Link>

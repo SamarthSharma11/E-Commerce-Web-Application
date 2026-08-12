@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight, Leaf } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight, Leaf, ArrowRight } from 'lucide-react';
 import api from '../api/axios';
 import ProductCard from '../components/ProductCard';
-import PitchDivider from '../components/PitchDivider';
+import SectionHeading from '../components/SectionHeading';
+import ProductImageTile from '../components/ProductImageTile';
 import { ProductListSkeleton, CategoryNavSkeleton } from '../components/LoadingSkeleton';
 import type { Product, Category, PaginationMeta } from '../types';
 import { FALLBACK_CATEGORIES, FALLBACK_PRODUCTS } from '../data/mockProducts';
 
 // =====================================================
-// ProductListPage
+// ProductListPage — White-Canvas Floating Product Constellation
 // =====================================================
 const ProductListPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,7 +73,7 @@ const ProductListPage: React.FC = () => {
         applyFallbackProducts();
       }
     } catch (err: unknown) {
-      console.warn('Backend API unavailable on Vercel, using fallback products:', err);
+      console.warn('Backend API unavailable, using fallback products:', err);
       applyFallbackProducts();
     } finally {
       setLoading(false);
@@ -145,13 +146,21 @@ const ProductListPage: React.FC = () => {
   const totalPages = pagination?.totalPages || 1;
   const hasActiveFilters = currentCategory || currentMinPrice || currentMaxPrice || currentSearch;
 
+  /* Category Tiles Data for "Shop by Category" Tile Grid */
+  const categoryTiles = [
+    { title: 'Match Balls & Footballs', image: '/products/ball-pro-match.png', slug: 'match-balls-footballs' },
+    { title: 'Football Boots & Shoes', image: '/products/football-boots-beginner.jpg', slug: 'football-boots-shoes' },
+    { title: 'Jerseys & Performance Apparel', image: '/products/training-jacket.jpg', slug: 'jerseys-apparel' },
+    { title: 'Goalkeeper Gear & Protection', image: '/products/goalkeeper-gloves-training.jpg', slug: 'shin-guards-gk-gear' },
+  ];
+
   /* ── Sidebar ── */
   const SidebarContent = () => (
     <div className="space-y-6">
       {/* Categories */}
       <div>
-        <h3 className="text-xs font-bold text-[var(--color-text)] mb-3 uppercase tracking-wider flex items-center gap-1.5">
-          <Leaf className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+        <h3 className="text-[12px] font-normal text-[#000000] mb-3 uppercase tracking-wider flex items-center gap-1.5">
+          <Leaf className="w-3.5 h-3.5 text-[#5433eb]" />
           Categories
         </h3>
         <div className="space-y-1">
@@ -161,10 +170,10 @@ const ProductListPage: React.FC = () => {
             <>
               <button
                 onClick={() => updateFilter('category', '')}
-                className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
+                className={`block w-full text-left px-3 py-2 rounded-[12px] text-[14px] transition-all cursor-pointer ${
                   !currentCategory
-                    ? 'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] font-semibold border border-[var(--color-primary)]/20'
-                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-subtle)]'
+                    ? 'bg-[#f2f4f5] text-[#000000] font-normal'
+                    : 'text-[#787574] hover:text-[#000000] hover:bg-[#f2f4f5]'
                 }`}
               >
                 All Products
@@ -173,10 +182,10 @@ const ProductListPage: React.FC = () => {
                 <button
                   key={cat._id}
                   onClick={() => updateFilter('category', currentCategory === cat.slug ? '' : cat.slug)}
-                  className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
+                  className={`block w-full text-left px-3 py-2 rounded-[12px] text-[14px] transition-all cursor-pointer ${
                     currentCategory === cat.slug
-                      ? 'bg-[var(--color-primary-subtle)] text-[var(--color-primary)] font-semibold border border-[var(--color-primary)]/20'
-                      : 'text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary-subtle)]'
+                      ? 'bg-[#f2f4f5] text-[#000000] font-normal'
+                      : 'text-[#787574] hover:text-[#000000] hover:bg-[#f2f4f5]'
                   }`}
                 >
                   {cat.name}
@@ -189,22 +198,22 @@ const ProductListPage: React.FC = () => {
 
       {/* Price Range */}
       <div>
-        <h3 className="text-xs font-bold text-[var(--color-text)] mb-3 uppercase tracking-wider">Price Range (₹)</h3>
+        <h3 className="text-[12px] font-normal text-[#000000] mb-3 uppercase tracking-wider">Price Range (₹)</h3>
         <div className="flex items-center gap-2">
           <input
             type="number"
             placeholder="Min"
             value={currentMinPrice}
             onChange={(e) => updateFilter('minPrice', e.target.value)}
-            className="w-full px-3 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] transition-colors"
+            className="w-full px-3 py-2 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none"
           />
-          <span className="text-[var(--color-text-muted)] font-medium">–</span>
+          <span className="text-[#787574] font-normal">–</span>
           <input
             type="number"
             placeholder="Max"
             value={currentMaxPrice}
             onChange={(e) => updateFilter('maxPrice', e.target.value)}
-            className="w-full px-3 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] transition-colors"
+            className="w-full px-3 py-2 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none"
           />
         </div>
       </div>
@@ -213,7 +222,7 @@ const ProductListPage: React.FC = () => {
       {hasActiveFilters && (
         <button
           onClick={clearFilters}
-          className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 transition-colors font-medium"
+          className="flex items-center gap-2 text-[14px] text-red-500 hover:text-red-600 transition-colors font-normal cursor-pointer"
         >
           <X className="w-4 h-4" />
           Clear all filters
@@ -223,51 +232,154 @@ const ProductListPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <div className="max-w-7xl mx-auto px-4 md:px-[var(--space-6)] py-8">
+    <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
+      <div className="max-w-[1200px] mx-auto px-4 py-4">
 
-        {/* ── Hero Banner ── */}
-        <section className="hero rounded-2xl px-8 py-14 md:px-12 md:py-20 mb-10 flex flex-col items-center text-center shadow-[var(--shadow-lg)] overflow-hidden">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/25 text-xs font-semibold text-white mb-4 backdrop-blur-sm">
-            ⚽ Football Equipment
+        {/* ── Hero Showcase: Floating Product Constellation ── */}
+        <section className="relative py-8 md:py-12 mb-10 flex flex-col items-center text-center">
+          
+          {/* Floating Product Cards Constellation */}
+          <div className="w-full flex items-center justify-center gap-4 md:gap-6 mb-8 overflow-x-auto pb-4 pt-2 no-scrollbar px-2">
+            
+            {/* Floating Card 1 */}
+            <div className="w-44 md:w-52 bg-white rounded-[28px] shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] p-0 overflow-hidden flex-shrink-0 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+              <div className="p-2">
+                <img
+                  src="/products/ball-pro-match.png"
+                  alt="GoalKart Pro Match"
+                  className="w-full aspect-square object-cover rounded-[20px]"
+                />
+              </div>
+              <div className="px-3 pb-3 text-left">
+                <h4 className="text-[14px] font-normal text-[#000000] tracking-[-0.014em] truncate">GoalKart Pro Match</h4>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <span className="text-yellow-400 text-[10px]">★★★★★</span>
+                  <span className="text-[9px] text-[#787574] tracking-[-0.058em]">4.9 (245)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Card 2 (Center Hero Spotlight Tile) */}
+            <div className="w-48 md:w-56 bg-white rounded-[28px] shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] p-0 overflow-hidden flex-shrink-0 transform -translate-y-2 hover:translate-y-0 transition-transform duration-300">
+              <div className="p-2">
+                <img
+                  src="/products/football-boots-beginner.jpg"
+                  alt="Firm Ground Boots"
+                  className="w-full aspect-square object-cover rounded-[20px]"
+                />
+              </div>
+              <div className="px-3 pb-3 text-left">
+                <h4 className="text-[14px] font-normal text-[#000000] tracking-[-0.014em] truncate">Firm Ground Boots</h4>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <span className="text-yellow-400 text-[10px]">★★★★★</span>
+                  <span className="text-[9px] text-[#787574] tracking-[-0.058em]">4.8 (180)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Card 3 */}
+            <div className="w-44 md:w-52 bg-white rounded-[28px] shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] p-0 overflow-hidden flex-shrink-0 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+              <div className="p-2">
+                <img
+                  src="/products/training-jacket.jpg"
+                  alt="Pro Training Jacket"
+                  className="w-full aspect-square object-cover rounded-[20px]"
+                />
+              </div>
+              <div className="px-3 pb-3 text-left">
+                <h4 className="text-[14px] font-normal text-[#000000] tracking-[-0.014em] truncate">Pro Training Jacket</h4>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <span className="text-yellow-400 text-[10px]">★★★★★</span>
+                  <span className="text-[9px] text-[#787574] tracking-[-0.058em]">4.7 (96)</span>
+                </div>
+              </div>
+            </div>
+
           </div>
-          <h1 className="font-display font-extrabold text-4xl md:text-5xl lg:text-6xl tracking-tight text-white mb-4 leading-tight">
-            Gear Up. Play Harder.
+
+          {/* Centered Wordmark with Single Violet Dot Accent */}
+          <h1 className="text-4xl md:text-6xl font-normal tracking-[-0.05em] text-[#000000] flex items-center justify-center gap-1.5 mb-6">
+            goalkart
+            <span className="w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-[#5433eb] inline-block" />
           </h1>
-          <p className="text-white/80 text-lg md:text-xl max-w-2xl mb-8 leading-relaxed">
-            Premium sports gear for athletes who refuse to settle. Shop the latest collections.
-          </p>
-          <Link
-            to="/products"
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--color-primary-dark)] font-bold text-sm rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-md"
+
+          {/* Search Bar with Circular Violet Submit Button */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              updateFilter('search', currentSearch);
+            }}
+            className="w-full max-w-2xl bg-white rounded-full border border-[#000000]/10 shadow-sm flex items-center py-1 pl-6 pr-1 mb-8 transition-all hover:border-[#000000]/20"
           >
-            Shop Now →
-          </Link>
-        </section>
-
-        {/* Divider */}
-        <hr className="chalk-line mb-8" />
-        <PitchDivider className="mb-8" />
-
-        {/* ── Search & Sort Bar ── */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)]" />
             <input
               type="text"
-              placeholder="Search football products..."
+              placeholder="What are you looking for today?"
               value={currentSearch}
               onChange={(e) => updateFilter('search', e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-[var(--color-text)] placeholder-[var(--color-text-light)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]/20 transition-all shadow-[var(--shadow-xs)]"
+              className="flex-1 bg-transparent text-[16px] tracking-[-0.031em] text-[#000000] placeholder-[#787574] focus:outline-none border-none p-0"
             />
+            <button
+              type="submit"
+              className="w-12 h-12 rounded-full bg-[#5433eb] text-white flex items-center justify-center flex-shrink-0 shadow-[rgba(69,36,219,0.34)_0px_4px_24px_0px] hover:opacity-95 transition-opacity cursor-pointer"
+              aria-label="Search"
+            >
+              <ArrowRight className="w-5 h-5 stroke-[2.5]" />
+            </button>
+          </form>
+
+          {/* Centered Category Pills Row */}
+          <div className="flex items-center justify-center flex-wrap gap-2.5 max-w-3xl mx-auto">
+            <button
+              onClick={() => updateFilter('category', '')}
+              className={`rounded-full bg-white border border-[#ebebeb] shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px] px-4 py-2 flex items-center gap-2 text-[14px] text-[#000000] tracking-[-0.031em] cursor-pointer hover:bg-[#f2f4f5] transition-colors ${
+                !currentCategory ? 'ring-1 ring-[#000000] bg-[#f2f4f5]' : ''
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-[#000000]" />
+              All Products
+            </button>
+            {categories.slice(0, 6).map((cat) => (
+              <button
+                key={cat._id}
+                onClick={() => updateFilter('category', currentCategory === cat.slug ? '' : cat.slug)}
+                className={`rounded-full bg-white border border-[#ebebeb] shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px] px-4 py-2 flex items-center gap-2 text-[14px] text-[#000000] tracking-[-0.031em] cursor-pointer hover:bg-[#f2f4f5] transition-colors ${
+                  currentCategory === cat.slug ? 'ring-1 ring-[#5433eb] bg-[#f2f4f5]' : ''
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-[#787574]" />
+                {cat.name}
+              </button>
+            ))}
           </div>
-          <div className="flex gap-3">
+        </section>
+
+        {/* ── Shop by Category Section (ProductImageTile Grid) ── */}
+        {!currentSearch && !currentCategory && (
+          <section className="mb-14">
+            <SectionHeading title="Shop by Category" to="/products" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {categoryTiles.map((tile) => (
+                <ProductImageTile
+                  key={tile.slug}
+                  title={tile.title}
+                  imageUrl={tile.image}
+                  to={`/products?category=${tile.slug}`}
+                  aspectRatio="square"
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── Sort & Controls Bar ── */}
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <SectionHeading title={currentCategory ? currentCategory : "All Gear"} />
+          
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`lg:hidden flex items-center gap-2 px-4 py-3 bg-[var(--color-surface)] border rounded-xl text-sm font-medium transition-all shadow-[var(--shadow-xs)] ${
-                showFilters
-                  ? 'border-[var(--color-primary)] text-[var(--color-primary)] bg-[var(--color-primary-subtle)]'
-                  : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-[var(--color-primary)]/50'
+              className={`lg:hidden flex items-center gap-2 px-4 py-2 bg-white border border-[#ebebeb] rounded-full text-[14px] transition-all cursor-pointer ${
+                showFilters ? 'bg-[#f2f4f5] text-[#000000]' : 'text-[#787574]'
               }`}
             >
               <SlidersHorizontal className="w-4 h-4" />
@@ -276,7 +388,7 @@ const ProductListPage: React.FC = () => {
             <select
               value={currentSort}
               onChange={(e) => updateFilter('sort', e.target.value)}
-              className="px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-[var(--color-text)] focus:outline-none focus:border-[var(--color-primary)] cursor-pointer shadow-[var(--shadow-xs)] hover:border-[var(--color-primary)]/50 transition-all"
+              className="px-4 py-2 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] focus:outline-none cursor-pointer"
             >
               <option value="newest">Newest</option>
               <option value="price_asc">Price: Low to High</option>
@@ -286,22 +398,12 @@ const ProductListPage: React.FC = () => {
           </div>
         </div>
 
-        {/* ── Results count ── */}
-        {!loading && !error && (
-          <div className="mb-4 flex items-center justify-between">
-            <p className="text-sm text-[var(--color-text-muted)]">
-              {pagination?.totalCount ?? pagination?.total ?? products.length} product{(pagination?.totalCount ?? pagination?.total ?? products.length) !== 1 ? 's' : ''} found
-              {currentCategory && <span className="ml-1">in <span className="font-medium text-[var(--color-primary)]">{currentCategory}</span></span>}
-            </p>
-          </div>
-        )}
-
-        {/* ── Layout: Sidebar + Grid ── */}
+        {/* ── Layout: Sidebar + Product Cards Grid ── */}
         <div className="flex gap-8">
 
           {/* Desktop Sidebar */}
           <aside className="hidden lg:block w-60 flex-shrink-0">
-            <div className="sticky top-24 bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-2xl p-5 shadow-[var(--shadow-sm)]">
+            <div className="sticky top-6 bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
               <SidebarContent />
             </div>
           </aside>
@@ -309,13 +411,13 @@ const ProductListPage: React.FC = () => {
           {/* Mobile Filters Drawer */}
           {showFilters && (
             <div className="fixed inset-0 z-50 lg:hidden">
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowFilters(false)} />
-              <div className="absolute right-0 top-0 bottom-0 w-80 bg-[var(--color-surface)] border-l border-[var(--color-border)] p-6 overflow-y-auto shadow-2xl">
+              <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setShowFilters(false)} />
+              <div className="absolute right-0 top-0 bottom-0 w-80 bg-white p-6 overflow-y-auto shadow-2xl">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-base font-bold">Filters</h2>
+                  <h2 className="text-[16px] font-normal">Filters</h2>
                   <button
                     onClick={() => setShowFilters(false)}
-                    className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg text-[var(--color-text-muted)] transition-colors"
+                    className="p-2 hover:bg-[#f2f4f5] rounded-full text-[#787574] transition-colors cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -331,29 +433,29 @@ const ProductListPage: React.FC = () => {
               <ProductListSkeleton count={currentLimit} />
             ) : error ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
-                <div className="w-16 h-16 rounded-full bg-red-50 border border-red-100 flex items-center justify-center mb-4">
-                  <X className="w-8 h-8 text-red-400" />
+                <div className="w-16 h-16 rounded-full bg-[#f2f4f5] flex items-center justify-center mb-4">
+                  <X className="w-8 h-8 text-red-500" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Something went wrong</h3>
-                <p className="text-[var(--color-text-muted)] mb-6 text-sm">{error}</p>
+                <h3 className="text-[16px] font-normal mb-2">Something went wrong</h3>
+                <p className="text-[#787574] mb-6 text-[14px]">{error}</p>
                 <button
                   onClick={fetchProducts}
-                  className="px-6 py-2.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-sm font-semibold rounded-xl transition-all shadow-[var(--shadow-sm)]"
+                  className="btn btn-primary px-6 py-2.5 text-[14px]"
                 >
                   Try Again
                 </button>
               </div>
             ) : products.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--color-surface-2)] border border-[var(--color-border)] flex items-center justify-center mb-4">
-                  <Search className="w-8 h-8 text-[var(--color-text-muted)]" />
+                <div className="w-16 h-16 rounded-full bg-white border border-[#ebebeb] flex items-center justify-center mb-4">
+                  <Search className="w-8 h-8 text-[#787574]" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No products found</h3>
-                <p className="text-[var(--color-text-muted)] mb-6 text-sm">Try adjusting your filters or search terms</p>
+                <h3 className="text-[16px] font-normal mb-2">No products found</h3>
+                <p className="text-[#787574] mb-6 text-[14px]">Try adjusting your search or category filters</p>
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="px-6 py-2.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-sm font-semibold rounded-xl transition-all shadow-[var(--shadow-sm)]"
+                    className="btn btn-primary px-6 py-2.5 text-[14px]"
                   >
                     Clear Filters
                   </button>
@@ -373,7 +475,7 @@ const ProductListPage: React.FC = () => {
                     <button
                       onClick={() => updateFilter('page', String(Math.max(1, currentPage - 1)))}
                       disabled={currentPage === 1}
-                      className="p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/40 hover:bg-[var(--color-primary-subtle)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[var(--shadow-xs)]"
+                      className="p-2.5 rounded-full bg-white border border-[#ebebeb] hover:bg-[#f2f4f5] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px] cursor-pointer"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
@@ -382,10 +484,10 @@ const ProductListPage: React.FC = () => {
                       <button
                         key={page}
                         onClick={() => updateFilter('page', String(page))}
-                        className={`w-10 h-10 rounded-lg text-sm font-semibold transition-all ${
+                        className={`w-10 h-10 rounded-full text-[14px] font-normal transition-all cursor-pointer ${
                           currentPage === page
-                            ? 'bg-[var(--color-primary)] text-white shadow-[var(--shadow-sm)]'
-                            : 'bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/40 hover:bg-[var(--color-primary-subtle)] text-[var(--color-text-muted)]'
+                            ? 'bg-[#000000] text-white shadow-sm'
+                            : 'bg-white border border-[#ebebeb] hover:bg-[#f2f4f5] text-[#787574]'
                         }`}
                       >
                         {page}
@@ -395,7 +497,7 @@ const ProductListPage: React.FC = () => {
                     <button
                       onClick={() => updateFilter('page', String(Math.min(totalPages, currentPage + 1)))}
                       disabled={currentPage === totalPages}
-                      className="p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/40 hover:bg-[var(--color-primary-subtle)] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[var(--shadow-xs)]"
+                      className="p-2.5 rounded-full bg-white border border-[#ebebeb] hover:bg-[#f2f4f5] disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px] cursor-pointer"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>

@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import type { Product, Category, PaginationMeta } from '../../types';
 
 // =====================================================
-// Admin Products Page
+// Admin Products Page — White Canvas
 // =====================================================
 const AdminProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -195,199 +195,200 @@ const AdminProductsPage: React.FC = () => {
     }
   };
 
+  const inputClass = `w-full px-4 py-3 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none`;
+
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold font-['Outfit']">Products</h1>
-            <p className="text-[var(--color-text-muted)] mt-1">Manage your product inventory</p>
-          </div>
-          <button
-            onClick={openCreateModal}
-            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-indigo-500/20"
-          >
-            <Plus className="w-5 h-5" />
-            Add Product
-          </button>
+    <div className="min-h-screen">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-normal tracking-[-0.05em] text-[#000000]">Products</h1>
+          <p className="text-[#787574] text-[14px] mt-1">Manage your product inventory</p>
         </div>
-
-        {/* Search */}
-        <div className="relative mb-6 max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-text-muted)]" />
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPagination((prev) => prev ? { ...prev, currentPage: 1 } : null);
-            }}
-            className="w-full pl-12 pr-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-indigo-500"
-          />
-        </div>
-
-        {/* Table */}
-        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center">
-              <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-[var(--color-text-muted)]">Loading products...</p>
-            </div>
-          ) : products.length === 0 ? (
-            <div className="p-8 text-center">
-              <p className="text-[var(--color-text-muted)]">No products found</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-[var(--color-surface-2)] text-[var(--color-text-muted)] uppercase text-xs">
-                  <tr>
-                    <th className="px-6 py-4">Product</th>
-                    <th className="px-6 py-4">Category</th>
-                    <th className="px-6 py-4">Price</th>
-                    <th className="px-6 py-4">Stock</th>
-                    <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--color-border)]">
-                  {products.map((product) => (
-                    <tr key={product._id} className="hover:bg-[var(--color-surface-2)]/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-4">
-                          <img
-                            src={product.images[0] || '/placeholder.png'}
-                            alt={product.name}
-                            className="w-12 h-12 rounded-lg object-cover border border-[var(--color-border)]"
-                          />
-                          <div>
-                            <p className="font-medium text-white line-clamp-1">{product.name}</p>
-                            <p className="text-xs text-[var(--color-text-muted)]">{product.sku}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-[var(--color-text-muted)]">
-                        {typeof product.category === 'object' ? product.category.name : '-'}
-                      </td>
-                      <td className="px-6 py-4 font-medium">
-                        ₹{(product.discountPrice ?? product.price).toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={product.stock > 0 ? 'text-green-400' : 'text-red-400'}>
-                          {product.stock}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                            product.isActive
-                              ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                              : 'bg-red-500/10 text-red-400 border border-red-500/20'
-                          }`}
-                        >
-                          {product.isActive ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEditModal(product)}
-                            className="p-2 hover:bg-indigo-500/10 rounded-lg text-indigo-400 transition-colors"
-                            title="Edit"
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(product._id)}
-                            className="p-2 hover:bg-red-500/10 rounded-lg text-red-400 transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Pagination */}
-          {pagination && totalPages > 1 && (
-            <div className="flex items-center justify-between px-6 py-4 border-t border-[var(--color-border)]">
-              <p className="text-sm text-[var(--color-text-muted)]">
-                Showing page {currentPage} of {totalPages}
-              </p>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setPagination((prev) => prev ? { ...prev, currentPage: Math.max(1, currentPage - 1) } : null)}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)] hover:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <span className="text-sm font-medium px-4">
-                  {currentPage} / {totalPages}
-                </span>
-                <button
-                  onClick={() => setPagination((prev) => prev ? { ...prev, currentPage: Math.min(totalPages, currentPage + 1) } : null)}
-                  disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)] hover:border-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <button
+          onClick={openCreateModal}
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#000000] hover:opacity-90 text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
+        >
+          <Plus className="w-4 h-4" />
+          Add Product
+        </button>
       </div>
 
-      {/* Modal */}
+      {/* Search */}
+      <div className="relative mb-6 max-w-md">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#787574]" />
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPagination((prev) => prev ? { ...prev, currentPage: 1 } : null);
+          }}
+          className="w-full pl-11 pr-4 py-3 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]"
+        />
+      </div>
+
+      {/* Table */}
+      <div className="bg-white border-none rounded-[28px] overflow-hidden shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+        {loading ? (
+          <div className="p-8 text-center">
+            <div className="w-8 h-8 border-2 border-[#000000] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-[#787574] text-[14px]">Loading products...</p>
+          </div>
+        ) : products.length === 0 ? (
+          <div className="p-8 text-center">
+            <p className="text-[#787574] text-[14px]">No products found</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-[14px] text-left">
+              <thead className="bg-[#f2f4f5] text-[#787574] uppercase text-[12px]">
+                <tr>
+                  <th className="px-6 py-4 font-normal">Product</th>
+                  <th className="px-6 py-4 font-normal">Category</th>
+                  <th className="px-6 py-4 font-normal">Price</th>
+                  <th className="px-6 py-4 font-normal">Stock</th>
+                  <th className="px-6 py-4 font-normal">Status</th>
+                  <th className="px-6 py-4 text-right font-normal">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#ebebeb]">
+                {products.map((product) => (
+                  <tr key={product._id} className="hover:bg-[#f2f4f5]/60 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={product.images[0] || '/placeholder.png'}
+                          alt={product.name}
+                          className="w-12 h-12 rounded-[14px] object-cover border border-[#ebebeb]"
+                        />
+                        <div>
+                          <p className="font-normal text-[#000000] line-clamp-1">{product.name}</p>
+                          <p className="text-[12px] text-[#787574]">{product.sku}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-[#787574]">
+                      {typeof product.category === 'object' ? product.category.name : '-'}
+                    </td>
+                    <td className="px-6 py-4 font-normal text-[#000000]">
+                      ₹{(product.discountPrice ?? product.price).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={product.stock > 0 ? 'text-[#000000]' : 'text-[#cccccc]'}>
+                        {product.stock}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2.5 py-1 rounded-full text-[12px] font-normal border ${
+                        product.isActive
+                          ? 'bg-[#000000] text-white border-[#000000]'
+                          : 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]'
+                      }`}>
+                        {product.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => openEditModal(product)}
+                          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
+                          title="Edit"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(product._id)}
+                          className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-red-500 transition-colors cursor-pointer"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {pagination && totalPages > 1 && (
+          <div className="flex items-center justify-between px-6 py-4 border-t border-[#ebebeb]">
+            <p className="text-[12px] text-[#787574]">
+              Showing page {currentPage} of {totalPages}
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPagination((prev) => prev ? { ...prev, currentPage: Math.max(1, currentPage - 1) } : null)}
+                disabled={currentPage === 1}
+                className="w-8 h-8 rounded-full bg-white border border-[#ebebeb] hover:border-[#000000] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer flex items-center justify-center"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="text-[12px] font-normal text-[#787574] px-2">
+                {currentPage} / {totalPages}
+              </span>
+              <button
+                onClick={() => setPagination((prev) => prev ? { ...prev, currentPage: Math.min(totalPages, currentPage + 1) } : null)}
+                disabled={currentPage === totalPages}
+                className="w-8 h-8 rounded-full bg-white border border-[#ebebeb] hover:border-[#000000] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer flex items-center justify-center"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Create/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowModal(false)} />
-          <div className="relative bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="sticky top-0 bg-[var(--color-surface)] border-b border-[var(--color-border)] px-6 py-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold font-['Outfit']">
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" onClick={() => setShowModal(false)} />
+          <div className="relative bg-white border-none rounded-[28px] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px]">
+            <div className="sticky top-0 bg-white border-b border-[#ebebeb] px-6 py-4 flex items-center justify-between rounded-t-[28px]">
+              <h2 className="text-xl font-normal tracking-[-0.05em] text-[#000000]">
                 {editingProduct ? 'Edit Product' : 'Create Product'}
               </h2>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-[var(--color-surface-2)] rounded-lg transition-colors">
-                <X className="w-5 h-5" />
+              <button
+                onClick={() => setShowModal(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="p-6 space-y-5">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium mb-2">Product Name</label>
+                <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Product Name</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className={inputClass}
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium mb-2">Description</label>
+                <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Description</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   required
                   rows={3}
-                  className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500 resize-none"
+                  className="w-full px-4 py-3 bg-white border border-[#ebebeb] rounded-[20px] text-[14px] text-[#000000] placeholder-[#787574] focus:outline-none resize-none"
                 />
               </div>
 
               {/* Price & Discount */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Price (₹)</label>
+                  <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Price (₹)</label>
                   <input
                     type="number"
                     value={formData.price}
@@ -395,18 +396,18 @@ const AdminProductsPage: React.FC = () => {
                     required
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className={inputClass}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Discount Price (₹)</label>
+                  <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Discount Price (₹)</label>
                   <input
                     type="number"
                     value={formData.discountPrice}
                     onChange={(e) => setFormData({ ...formData, discountPrice: e.target.value })}
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className={inputClass}
                   />
                 </div>
               </div>
@@ -414,13 +415,13 @@ const AdminProductsPage: React.FC = () => {
               {/* Category & Stock */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Category</label>
+                  <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Category</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     required
                     disabled={categoriesLoading}
-                    className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-4 py-3 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] focus:outline-none cursor-pointer appearance-none"
                   >
                     <option value="">Select category</option>
                     {categories.map((cat) => (
@@ -429,14 +430,14 @@ const AdminProductsPage: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Stock</label>
+                  <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Stock</label>
                   <input
                     type="number"
                     value={formData.stock}
                     onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
                     required
                     min="0"
-                    className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className={inputClass}
                   />
                 </div>
               </div>
@@ -444,22 +445,22 @@ const AdminProductsPage: React.FC = () => {
               {/* SKU & Brand */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">SKU</label>
+                  <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">SKU</label>
                   <input
                     type="text"
                     value={formData.sku}
                     onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                     required
-                    className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className={inputClass}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Brand</label>
+                  <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Brand</label>
                   <input
                     type="text"
                     value={formData.brand}
                     onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                    className="w-full px-4 py-3 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className={inputClass}
                   />
                 </div>
               </div>
@@ -471,34 +472,34 @@ const AdminProductsPage: React.FC = () => {
                   id="isActive"
                   checked={formData.isActive}
                   onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                  className="w-4 h-4 rounded border-[var(--color-border)] bg-[var(--color-surface-2)] text-indigo-600 focus:ring-indigo-500"
+                  className="w-4 h-4 rounded border-[#ebebeb]"
                 />
-                <label htmlFor="isActive" className="text-sm font-medium">Active</label>
+                <label htmlFor="isActive" className="text-[14px] font-normal text-[#000000]">Active</label>
               </div>
 
               {/* Images */}
               <div>
-                <label className="block text-sm font-medium mb-2">Images</label>
+                <label className="block text-[12px] text-[#787574] uppercase tracking-wider mb-2">Images</label>
                 <div className="flex flex-wrap gap-3 mb-3">
                   {existingImages.map((img, idx) => (
-                    <div key={`existing-${idx}`} className="relative w-24 h-24 rounded-xl overflow-hidden border border-[var(--color-border)]">
+                    <div key={`existing-${idx}`} className="relative w-24 h-24 rounded-[20px] overflow-hidden border border-[#ebebeb]">
                       <img src={img} alt="" className="w-full h-full object-cover" />
                       <button
                         type="button"
                         onClick={() => removeImage(idx, true)}
-                        className="absolute top-1 right-1 p-1 bg-black/60 hover:bg-red-500 rounded-full text-white transition-colors"
+                        className="absolute top-1 right-1 w-6 h-6 bg-black/60 hover:bg-red-500 rounded-full flex items-center justify-center text-white transition-colors cursor-pointer"
                       >
                         <X className="w-3 h-3" />
                       </button>
                     </div>
                   ))}
                   {imagePreviewUrls.map((url, idx) => (
-                    <div key={`preview-${idx}`} className="relative w-24 h-24 rounded-xl overflow-hidden border border-[var(--color-border)]">
+                    <div key={`preview-${idx}`} className="relative w-24 h-24 rounded-[20px] overflow-hidden border border-[#ebebeb]">
                       <img src={url} alt="" className="w-full h-full object-cover" />
                       <button
                         type="button"
                         onClick={() => removeImage(idx)}
-                        className="absolute top-1 right-1 p-1 bg-black/60 hover:bg-red-500 rounded-full text-white transition-colors"
+                        className="absolute top-1 right-1 w-6 h-6 bg-black/60 hover:bg-red-500 rounded-full flex items-center justify-center text-white transition-colors cursor-pointer"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -506,9 +507,9 @@ const AdminProductsPage: React.FC = () => {
                   ))}
                 </div>
                 {existingImages.length + imageFiles.length < 10 && (
-                  <label className="flex items-center justify-center gap-2 w-full py-6 border-2 border-dashed border-[var(--color-border)] rounded-xl cursor-pointer hover:border-indigo-500/50 transition-colors">
-                    <Upload className="w-5 h-5 text-[var(--color-text-muted)]" />
-                    <span className="text-sm text-[var(--color-text-muted)]">Click to upload images</span>
+                  <label className="flex items-center justify-center gap-2 w-full py-6 border border-dashed border-[#cccccc] rounded-[20px] cursor-pointer hover:border-[#000000] transition-colors">
+                    <Upload className="w-4 h-4 text-[#787574]" />
+                    <span className="text-[14px] text-[#787574]">Click to upload images</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -521,18 +522,18 @@ const AdminProductsPage: React.FC = () => {
               </div>
 
               {/* Submit */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[var(--color-border)]">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#ebebeb]">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-2.5 text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors"
+                  className="px-5 py-2.5 text-[14px] font-normal text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors"
+                  className="px-6 py-2.5 bg-[#000000] hover:opacity-90 disabled:bg-[#cccccc] disabled:cursor-not-allowed text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
                 >
                   {submitting ? 'Saving...' : editingProduct ? 'Update Product' : 'Create Product'}
                 </button>

@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 // =====================================================
-// Dashboard Home Page
+// Dashboard Home Page — White Canvas
 // =====================================================
 interface SummaryData {
   totalRevenue: number;
@@ -75,15 +75,15 @@ const DashboardHome: React.FC = () => {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 animate-pulse">
-              <div className="h-4 bg-[var(--color-surface-2)] rounded w-1/2 mb-4" />
-              <div className="h-8 bg-[var(--color-surface-2)] rounded w-3/4" />
+            <div key={i} className="bg-white border-none rounded-[28px] p-6 animate-pulse shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+              <div className="h-4 bg-[#f2f4f5] rounded-full w-1/2 mb-4" />
+              <div className="h-8 bg-[#f2f4f5] rounded-full w-3/4" />
             </div>
           ))}
         </div>
-        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 animate-pulse">
-          <div className="h-6 bg-[var(--color-surface-2)] rounded w-1/3 mb-6" />
-          <div className="h-64 bg-[var(--color-surface-2)] rounded" />
+        <div className="bg-white border-none rounded-[28px] p-6 animate-pulse shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+          <div className="h-6 bg-[#f2f4f5] rounded-full w-1/3 mb-6" />
+          <div className="h-64 bg-[#f2f4f5] rounded-[20px]" />
         </div>
       </div>
     );
@@ -93,8 +93,8 @@ const DashboardHome: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold font-['Outfit']">Dashboard</h1>
-        <p className="text-[var(--color-text-muted)] mt-1">Welcome back! Here's what's happening with your store.</p>
+        <h1 className="text-3xl font-normal tracking-[-0.05em] text-[#000000]">Dashboard</h1>
+        <p className="text-[#787574] text-[14px] mt-1">Welcome back! Here's what's happening with your store.</p>
       </div>
 
       {/* Summary Cards */}
@@ -103,54 +103,46 @@ const DashboardHome: React.FC = () => {
           title="Total Revenue"
           value={formatCurrency(summary?.totalRevenue || 0)}
           icon={DollarSign}
-          color="text-green-400"
-          bgColor="bg-green-500/10"
         />
         <StatCard
           title="Total Orders"
           value={summary?.totalOrders.toString() || '0'}
           icon={ShoppingCart}
-          color="text-blue-400"
-          bgColor="bg-blue-500/10"
         />
         <StatCard
           title="Total Users"
           value={summary?.totalUsers.toString() || '0'}
           icon={Users}
-          color="text-purple-400"
-          bgColor="bg-purple-500/10"
         />
         <StatCard
           title="Total Products"
           value={summary?.totalProducts.toString() || '0'}
           icon={Package}
-          color="text-indigo-400"
-          bgColor="bg-indigo-500/10"
         />
       </div>
 
       {/* Low Stock Alert */}
       {summary && summary.lowStockProducts > 0 && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex items-center gap-3">
-          <TrendingUp className="w-5 h-5 text-red-400" />
-          <p className="text-sm text-red-300">
-            <span className="font-semibold">{summary.lowStockProducts}</span> product{summary.lowStockProducts !== 1 ? 's' : ''} running low on stock (less than 10 units)
+        <div className="bg-white border border-[#ebebeb] rounded-[20px] p-4 flex items-center gap-3 shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]">
+          <TrendingUp className="w-5 h-5 text-[#787574]" />
+          <p className="text-[14px] text-[#000000]">
+            <span className="font-normal">{summary.lowStockProducts}</span> product{summary.lowStockProducts !== 1 ? 's' : ''} running low on stock (less than 10 units)
           </p>
         </div>
       )}
 
       {/* Sales Chart */}
-      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6">
+      <div className="bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-bold font-['Outfit']">Sales Over Time</h2>
-            <p className="text-sm text-[var(--color-text-muted)]">Revenue trends for the selected period</p>
+            <h2 className="text-xl font-normal tracking-[-0.05em] text-[#000000]">Sales Over Time</h2>
+            <p className="text-[12px] text-[#787574]">Revenue trends for the selected period</p>
           </div>
           <div className="flex items-center gap-3">
             <select
               value={period}
               onChange={(e) => setPeriod(e.target.value as 'daily' | 'monthly')}
-              className="px-4 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+              className="px-4 py-2 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] focus:outline-none cursor-pointer shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]"
             >
               <option value="daily">Daily</option>
               <option value="monthly">Monthly</option>
@@ -158,7 +150,7 @@ const DashboardHome: React.FC = () => {
             <select
               value={days}
               onChange={(e) => setDays(Number(e.target.value))}
-              className="px-4 py-2 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+              className="px-4 py-2 bg-white border border-[#ebebeb] rounded-full text-[14px] text-[#000000] focus:outline-none cursor-pointer shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]"
             >
               <option value="7">Last 7 days</option>
               <option value="30">Last 30 days</option>
@@ -168,17 +160,17 @@ const DashboardHome: React.FC = () => {
         </div>
 
         {salesData.length === 0 ? (
-          <div className="h-64 flex items-center justify-center text-[var(--color-text-muted)]">
+          <div className="h-64 flex items-center justify-center text-[#787574] text-[14px]">
             No sales data available for this period
           </div>
         ) : (
           <div className="h-64 sm:h-80">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={salesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
                 <XAxis
                   dataKey="date"
-                  stroke="rgba(255,255,255,0.3)"
+                  stroke="rgba(0,0,0,0.3)"
                   style={{ fontSize: '12px' }}
                   tickFormatter={(value) => {
                     if (period === 'monthly') {
@@ -192,16 +184,17 @@ const DashboardHome: React.FC = () => {
                   }}
                 />
                 <YAxis
-                  stroke="rgba(255,255,255,0.3)"
+                  stroke="rgba(0,0,0,0.3)"
                   style={{ fontSize: '12px' }}
                   tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(15, 15, 20, 0.95)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '12px',
-                    color: '#fff',
+                    backgroundColor: 'rgba(255,255,255,0.98)',
+                    border: '1px solid #ebebeb',
+                    borderRadius: '20px',
+                    color: '#000000',
+                    boxShadow: 'rgba(0,0,0,0.1) 0px 4px_6px -1px',
                   }}
                   formatter={(value) => [formatCurrency(Number(value)), 'Revenue']}
                   labelFormatter={(label) => `Date: ${label}`}
@@ -209,10 +202,10 @@ const DashboardHome: React.FC = () => {
                 <Line
                   type="monotone"
                   dataKey="revenue"
-                  stroke="#8b5cf6"
-                  strokeWidth={3}
-                  dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, stroke: '#8b5cf6', strokeWidth: 2 }}
+                  stroke="#000000"
+                  strokeWidth={2}
+                  dot={{ fill: '#000000', strokeWidth: 2, r: 3 }}
+                  activeDot={{ r: 5, stroke: '#000000', strokeWidth: 2 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -221,46 +214,46 @@ const DashboardHome: React.FC = () => {
       </div>
 
       {/* Top Products Table */}
-      <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl overflow-hidden">
-        <div className="p-6 border-b border-[var(--color-border)]">
-          <h2 className="text-xl font-bold font-['Outfit']">Top Selling Products</h2>
-          <p className="text-sm text-[var(--color-text-muted)]">Best performing products by quantity sold</p>
+      <div className="bg-white border-none rounded-[28px] overflow-hidden shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+        <div className="p-6 border-b border-[#ebebeb]">
+          <h2 className="text-xl font-normal tracking-[-0.05em] text-[#000000]">Top Selling Products</h2>
+          <p className="text-[12px] text-[#787574]">Best performing products by quantity sold</p>
         </div>
 
         {topProducts.length === 0 ? (
-          <div className="p-8 text-center text-[var(--color-text-muted)]">No sales data available</div>
+          <div className="p-8 text-center text-[#787574] text-[14px]">No sales data available</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-[var(--color-surface-2)] text-[var(--color-text-muted)] uppercase text-xs">
+            <table className="w-full text-[14px] text-left">
+              <thead className="bg-[#f2f4f5] text-[#787574] uppercase text-[12px]">
                 <tr>
-                  <th className="px-6 py-4">Product</th>
-                  <th className="px-6 py-4">Price</th>
-                  <th className="px-6 py-4">Units Sold</th>
-                  <th className="px-6 py-4">Total Revenue</th>
+                  <th className="px-6 py-4 font-normal">Product</th>
+                  <th className="px-6 py-4 font-normal">Price</th>
+                  <th className="px-6 py-4 font-normal">Units Sold</th>
+                  <th className="px-6 py-4 font-normal">Total Revenue</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--color-border)]">
+              <tbody className="divide-y divide-[#ebebeb]">
                 {topProducts.map((product, idx) => (
-                  <tr key={product.productId} className="hover:bg-[var(--color-surface-2)]/50 transition-colors">
+                  <tr key={product.productId} className="hover:bg-[#f2f4f5]/60 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <span className="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-xs font-bold">
+                        <span className="w-6 h-6 rounded-full bg-[#f2f4f5] border border-[#ebebeb] text-[#787574] flex items-center justify-center text-[12px] font-normal">
                           {idx + 1}
                         </span>
-                        <div className="w-10 h-10 rounded-lg overflow-hidden border border-[var(--color-border)]">
+                        <div className="w-10 h-10 rounded-[14px] overflow-hidden border border-[#ebebeb]">
                           <img
                             src={product.images?.[0] || '/placeholder.png'}
                             alt={product.name}
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <span className="font-medium text-white">{product.name}</span>
+                        <span className="font-normal text-[#000000]">{product.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">{formatCurrency(product.price)}</td>
-                    <td className="px-6 py-4 font-medium">{product.totalQuantity}</td>
-                    <td className="px-6 py-4 font-medium text-green-400">{formatCurrency(product.totalRevenue)}</td>
+                    <td className="px-6 py-4 text-[#787574]">{formatCurrency(product.price)}</td>
+                    <td className="px-6 py-4 text-[#000000]">{product.totalQuantity}</td>
+                    <td className="px-6 py-4 text-[#000000]">{formatCurrency(product.totalRevenue)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -279,20 +272,18 @@ interface StatCardProps {
   title: string;
   value: string;
   icon: React.FC<{ className?: string }>;
-  color: string;
-  bgColor: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, color, bgColor }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon }) => {
   return (
-    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 hover:border-indigo-500/30 transition-colors">
+    <div className="bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] hover:shadow-[rgba(0,0,0,0.15)_0px_8px_16px_-2px,rgba(0,0,0,0.1)_0px_3px_6px_-3px] transition-shadow">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-sm font-medium text-[var(--color-text-muted)]">{title}</span>
-        <div className={`w-10 h-10 rounded-xl ${bgColor} flex items-center justify-center`}>
-          <Icon className={`w-5 h-5 ${color}`} />
+        <span className="text-[12px] font-normal text-[#787574]">{title}</span>
+        <div className="w-9 h-9 rounded-full bg-[#f2f4f5] flex items-center justify-center">
+          <Icon className="w-4 h-4 text-[#000000]" />
         </div>
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
+      <p className="text-2xl font-normal text-[#000000] tracking-[-0.031em]">{value}</p>
     </div>
   );
 };
