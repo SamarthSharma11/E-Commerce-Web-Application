@@ -115,7 +115,7 @@ const PRODUCTS = [
     description: 'Authentic player-issue edition jersey with heat-applied badges and ergonomic athletic fit.',
     price: 1499, discountPrice: 1299,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1522670289-3b51d8f2e1dd?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786557498/ChatGPT_Image_Aug_12_2026_11_27_59_PM.png'],
     stock: 35, sku: 'GK-APP-003', brand: 'GoalKart', ratingsAverage: 4.9, ratingsCount: 220,
   },
   {
