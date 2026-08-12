@@ -65,7 +65,7 @@ const PRODUCTS = [
     description: 'Mid-range performance boots with textured upper for improved ball control.',
     price: 4999, discountPrice: 4499,
     category: 'Football Boots & Shoes',
-    images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786553196/ChatGPT_Image_Aug_6_2026_11_08_00_PM.png'],
     stock: 25, sku: 'GK-BOT-002', brand: 'GoalKart', ratingsAverage: 4.7, ratingsCount: 112,
   },
   {
