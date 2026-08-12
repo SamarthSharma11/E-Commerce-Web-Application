@@ -409,7 +409,7 @@ const PRODUCTS = [
     description: 'Pealess loud referee whistle (115dB) with lanyard.',
     price: 299,
     category: 'Bags & Pitch Accessories',
-    images: ['https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786555270/ChatGPT_Image_Aug_6_2026_06_05_13_PM.png'],
     stock: 95, sku: 'GK-ACC-010', brand: 'GoalKart', ratingsAverage: 4.5, ratingsCount: 115,
   },
   {
