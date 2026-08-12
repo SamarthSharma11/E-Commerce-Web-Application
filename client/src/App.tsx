@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { ShoppingBag, User, LogOut, ShieldCheck, ArrowRight, Trophy, Zap, Star, Flame, Crown } from 'lucide-react';
+import { ShoppingBag, User, LogOut, ShieldCheck, ArrowRight, Zap, Star, Search } from 'lucide-react';
 import { FALLBACK_PRODUCTS } from './data/mockProducts';
 
 import useAuthStore from './store/authStore';
@@ -23,15 +23,29 @@ import DashboardHome from './pages/admin/DashboardHome';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import GoalKartLogo from './components/GoalKartLogo';
+
 // ── Shared Home Layout (Header, Hero, Products grid) ─────
 const Home = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate('/products');
+    }
+  };
+
+  const heroProducts = FALLBACK_PRODUCTS.slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex flex-col">
+    <div className="min-h-screen bg-[var(--color-canvas-mist,#f2f4f5)] text-[var(--color-ink-black,#000000)] flex flex-col font-['Inter']">
 
       {/* ── Header ── */}
-      <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]/90 backdrop-blur-md sticky top-0 z-50 shadow-[var(--shadow-xs)]">
+      <header className="border-b border-[#ebebeb] bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center">
             <GoalKartLogo size="md" />
@@ -40,25 +54,25 @@ const Home = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/products"
-              className="hidden sm:flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors"
+              className="hidden sm:flex items-center gap-2 text-sm font-normal text-[var(--color-muted-gray,#787574)] hover:text-[var(--color-ink-black,#000000)] transition-colors"
             >
               Shop
             </Link>
 
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--color-primary-subtle)] border border-[var(--color-border)] text-xs font-medium">
-                  <User className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-                  <span className="text-[var(--color-text)]">{user?.name}</span>
+                <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white border border-[#ebebeb] text-xs font-normal shadow-[rgba(0,0,0,0.04)_0px_2px_4px_0px]">
+                  <User className="w-3.5 h-3.5 text-[var(--color-ink-black,#000000)]" />
+                  <span className="text-[var(--color-ink-black,#000000)]">{user?.name}</span>
                   {user?.role === 'admin' && (
-                    <span className="px-2 py-0.5 rounded-full bg-[var(--color-primary)] text-white text-[10px] uppercase tracking-wider font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-[var(--color-ink-black,#000000)] text-white text-[10px] uppercase tracking-wider font-normal">
                       Admin
                     </span>
                   )}
                 </div>
                 <button
                   onClick={() => logout()}
-                  className="p-2 rounded-xl bg-[var(--color-surface-2)] hover:bg-red-50 hover:text-red-600 border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all flex items-center gap-1.5 text-xs font-semibold"
+                  className="p-2 rounded-full bg-white hover:bg-[#f2f4f5] border border-[#ebebeb] text-[var(--color-muted-gray,#787574)] hover:text-[var(--color-ink-black,#000000)] transition-all flex items-center gap-1.5 text-xs font-normal cursor-pointer"
                   title="Logout"
                 >
                   <LogOut className="w-4 h-4" />
@@ -69,13 +83,13 @@ const Home = () => {
               <div className="flex items-center gap-3">
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-xs font-semibold text-[var(--color-text)] bg-[var(--color-surface-2)] hover:bg-[var(--color-border)] border border-[var(--color-border)] rounded-xl transition-all"
+                  className="px-5 py-2 text-xs font-normal text-[var(--color-ink-black,#000000)] bg-white hover:bg-[#f2f4f5] border border-[#ebebeb] rounded-full transition-all"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 text-xs font-semibold text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] rounded-xl shadow-[var(--shadow-sm)] transition-all"
+                  className="px-5 py-2 text-xs font-normal text-white bg-[var(--color-ink-black,#000000)] hover:opacity-90 rounded-full shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px] transition-all"
                 >
                   Get Started
                 </Link>
@@ -87,46 +101,81 @@ const Home = () => {
 
       {/* ── Hero ── */}
       <main className="flex-1 flex flex-col">
-        {/* Big hero section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-[var(--color-primary-dark)] via-[var(--color-primary)] to-[#2ecc71] text-white">
-          {/* Pitch stripe overlay */}
-          <div className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: `repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.15) 40px, rgba(255,255,255,0.15) 80px)`
-            }}
-          />
-          {/* Glow orb */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4 pointer-events-none" />
-
-          <div className="relative max-w-7xl mx-auto px-6 py-24 md:py-32 flex flex-col items-center text-center gap-6">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold backdrop-blur-sm">
-              <Trophy className="w-4 h-4 text-[var(--color-secondary)]" />
-              <span>Official Football Equipment Store</span>
+        {/* Floating product card constellation hero */}
+        <section className="relative overflow-hidden bg-[var(--color-canvas-mist,#f2f4f5)] text-[var(--color-ink-black,#000000)] py-16 md:py-24 px-6">
+          <div className="max-w-5xl mx-auto flex flex-col items-center text-center gap-8">
+            
+            {/* Constellation of floating cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-3xl mb-4">
+              {heroProducts.map((product) => (
+                <div
+                  key={product._id}
+                  className="bg-white rounded-[28px] p-0 shadow-[var(--shadow-card,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px)] flex flex-col overflow-hidden text-left"
+                >
+                  <div className="aspect-square p-2 bg-white">
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      className="w-full h-full object-cover rounded-[20px]"
+                    />
+                  </div>
+                  <div className="p-4 pt-2">
+                    <p className="text-[14px] font-normal text-[var(--color-ink-black,#000000)] line-clamp-1 tracking-[-0.2px]">
+                      {product.name}
+                    </p>
+                    <div className="flex items-center gap-1 mt-1">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star key={s} className="w-2.5 h-2.5 fill-[var(--color-ink-black,#000000)] text-[var(--color-ink-black,#000000)]" />
+                      ))}
+                      <span className="text-[9px] text-[var(--color-muted-gray,#787574)] ml-1">5.0</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <h1 className="text-5xl sm:text-7xl font-black font-['Outfit'] tracking-tight leading-[1.05] max-w-3xl">
-              Gear Up.<br />
-              <span className="text-[#A8EDBA]">Play Harder.</span>
-            </h1>
+            {/* Wordmark */}
+            <div className="flex items-center gap-2">
+              <h1 className="text-4xl sm:text-6xl font-normal tracking-[-0.05em] text-[var(--color-ink-black,#000000)]">
+                GOALKART
+              </h1>
+              <span className="w-3.5 h-3.5 rounded-full bg-[var(--color-shop-violet,#5433eb)] inline-block mt-2" />
+            </div>
 
-            <p className="text-lg sm:text-xl text-white/80 max-w-xl leading-relaxed">
+            <p className="text-base sm:text-lg text-[var(--color-muted-gray,#787574)] max-w-lg leading-relaxed font-normal">
               Premium football equipment for players who refuse to settle — from boots to jerseys, balls to training gear.
             </p>
+
+            {/* Violet Pill Search Bar */}
+            <form onSubmit={handleSearchSubmit} className="w-full max-w-xl relative mt-2">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="What are you looking for today?"
+                className="w-full bg-white border border-[#000000]/10 rounded-full py-4 pl-6 pr-16 text-base text-[var(--color-ink-black,#000000)] placeholder-[var(--color-muted-gray,#787574)] shadow-[var(--shadow-card,rgba(0,0,0,0.1)_0px_4px_6px_-1px)] focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-[var(--color-shop-violet,#5433eb)] flex items-center justify-center text-white shadow-[var(--shadow-violet,rgba(84,51,235,0.3)_0px_4px_12px)] hover:opacity-95 transition-opacity cursor-pointer"
+              >
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </form>
 
             <div className="flex flex-wrap items-center justify-center gap-4 mt-2">
               <Link
                 to="/products"
-                className="px-8 py-4 bg-white text-[var(--color-primary-dark)] font-bold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center gap-2 text-sm"
+                className="px-8 py-3.5 bg-[var(--color-ink-black,#000000)] text-white font-normal rounded-full shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px] hover:opacity-90 transition-opacity flex items-center gap-2 text-sm"
               >
                 <ShoppingBag className="w-4 h-4" />
-                Shop Now
-                <ArrowRight className="w-4 h-4" />
+                Shop All Equipment
               </Link>
 
               {!isAuthenticated ? (
                 <Link
                   to="/register"
-                  className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold rounded-xl backdrop-blur-sm transition-all text-sm"
+                  className="px-8 py-3.5 bg-white border border-[#ebebeb] text-[var(--color-ink-black,#000000)] font-normal rounded-full shadow-[rgba(0,0,0,0.04)_0px_2px_4px_0px] hover:bg-[#f2f4f5] transition-colors text-sm"
                 >
                   Create Free Account
                 </Link>
@@ -134,7 +183,7 @@ const Home = () => {
                 user?.role === 'admin' && (
                   <Link
                     to="/admin"
-                    className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold rounded-xl backdrop-blur-sm transition-all flex items-center gap-2 text-sm"
+                    className="px-8 py-3.5 bg-white border border-[#ebebeb] text-[var(--color-ink-black,#000000)] font-normal rounded-full shadow-[rgba(0,0,0,0.04)_0px_2px_4px_0px] hover:bg-[#f2f4f5] transition-colors flex items-center gap-2 text-sm"
                   >
                     <ShieldCheck className="w-4 h-4" />
                     Admin Dashboard
@@ -147,7 +196,7 @@ const Home = () => {
 
         {/* ── Feature cards ── */}
         <section className="max-w-7xl mx-auto w-full px-6 py-16">
-          <h2 className="text-2xl font-bold font-['Outfit'] text-[var(--color-text)] text-center mb-10">
+          <h2 className="text-2xl font-normal tracking-[-1.0px] text-[var(--color-ink-black,#000000)] text-center mb-10">
             Why Choose GoalKart?
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -156,10 +205,10 @@ const Home = () => {
               { icon: '🛡️', title: 'Premium Protection', desc: 'CE-certified shin guards, ankle braces, and goalkeeper equipment.' },
               { icon: '🏋️', title: 'Training Excellence', desc: 'Agility ladders, resistance bands, cones and everything to elevate your game.' },
             ].map((f) => (
-              <div key={f.title} className="bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] hover:-translate-y-1 transition-all group">
+              <div key={f.title} className="bg-white rounded-[28px] p-8 shadow-[var(--shadow-card,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px)]">
                 <div className="text-4xl mb-4">{f.icon}</div>
-                <h3 className="text-base font-bold text-[var(--color-text)] mb-2 group-hover:text-[var(--color-primary)] transition-colors">{f.title}</h3>
-                <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">{f.desc}</p>
+                <h3 className="text-base font-normal text-[var(--color-ink-black,#000000)] mb-2">{f.title}</h3>
+                <p className="text-sm text-[var(--color-muted-gray,#787574)] leading-relaxed font-normal">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -167,7 +216,7 @@ const Home = () => {
           <div className="flex items-center justify-center mt-10">
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white font-semibold rounded-xl shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-all text-sm"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-[var(--color-ink-black,#000000)] text-white font-normal rounded-full shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px] hover:opacity-90 transition-opacity text-sm"
             >
               <Zap className="w-4 h-4" />
               Browse All Products
@@ -193,49 +242,46 @@ const Home = () => {
             <section className="max-w-7xl mx-auto w-full px-6 py-16">
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-                    <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                  <div className="w-10 h-10 rounded-full bg-white border border-[#ebebeb] flex items-center justify-center shadow-[rgba(0,0,0,0.04)_0px_2px_4px_0px]">
+                    <Star className="w-5 h-5 text-[var(--color-ink-black,#000000)] fill-[var(--color-ink-black,#000000)]" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold font-['Outfit'] text-[var(--color-text)]">Best Sellers</h2>
-                    <p className="text-sm text-[var(--color-text-muted)]">Our most loved products</p>
+                    <h2 className="text-2xl font-normal tracking-[-1.0px] text-[var(--color-ink-black,#000000)]">Best Sellers</h2>
+                    <p className="text-sm text-[var(--color-muted-gray,#787574)]">Our most loved products</p>
                   </div>
                 </div>
                 <Link
                   to="/products"
-                  className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors"
+                  className="hidden sm:flex items-center gap-1.5 text-sm font-normal text-[var(--color-ink-black,#000000)] hover:text-[var(--color-muted-gray,#787574)] transition-colors"
                 >
                   View All <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                {bestSellers.map((product, i) => (
+                {bestSellers.map((product) => (
                   <Link
                     key={product._id}
                     to={`/products/${product.slug}`}
-                    className="group bg-[var(--color-surface)] border border-[var(--color-border-subtle)] rounded-2xl overflow-hidden hover:shadow-[var(--shadow-md)] hover:-translate-y-1 transition-all flex flex-col"
+                    className="bg-white rounded-[28px] overflow-hidden shadow-[var(--shadow-card,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px)] flex flex-col"
                   >
-                    <div className="relative">
-                      <div className="aspect-square overflow-hidden bg-[var(--color-surface-2)]">
+                    <div className="p-2 bg-white">
+                      <div className="aspect-square overflow-hidden rounded-[20px]">
                         <img
                           src={product.images[0]}
                           alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover"
                         />
                       </div>
-                      {i === 0 && (
-                        <span className="absolute top-2 left-2 text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">#1 Pick</span>
-                      )}
                     </div>
-                    <div className="p-3 flex flex-col flex-1">
-                      <p className="text-xs font-semibold text-[var(--color-text)] line-clamp-2 leading-snug mb-1.5 flex-1">{product.name}</p>
+                    <div className="p-4 pt-1 flex flex-col flex-1">
+                      <p className="text-xs font-normal text-[var(--color-ink-black,#000000)] line-clamp-2 leading-snug mb-1.5 flex-1 tracking-[-0.2px]">{product.name}</p>
                       <div className="flex items-center gap-1 mb-1">
                         {[1, 2, 3, 4, 5].map((s) => (
-                          <Star key={s} className={`w-3 h-3 ${s <= Math.round(product.ratingsAverage) ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
+                          <Star key={s} className={`w-3 h-3 ${s <= Math.round(product.ratingsAverage) ? 'fill-[var(--color-ink-black,#000000)] text-[var(--color-ink-black,#000000)]' : 'text-gray-300'}`} />
                         ))}
                       </div>
-                      <p className="text-sm font-bold text-[var(--color-primary)]">
+                      <p className="text-sm font-normal text-[var(--color-ink-black,#000000)]">
                         ₹{(product.discountPrice ?? product.price).toLocaleString()}
                       </p>
                     </div>
@@ -263,21 +309,21 @@ const Home = () => {
             .filter(Boolean) as typeof FALLBACK_PRODUCTS;
 
           return (
-            <section className="w-full bg-[var(--color-primary-subtle)] border-y border-[var(--color-border-subtle)] py-16">
+            <section className="w-full border-y border-[#ebebeb] py-16 bg-white">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="flex items-center justify-between mb-10">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-                      <Flame className="w-5 h-5 text-green-600" />
+                    <div className="w-10 h-10 rounded-full bg-[var(--color-canvas-mist,#f2f4f5)] border border-[#ebebeb] flex items-center justify-center">
+                      <Search className="w-5 h-5 text-[var(--color-ink-black,#000000)]" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold font-['Outfit'] text-[var(--color-text)]">Budget Collection</h2>
-                      <p className="text-sm text-[var(--color-text-muted)]">Great gear under ₹1,000</p>
+                      <h2 className="text-2xl font-normal tracking-[-1.0px] text-[var(--color-ink-black,#000000)]">Budget Collection</h2>
+                      <p className="text-sm text-[var(--color-muted-gray,#787574)]">Great gear under ₹1,000</p>
                     </div>
                   </div>
                   <Link
                     to="/products?maxPrice=1000"
-                    className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors"
+                    className="hidden sm:flex items-center gap-1.5 text-sm font-normal text-[var(--color-ink-black,#000000)] hover:text-[var(--color-muted-gray,#787574)] transition-colors"
                   >
                     See all under ₹1,000 <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -288,22 +334,21 @@ const Home = () => {
                     <Link
                       key={product._id}
                       to={`/products/${product.slug}`}
-                      className="group bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl overflow-hidden hover:shadow-[var(--shadow-md)] hover:-translate-y-1 transition-all flex flex-col"
+                      className="bg-white border border-[#ebebeb] rounded-[28px] p-2 overflow-hidden shadow-[var(--shadow-card,rgba(0,0,0,0.1)_0px_4px_6px_-1px)] flex flex-col"
                     >
-                      <div className="aspect-square overflow-hidden bg-[var(--color-surface-2)]">
+                      <div className="aspect-square overflow-hidden rounded-[20px] bg-[var(--color-canvas-mist,#f2f4f5)]">
                         <img
                           src={product.images[0]}
                           alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="p-2.5 flex flex-col flex-1">
-                        <p className="text-[11px] font-semibold text-[var(--color-text)] line-clamp-2 leading-snug mb-1.5 flex-1">{product.name}</p>
+                      <div className="p-2.5 pt-2 flex flex-col flex-1">
+                        <p className="text-[11px] font-normal text-[var(--color-ink-black,#000000)] line-clamp-2 leading-snug mb-1.5 flex-1">{product.name}</p>
                         <div className="flex items-center justify-between mt-auto">
-                          <p className="text-sm font-bold text-[var(--color-primary)]">
+                          <p className="text-sm font-normal text-[var(--color-ink-black,#000000)]">
                             ₹{(product.discountPrice ?? product.price).toLocaleString()}
                           </p>
-                          <span className="text-[9px] font-bold bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">DEAL</span>
                         </div>
                       </div>
                     </Link>
@@ -314,85 +359,10 @@ const Home = () => {
           );
         })()}
 
-        {/* ── Premium Collection ── */}
-        {(() => {
-          const premiumSlugs = [
-            'football-boots-elite',
-            'goalkeeper-gloves-professional',
-            'training-jacket',
-            'windbreaker',
-            'goal-net',
-          ];
-          const premiumItems = premiumSlugs
-            .map((slug) => FALLBACK_PRODUCTS.find((p) => p.slug === slug))
-            .filter(Boolean) as typeof FALLBACK_PRODUCTS;
-
-          return (
-            <section className="max-w-7xl mx-auto w-full px-6 py-16">
-              <div className="flex items-center justify-between mb-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[var(--color-primary)] flex items-center justify-center">
-                    <Crown className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold font-['Outfit'] text-[var(--color-text)]">Premium Collection</h2>
-                    <p className="text-sm text-[var(--color-text-muted)]">Professional-grade equipment</p>
-                  </div>
-                </div>
-                <Link
-                  to="/products?minPrice=2000&sort=price_desc"
-                  className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors"
-                >
-                  Shop Premium <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-                {premiumItems.map((product, i) => (
-                  <Link
-                    key={product._id}
-                    to={`/products/${product.slug}`}
-                    className={`group relative rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col ${i === 0 ? 'sm:col-span-2 lg:col-span-2' : ''}`}
-                  >
-                    {/* Background image */}
-                    <div className={`relative overflow-hidden bg-[var(--color-primary-dark)] ${i === 0 ? 'h-72' : 'h-52'}`}>
-                      <img
-                        src={product.images[0]}
-                        alt={product.name}
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-70 group-hover:scale-105 transition-all duration-300"
-                      />
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary-dark)]/90 via-transparent to-transparent" />
-
-                      {/* Crown badge */}
-                      <span className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center">
-                        <Crown className="w-3.5 h-3.5 text-white" />
-                      </span>
-
-                      {/* Content */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <p className="text-white font-bold text-sm leading-snug mb-1">{product.name}</p>
-                        <div className="flex items-center justify-between">
-                          <p className="text-white/90 font-black text-lg font-['Outfit']">
-                            ₹{(product.discountPrice ?? product.price).toLocaleString()}
-                          </p>
-                          <span className="flex items-center gap-1 text-white/80 text-xs font-semibold bg-white/10 border border-white/20 rounded-full px-2.5 py-1 backdrop-blur-sm">
-                            Shop <ArrowRight className="w-3 h-3" />
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          );
-        })()}
-
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[var(--color-border)] py-6 bg-[var(--color-surface)] text-center text-xs text-[var(--color-text-muted)]">
+      <footer className="border-t border-[#ebebeb] py-6 bg-black text-white text-center text-xs font-normal">
         © {new Date().getFullYear()} GoalKart — Football Equipment Store. Built with React + Vite + Express + MongoDB.
       </footer>
     </div>
@@ -403,16 +373,16 @@ const Home = () => {
 const Profile = () => {
   const { user } = useAuthStore();
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] p-8 flex flex-col items-center justify-center">
-      <div className="max-w-md w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 shadow-[var(--shadow-md)]">
-        <h2 className="text-xl font-bold font-['Outfit'] mb-4 text-[var(--color-primary)]">User Profile</h2>
-        <div className="space-y-3 text-sm">
-          <div><span className="text-[var(--color-text-muted)]">ID:</span> <code className="text-xs bg-[var(--color-surface-2)] px-2 py-1 rounded border border-[var(--color-border)]">{user?._id}</code></div>
-          <div><span className="text-[var(--color-text-muted)]">Name:</span> <span className="font-semibold ml-1">{user?.name}</span></div>
-          <div><span className="text-[var(--color-text-muted)]">Email:</span> <span className="font-semibold ml-1">{user?.email}</span></div>
-          <div><span className="text-[var(--color-text-muted)]">Role:</span> <span className="uppercase text-[var(--color-primary)] font-bold ml-1">{user?.role}</span></div>
+    <div className="min-h-screen bg-[var(--color-canvas-mist,#f2f4f5)] text-[var(--color-ink-black,#000000)] p-8 flex flex-col items-center justify-center font-['Inter']">
+      <div className="max-w-md w-full bg-white rounded-[28px] p-8 shadow-[var(--shadow-card,rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px)]">
+        <h2 className="text-xl font-normal tracking-[-0.05em] mb-4 text-[var(--color-ink-black,#000000)]">User Profile</h2>
+        <div className="space-y-3 text-sm font-normal">
+          <div><span className="text-[var(--color-muted-gray,#787574)]">ID:</span> <code className="text-xs bg-[var(--color-canvas-mist,#f2f4f5)] px-2 py-1 rounded-full border border-[#ebebeb]">{user?._id}</code></div>
+          <div><span className="text-[var(--color-muted-gray,#787574)]">Name:</span> <span className="font-normal ml-1 text-[var(--color-ink-black,#000000)]">{user?.name}</span></div>
+          <div><span className="text-[var(--color-muted-gray,#787574)]">Email:</span> <span className="font-normal ml-1 text-[var(--color-ink-black,#000000)]">{user?.email}</span></div>
+          <div><span className="text-[var(--color-muted-gray,#787574)]">Role:</span> <span className="uppercase text-[var(--color-ink-black,#000000)] font-normal ml-1">{user?.role}</span></div>
         </div>
-        <Link to="/" className="inline-block mt-6 px-4 py-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-xs font-semibold rounded-xl transition-all">
+        <Link to="/" className="inline-block mt-6 px-6 py-2.5 bg-[var(--color-ink-black,#000000)] text-white text-xs font-normal rounded-full transition-opacity hover:opacity-90">
           Back to Home
         </Link>
       </div>
@@ -435,11 +405,13 @@ function App() {
         toastOptions={{
           duration: 4000,
           style: {
-            background: 'var(--color-surface)',
-            color: 'var(--color-text)',
-            border: '1px solid var(--color-border)',
-            boxShadow: 'var(--shadow-md)',
-            fontFamily: 'var(--font-sans)',
+            background: '#ffffff',
+            color: 'var(--color-ink-black, #000000)',
+            border: '1px solid #ebebeb',
+            boxShadow: 'rgba(0,0,0,0.1) 0px 4px 6px -1px',
+            fontFamily: 'Inter, sans-serif',
+            borderRadius: '9999px',
+            padding: '8px 16px',
           },
         }}
       />
