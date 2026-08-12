@@ -1,47 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, ArrowRight, ShieldCheck, Zap, Trophy, Sparkles, ChevronRight } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, Trophy, Sparkles, ChevronRight, X } from 'lucide-react';
 import '../styles/landing.css';
 import { FALLBACK_PRODUCTS } from '../data/mockProducts';
 
 export const LandingPage: React.FC = () => {
+  const [showAnnouncement, setShowAnnouncement] = useState(true);
   const featuredProducts = FALLBACK_PRODUCTS.slice(0, 4);
 
   return (
     <div className="landing-page min-h-screen flex flex-col overflow-x-hidden selection:bg-[#C6FF00] selection:text-black">
       
-      {/* ── Navigation ── */}
-      <nav className="border-b border-[var(--landing-border)] bg-[#0A0A0A]/80 backdrop-blur-xl sticky top-0 z-50">
+      {/* ── 1. Top Slim Announcement Bar ── */}
+      {showAnnouncement && (
+        <div className="bg-[#000000] border-b border-white/10 px-4 py-2.5 flex items-center justify-between text-xs relative z-50">
+          <div className="flex-1 text-center font-bold tracking-wider text-[var(--landing-neon)] uppercase">
+            GET 20% OFF YOUR FIRST ORDER
+          </div>
+          <button
+            onClick={() => setShowAnnouncement(false)}
+            className="text-[var(--landing-gray)] hover:text-white transition-colors p-1 cursor-pointer"
+            aria-label="Dismiss announcement"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* ── 2. Navigation Bar ── */}
+      <nav className="border-b border-[var(--landing-border)] bg-[#0A0A0A]/90 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="landing-display-text text-2xl tracking-tighter text-white">
-              GOAL<span className="text-[var(--landing-neon)]">KART</span>
+          
+          {/* Left: Wordmark Logo */}
+          <Link to="/" className="flex items-center gap-1.5">
+            <span className="font-extrabold text-2xl tracking-tighter text-white font-['Inter'] uppercase">
+              GOALKART
             </span>
             <span className="w-2 h-2 rounded-full bg-[var(--landing-neon)] animate-pulse" />
           </Link>
 
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--landing-gray)]">
-            <a href="#features" className="hover:text-white transition-colors">Why Us</a>
-            <a href="#featured" className="hover:text-white transition-colors">Pro Gear</a>
-            <a href="#reviews" className="hover:text-white transition-colors">Community</a>
-            <Link to="/products" className="hover:text-white transition-colors">Full Catalog</Link>
+          {/* Center/Right: Navigation Links */}
+          <div className="hidden lg:flex items-center gap-8 text-xs font-bold tracking-widest uppercase text-white">
+            <Link to="/" className="hover:text-[var(--landing-neon)] transition-colors">Home</Link>
+            <Link to="/products" className="hover:text-[var(--landing-neon)] transition-colors">Shop</Link>
+            <a href="#features" className="hover:text-[var(--landing-neon)] transition-colors">Athletes</a>
+            <a href="#featured" className="hover:text-[var(--landing-neon)] transition-colors">Stockists</a>
+            <a href="#reviews" className="hover:text-[var(--landing-neon)] transition-colors">Careers</a>
           </div>
 
+          {/* Far Right: Pill CTA Button */}
           <div className="flex items-center gap-4">
             <Link
-              to="/login"
-              className="px-5 py-2.5 text-xs font-semibold text-white hover:text-[var(--landing-neon)] transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
               to="/products"
-              className="px-6 py-3 text-xs font-bold text-black bg-[var(--landing-neon)] hover:brightness-110 rounded-full transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(198,255,0,0.3)]"
+              className="px-6 py-2.5 text-xs font-extrabold uppercase tracking-wider text-black bg-[var(--landing-neon)] hover:brightness-110 rounded-full transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(198,255,0,0.3)] cursor-pointer"
             >
-              <ShoppingBag className="w-4 h-4" />
-              Shop Now
+              Get 20% Off
             </Link>
           </div>
+
         </div>
       </nav>
 
