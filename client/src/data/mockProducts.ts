@@ -398,7 +398,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Cozy fleece-lined pullover hoodie for post-match recovery and travel.',
     price: 2199,
     category: FALLBACK_CATEGORIES[2],
-    images: ['https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786555961/ChatGPT_Image_Aug_12_2026_11_02_14_PM.png'],
     stock: 35,
     sku: 'GK-APP-011',
     brand: 'GoalKart',
