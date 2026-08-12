@@ -81,7 +81,7 @@ const PRODUCTS = [
     description: 'Non-marking gum rubber sole for court traction and precision futsal control.',
     price: 2999,
     category: 'Football Boots & Shoes',
-    images: ['https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786553677/ChatGPT_Image_Aug_6_2026_11_05_58_PM.png'],
     stock: 28, sku: 'GK-BOT-004', brand: 'GoalKart', ratingsAverage: 4.6, ratingsCount: 94,
   },
   {
