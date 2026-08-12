@@ -244,6 +244,63 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
+      {/* ── WHAT'S INSIDE / BUILT FOR PERFORMANCE Section ── */}
+      <section className="py-24 border-b border-[var(--landing-border)] bg-[#070707]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-14 text-center md:text-left">
+            <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-[var(--landing-neon)]">
+              WHAT'S INSIDE
+            </span>
+            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-1">
+              BUILT FOR PERFORMANCE
+            </h2>
+          </div>
+
+          {/* 4-Column Stat Grid (2-Column on Mobile) */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                stat: '210g',
+                label: 'Ultra-Light',
+                desc: 'Barely feel it on your feet during full 90-minute matches.',
+              },
+              {
+                stat: '0',
+                label: 'Compromise',
+                desc: 'Unmatched standard for grip, comfort, and durability.',
+              },
+              {
+                stat: '360°',
+                label: 'Touch Control',
+                desc: '3D micro-textured surface for ultimate ball handling.',
+              },
+              {
+                stat: 'FIFA',
+                label: 'Certified',
+                desc: 'Approved tournament-grade quality for competitive play.',
+              },
+            ].map((cell, idx) => (
+              <div
+                key={idx}
+                className="bg-[#111111] border border-white/10 rounded-[28px] p-8 flex flex-col justify-between hover:border-[var(--landing-neon)]/50 transition-all duration-300 group"
+              >
+                <div>
+                  <span className="landing-display-text text-5xl sm:text-6xl lg:text-7xl text-[var(--landing-neon)] block mb-4 group-hover:scale-105 transition-transform duration-300 origin-left">
+                    {cell.stat}
+                  </span>
+                  <h3 className="landing-display-text text-xl sm:text-2xl text-white mb-2 tracking-tight">
+                    {cell.label}
+                  </h3>
+                </div>
+                <p className="text-xs sm:text-sm text-[var(--landing-gray)] font-normal leading-relaxed">
+                  {cell.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Feature Highlights ── */}
       <section id="features" className="py-24 border-b border-[var(--landing-border)] bg-[#0E0E0E]">
         <div className="max-w-7xl mx-auto px-6">
