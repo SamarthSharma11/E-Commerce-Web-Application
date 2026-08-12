@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check, GraduationCap, Users, School, Award } from 'lucide-react';
 import '../styles/landing.css';
 import { FALLBACK_PRODUCTS } from '../data/mockProducts';
 
@@ -297,6 +297,88 @@ export const LandingPage: React.FC = () => {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── GET INVOLVED / BRING GOALKART TO YOUR GAME Section ── */}
+      <section className="py-24 border-b border-[var(--landing-border)] bg-[#0A0A0A]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-14 text-center md:text-left">
+            <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-[var(--landing-neon)]">
+              GET INVOLVED
+            </span>
+            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-1">
+              BRING GOALKART TO YOUR GAME
+            </h2>
+          </div>
+
+          {/* 4-Card Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: GraduationCap,
+                title: 'Academy Trials',
+                desc: 'Try our gear free at partner football academies across the country.',
+                cta: 'Find Trials',
+                link: '/products',
+              },
+              {
+                icon: Users,
+                title: 'Club Partnerships',
+                desc: 'Kit out your club with bulk team orders and custom branding options.',
+                cta: 'Partner With Us',
+                link: '/products',
+              },
+              {
+                icon: School,
+                title: 'School Programs',
+                desc: 'Equip the next generation of players with durable training bundles.',
+                cta: 'Get a Quote',
+                link: '/products',
+              },
+              {
+                icon: Award,
+                title: 'Tournament Sponsorship',
+                desc: 'Sponsor your next tournament with official GoalKart match balls & prizes.',
+                cta: 'Sponsor an Event',
+                link: '/products',
+              },
+            ].map((card, idx) => {
+              const Icon = card.icon;
+              return (
+                <div
+                  key={idx}
+                  className="bg-[#141414] border border-white/10 rounded-[28px] p-8 flex flex-col justify-between hover:border-[var(--landing-neon)]/50 transition-all duration-300 group"
+                >
+                  <div>
+                    {/* Top Icon */}
+                    <div className="w-12 h-12 rounded-2xl bg-[var(--landing-neon)]/10 text-[var(--landing-neon)] flex items-center justify-center mb-6">
+                      <Icon className="w-6 h-6" />
+                    </div>
+
+                    {/* Heading */}
+                    <h3 className="landing-display-text text-2xl text-white mb-3 tracking-tight">
+                      {card.title}
+                    </h3>
+
+                    {/* One-line Description */}
+                    <p className="text-xs sm:text-sm text-[var(--landing-gray)] font-normal leading-relaxed mb-6">
+                      {card.desc}
+                    </p>
+                  </div>
+
+                  {/* Ghost-style Text Link with Arrow */}
+                  <Link
+                    to={card.link}
+                    className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-white hover:text-[var(--landing-neon)] transition-colors group-hover:translate-x-1 transition-transform"
+                  >
+                    <span>{card.cta}</span>
+                    <ArrowRight className="w-4 h-4 text-[var(--landing-neon)]" />
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
