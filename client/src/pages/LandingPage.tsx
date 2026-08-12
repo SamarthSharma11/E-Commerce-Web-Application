@@ -136,6 +136,114 @@ export const LandingPage: React.FC = () => {
         </div>
       </header>
 
+      {/* ── OUR GEAR / CHOOSE YOUR KIT Section ── */}
+      <section className="py-24 border-b border-[var(--landing-border)] bg-[#0A0A0A] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-12">
+            <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-[var(--landing-neon)]">
+              OUR GEAR
+            </span>
+            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-1">
+              CHOOSE YOUR KIT
+            </h2>
+          </div>
+
+          {/* Horizontally Scrollable Row of Large Product Line Cards */}
+          <div className="flex gap-6 overflow-x-auto pb-8 pt-2 scrollbar-none snap-x snap-mandatory">
+            {[
+              {
+                id: 'line-1',
+                badge: 'BEST SELLER',
+                title: 'MATCH BOOTS',
+                desc: 'Precision traction with ultra-responsive carbon fiber feel for explosive speed.',
+                features: ['Carbon Plate', 'Anti-Slip Grip', 'Lightweight', 'Firm Ground'],
+                image: FALLBACK_PRODUCTS[1]?.images[0] || '/products/boots-academy.png',
+                link: '/products?category=cat-boots',
+              },
+              {
+                id: 'line-2',
+                badge: 'NEW DROP',
+                title: 'TRAINING KIT',
+                desc: 'Breathable sweat-wicking apparel designed for intense daily training sessions.',
+                features: ['Dry-Fit Tech', 'Breathable Mesh', '4-Way Stretch', 'Ergonomic'],
+                image: FALLBACK_PRODUCTS[2]?.images[0] || '/products/jersey-club.png',
+                link: '/products?category=cat-apparel',
+              },
+              {
+                id: 'line-3',
+                badge: 'PRO SERIES',
+                title: 'GOALKEEPER GEAR',
+                desc: 'Maximum grip latex palm with finger-save protection and impact dampening.',
+                features: ['Contact Latex', 'Finger-Save', 'Padded Palm', '3D Punch Zone'],
+                image: FALLBACK_PRODUCTS[3]?.images[0] || '/products/gk-gloves.png',
+                link: '/products?category=cat-protection',
+              },
+              {
+                id: 'line-4',
+                badge: 'ESSENTIAL',
+                title: 'ACADEMY RANGE',
+                desc: 'FIFA-certified match balls and agility training tools for emerging talent.',
+                features: ['FIFA Inspected', 'Thermal Bonded', 'High Rebound', 'All-Weather'],
+                image: FALLBACK_PRODUCTS[0]?.images[0] || '/products/ball-club-size5.png',
+                link: '/products?category=cat-balls',
+              },
+            ].map((line) => (
+              <div
+                key={line.id}
+                className="snap-start flex-shrink-0 w-[320px] sm:w-[380px] lg:w-[420px] bg-[#141414] border border-white/10 rounded-[32px] p-6 flex flex-col justify-between hover:border-[var(--landing-neon)] transition-all duration-300 shadow-2xl group"
+              >
+                <div>
+                  {/* Top Badge */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="bg-[var(--landing-neon)] text-black font-extrabold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full">
+                      {line.badge}
+                    </span>
+                  </div>
+
+                  {/* Large Immersive Product Photo Area */}
+                  <div className="aspect-[4/3] rounded-[24px] overflow-hidden bg-black/60 p-4 mb-6 relative flex items-center justify-center border border-white/5">
+                    <img
+                      src={line.image}
+                      alt={line.title}
+                      className="w-full h-full object-cover rounded-[16px] group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+
+                  {/* Line Title & One-line Description */}
+                  <h3 className="landing-display-text text-2xl sm:text-3xl text-white mb-2">
+                    {line.title}
+                  </h3>
+                  <p className="text-xs text-[var(--landing-gray)] leading-relaxed mb-6 font-normal">
+                    {line.desc}
+                  </p>
+
+                  {/* Row of Small Feature Chips */}
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {line.features.map((feat) => (
+                      <span
+                        key={feat}
+                        className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-semibold text-white/90"
+                      >
+                        {feat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bottom CTA Pill Button */}
+                <Link
+                  to={line.link}
+                  className="w-full py-3.5 bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:bg-[var(--landing-neon)] transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                >
+                  Shop Now
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Feature Highlights ── */}
       <section id="features" className="py-24 border-b border-[var(--landing-border)] bg-[#0E0E0E]">
         <div className="max-w-7xl mx-auto px-6">
