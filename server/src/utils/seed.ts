@@ -219,7 +219,7 @@ const PRODUCTS = [
     description: 'Non-slip anti-blister grip socks to prevent foot slippage inside boots.',
     price: 699,
     category: 'Jerseys & Apparel',
-    images: ['https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/f_auto,q_auto/ChatGPT_Image_Aug_6_2026_11_17_53_PM'],
     stock: 90, sku: 'GK-APP-016', brand: 'GoalKart', ratingsAverage: 4.9, ratingsCount: 310,
   },
   {
