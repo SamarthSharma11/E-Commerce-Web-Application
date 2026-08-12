@@ -207,7 +207,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Multi-studded outsole designed for artificial turf grass fields.',
     price: 3999,
     category: FALLBACK_CATEGORIES[1],
-    images: ['https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786553909/ChatGPT_Image_Aug_6_2026_11_03_10_PM.png'],
     stock: 32,
     sku: 'GK-BOT-005',
     brand: 'GoalKart',
