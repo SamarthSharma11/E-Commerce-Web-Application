@@ -173,7 +173,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     price: 8999,
     discountPrice: 7999,
     category: FALLBACK_CATEGORIES[1],
-    images: ['https://images.unsplash.com/photo-1511886929837-354d827aae26?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786558618/ChatGPT_Image_Aug_12_2026_11_46_34_PM.png'],
     stock: 15,
     sku: 'GK-BOT-003',
     brand: 'GoalKart',
