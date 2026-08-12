@@ -361,7 +361,7 @@ const PRODUCTS = [
     description: 'Ventilated shoe bag to keep muddy boots separate from your clean gear.',
     price: 699,
     category: 'Bags & Pitch Accessories',
-    images: ['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786554406/ChatGPT_Image_Aug_6_2026_10_14_39_PM.png'],
     stock: 65, sku: 'GK-ACC-004', brand: 'GoalKart', ratingsAverage: 4.6, ratingsCount: 95,
   },
   {
