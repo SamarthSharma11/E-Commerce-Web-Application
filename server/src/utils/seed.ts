@@ -385,7 +385,7 @@ const PRODUCTS = [
     description: 'Elastic high-vis captain armband with strong velcro closure.',
     price: 299,
     category: 'Bags & Pitch Accessories',
-    images: ['https://images.unsplash.com/photo-1627483297886-49710ae1fc22?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786554906/ChatGPT_Image_Aug_6_2026_06_14_59_PM.png'],
     stock: 110, sku: 'GK-ACC-007', brand: 'GoalKart', ratingsAverage: 4.7, ratingsCount: 160,
   },
   {
