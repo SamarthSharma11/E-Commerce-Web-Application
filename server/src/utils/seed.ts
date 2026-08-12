@@ -377,7 +377,7 @@ const PRODUCTS = [
     description: 'Microfiber quick-dry towel for sweat absorption during breaks.',
     price: 349,
     category: 'Bags & Pitch Accessories',
-    images: ['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786554770/ChatGPT_Image_Aug_6_2026_10_09_58_PM.png'],
     stock: 100, sku: 'GK-ACC-006', brand: 'GoalKart', ratingsAverage: 4.3, ratingsCount: 74,
   },
   {
