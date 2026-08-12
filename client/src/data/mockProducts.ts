@@ -278,7 +278,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Padded elbow goalkeeper jersey with high-impact foam protection.',
     price: 1499,
     category: FALLBACK_CATEGORIES[2],
-    images: ['https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786557075/ChatGPT_Image_Aug_12_2026_11_20_58_PM.png'],
     stock: 25,
     sku: 'GK-APP-004',
     brand: 'GoalKart',
