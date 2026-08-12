@@ -243,7 +243,7 @@ export const FALLBACK_PRODUCTS: Product[] = [
     description: 'Sleek away kit design with moisture-wicking technology.',
     price: 999,
     category: FALLBACK_CATEGORIES[2],
-    images: ['https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786557759/ChatGPT_Image_Aug_12_2026_11_32_13_PM.png'],
     stock: 50,
     sku: 'GK-APP-002',
     brand: 'GoalKart',
