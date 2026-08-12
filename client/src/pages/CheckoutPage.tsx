@@ -49,7 +49,25 @@ const CheckoutPage: React.FC = () => {
     { key: 'payment', label: 'Payment', icon: CreditCard },
   ];
 
-  // Redirect if cart is empty
+  // Fetch addresses — must be before any early returns (Rules of Hooks)
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const response = await api.get('/auth/me');
+        const userData = response.data.data?.user;
+        if (userData?.addresses) {
+          setAddresses(userData.addresses);
+          const defaultAddr = userData.addresses.find((a: Address) => a.isDefault);
+          if (defaultAddr) setSelectedAddressId(defaultAddr._id || defaultAddr.line1);
+        }
+      } catch (error) {
+        console.error('Failed to fetch addresses:', error);
+      }
+    };
+    if (isAuthenticated) fetchAddresses();
+  }, [isAuthenticated]);
+
+  // Redirect if cart is empty (after all hooks)
   if (items.length === 0 && !createdOrder) {
     return (
       <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
@@ -70,25 +88,6 @@ const CheckoutPage: React.FC = () => {
   if (createdOrder) {
     return <OrderConfirmationPage order={createdOrder} />;
   }
-
-  // Fetch addresses
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    const fetchAddresses = async () => {
-      try {
-        const response = await api.get('/auth/me');
-        const userData = response.data.data?.user;
-        if (userData?.addresses) {
-          setAddresses(userData.addresses);
-          const defaultAddr = userData.addresses.find((a: Address) => a.isDefault);
-          if (defaultAddr) setSelectedAddressId(defaultAddr._id || defaultAddr.line1);
-        }
-      } catch (error) {
-        console.error('Failed to fetch addresses:', error);
-      }
-    };
-    if (isAuthenticated) fetchAddresses();
-  }, [isAuthenticated]);
 
   const handleSaveAddress = async (e: React.FormEvent) => {
     e.preventDefault();
