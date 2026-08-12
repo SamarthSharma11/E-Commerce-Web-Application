@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Zap, Trophy, Sparkles, ChevronRight, X } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check } from 'lucide-react';
 import '../styles/landing.css';
 import { FALLBACK_PRODUCTS } from '../data/mockProducts';
 
@@ -62,84 +62,74 @@ export const LandingPage: React.FC = () => {
       </nav>
 
       {/* ── Hero Section ── */}
-      <header className="relative pt-16 pb-24 md:pt-28 md:pb-36 border-b border-[var(--landing-border)]">
-        {/* Background glow effects */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--landing-neon)]/10 rounded-full blur-[140px] pointer-events-none" />
+      <header className="relative pt-12 pb-20 md:pt-20 md:pb-28 bg-[#FAFAFA] text-[#0A0A0A] border-b border-[#E5E5E5] overflow-hidden">
         
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-[var(--landing-neon)] mb-6">
-              <Sparkles className="w-4 h-4" />
-              <span>THE NEXT-GEN FOOTBALL MARKETPLACE</span>
+          {/* Left Column Content */}
+          <div className="lg:col-span-7 flex flex-col items-start text-left z-20">
+            
+            {/* Eyebrow Label */}
+            <div className="text-xs font-extrabold tracking-[0.25em] uppercase text-[#0A0A0A] mb-4">
+              PERFORMANCE FOOTBALL GEAR
             </div>
 
-            <h1 className="landing-display-text text-5xl sm:text-7xl lg:text-8xl leading-[0.9] mb-8 text-white">
-              UNLEASH <br />
-              <span className="text-[var(--landing-neon)] landing-neon-glow">PURE POWER.</span>
+            {/* Display Headline */}
+            <h1 className="landing-display-text text-6xl sm:text-7xl lg:text-[88px] leading-[0.92] tracking-tighter text-[#0A0A0A] mb-6">
+              GEAR YOUR <br />
+              <span className="text-[#0A0A0A]">GREATNESS</span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-[var(--landing-gray)] max-w-xl mb-10 leading-relaxed font-normal">
-              Engineered for elite athletes and rising pros. Discover match-certified boots, official club jerseys, and high-performance training gear.
+            {/* Subheadline */}
+            <p className="text-base sm:text-lg text-[#555555] max-w-lg mb-8 leading-relaxed font-normal">
+              Match-ready boots. Zero compromise. Built for players who show up.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-10">
               <Link
                 to="/products"
-                className="w-full sm:w-auto px-8 py-4 bg-[var(--landing-neon)] text-black font-extrabold text-sm uppercase tracking-wider rounded-full hover:brightness-110 transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(198,255,0,0.4)]"
+                className="w-full sm:w-auto px-9 py-4 bg-[#0A0A0A] hover:bg-[#222222] text-white font-extrabold text-xs uppercase tracking-wider rounded-full transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
               >
-                Explore Pro Gear
+                Shop Now
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                to="/register"
-                className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-sm uppercase tracking-wider rounded-full transition-all text-center"
+                to="/products"
+                className="w-full sm:w-auto px-9 py-4 bg-transparent border-2 border-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-white text-[#0A0A0A] font-extrabold text-xs uppercase tracking-wider rounded-full transition-all text-center cursor-pointer"
               >
-                Join GoalKart Club
+                Explore Gear
               </Link>
             </div>
 
-            {/* Stats strip */}
-            <div className="grid grid-cols-3 gap-8 mt-14 pt-8 border-t border-white/10 w-full max-w-lg">
-              <div>
-                <p className="landing-display-text text-3xl text-white">100%</p>
-                <p className="text-xs text-[var(--landing-gray)] mt-1">Authentic Gear</p>
-              </div>
-              <div>
-                <p className="landing-display-text text-3xl text-[var(--landing-neon)]">50K+</p>
-                <p className="text-xs text-[var(--landing-gray)] mt-1">Active Players</p>
-              </div>
-              <div>
-                <p className="landing-display-text text-3xl text-white">24H</p>
-                <p className="text-xs text-[var(--landing-gray)] mt-1">Express Dispatch</p>
-              </div>
+            {/* Horizontal Feature Pills */}
+            <div className="flex flex-wrap items-center gap-3">
+              {['Match-Ready', 'Lightweight', 'All-Weather Grip', 'FIFA-Grade'].map((feature) => (
+                <div
+                  key={feature}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#E0E0E0] shadow-sm text-xs font-semibold text-[#0A0A0A]"
+                >
+                  <div className="w-3.5 h-3.5 rounded-full bg-[var(--landing-neon)] text-black flex items-center justify-center flex-shrink-0">
+                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                  </div>
+                  <span>{feature}</span>
+                </div>
+              ))}
             </div>
+
           </div>
 
-          {/* Hero Visual Card */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative rounded-[32px] bg-gradient-to-b from-[var(--landing-surface-2)] to-[var(--landing-surface)] p-6 border border-white/10 landing-card-glow overflow-hidden">
-              <div className="absolute top-4 right-4 bg-[var(--landing-neon)] text-black text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-wider">
-                FEATURED RELEASE
-              </div>
-
-              <div className="aspect-square rounded-[24px] overflow-hidden bg-black/40 mb-6 flex items-center justify-center p-4 border border-white/5">
-                <img
-                  src={FALLBACK_PRODUCTS[0]?.images[0] || '/placeholder.png'}
-                  alt="Pro Football Boots"
-                  className="w-full h-full object-cover rounded-[16px] hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="landing-display-text text-xl text-white">PRO FOOTBALL BOOTS</h3>
-                  <p className="text-xs text-[var(--landing-gray)]">FIFA Certified • Precision Grip</p>
-                </div>
-                <div className="text-right">
-                  <p className="landing-display-text text-2xl text-[var(--landing-neon)]">₹{FALLBACK_PRODUCTS[0]?.price.toLocaleString()}</p>
-                </div>
-              </div>
+          {/* Right Column Floating Boot Image */}
+          <div className="lg:col-span-5 relative flex items-center justify-center lg:-ml-12 z-10">
+            {/* Subtle glow circle accent behind image */}
+            <div className="absolute w-[380px] h-[380px] bg-[var(--landing-neon)]/20 rounded-full blur-[80px] pointer-events-none" />
+            
+            <div className="relative w-full max-w-lg aspect-square flex items-center justify-center">
+              <img
+                src="/hero_boot.png"
+                alt="GoalKart Performance Football Boot"
+                className="w-full h-auto object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] hover:scale-105 transition-transform duration-500 transform lg:-rotate-6"
+              />
             </div>
           </div>
 
