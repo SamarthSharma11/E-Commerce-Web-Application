@@ -353,7 +353,7 @@ const PRODUCTS = [
     description: 'Ergonomic team backpack with ball pouch and boot compartment.',
     price: 1299,
     category: 'Bags & Pitch Accessories',
-    images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786554184/ChatGPT_Image_Aug_6_2026_11_00_44_PM.png'],
     stock: 45, sku: 'GK-ACC-003', brand: 'GoalKart', ratingsAverage: 4.7, ratingsCount: 140,
   },
   {
