@@ -369,7 +369,7 @@ const PRODUCTS = [
     description: 'BPA-free squeeze sports water bottle with leak-proof valve.',
     price: 399,
     category: 'Bags & Pitch Accessories',
-    images: ['https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80'],
+    images: ['https://res.cloudinary.com/slg7aikj/image/upload/v1786554571/ChatGPT_Image_Aug_6_2026_10_11_41_PM.png'],
     stock: 120, sku: 'GK-ACC-005', brand: 'GoalKart', ratingsAverage: 4.5, ratingsCount: 180,
   },
   {
