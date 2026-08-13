@@ -232,11 +232,10 @@ const ProductListPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
-      <div className="max-w-[1200px] mx-auto px-4 py-4">
+    <div className="w-full animate-fade-in py-2">
 
         {/* ── Hero Showcase: Floating Product Constellation ── */}
-        <section className="relative py-8 md:py-12 mb-10 flex flex-col items-center text-center">
+        <section className="relative py-8 md:py-12 mb-8 flex flex-col items-center text-center">
           
           {/* Floating Product Cards Constellation */}
           <div className="w-full flex items-center justify-center gap-4 md:gap-6 mb-8 overflow-x-auto pb-4 pt-2 no-scrollbar px-2">
@@ -355,7 +354,7 @@ const ProductListPage: React.FC = () => {
 
         {/* ── Shop by Category Section (ProductImageTile Grid) ── */}
         {!currentSearch && !currentCategory && (
-          <section className="mb-14">
+          <section className="mb-12">
             <SectionHeading title="Shop by Category" to="/products" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {categoryTiles.map((tile) => (
@@ -403,7 +402,7 @@ const ProductListPage: React.FC = () => {
 
           {/* Desktop Sidebar */}
           <aside className="hidden lg:block w-60 flex-shrink-0">
-            <div className="sticky top-6 bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+            <div className="sticky top-8 bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
               <SidebarContent />
             </div>
           </aside>
@@ -464,8 +463,12 @@ const ProductListPage: React.FC = () => {
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {products.map((product) => (
-                    <ProductCard key={product._id} product={product} />
+                  {products.map((product, idx) => (
+                    <ProductCard
+                      key={product._id}
+                      product={product}
+                      staggerDelay={Math.min(idx * 50, 300)}
+                    />
                   ))}
                 </div>
 
@@ -507,7 +510,6 @@ const ProductListPage: React.FC = () => {
             )}
           </main>
         </div>
-      </div>
     </div>
   );
 };

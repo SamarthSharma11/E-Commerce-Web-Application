@@ -34,19 +34,19 @@ const OrderHistoryPage: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending': return <Clock className="w-4 h-4 text-[#787574]" />;
-      case 'processing': return <Package className="w-4 h-4 text-[#787574]" />;
-      case 'shipped': return <Truck className="w-4 h-4 text-[#787574]" />;
-      case 'delivered': return <CheckCircle className="w-4 h-4 text-[#000000]" />;
-      case 'cancelled': return <XCircle className="w-4 h-4 text-[#787574]" />;
-      default: return <Clock className="w-4 h-4 text-[#cccccc]" />;
+      case 'pending': return <Clock className="w-4 h-4 text-[#525252]" />;
+      case 'processing': return <Package className="w-4 h-4 text-[#525252]" />;
+      case 'shipped': return <Truck className="w-4 h-4 text-[#525252]" />;
+      case 'delivered': return <CheckCircle className="w-4 h-4 text-white" />;
+      case 'cancelled': return <XCircle className="w-4 h-4 text-red-500" />;
+      default: return <Clock className="w-4 h-4 text-[#525252]" />;
     }
   };
 
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'delivered': return 'bg-[#000000] text-white border-[#000000]';
-      case 'cancelled': return 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]';
+      case 'cancelled': return 'bg-[#fef2f2] text-red-600 border-red-200';
       default: return 'bg-[#f2f4f5] text-[#000000] border-[#ebebeb]';
     }
   };
@@ -87,14 +87,15 @@ const OrderHistoryPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
       <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-8">
-        <h1 className="text-3xl font-normal tracking-[-0.05em] mb-8">My Orders</h1>
+        <h1 className="text-3xl font-normal tracking-[-0.05em] mb-8 animate-fade-up">My Orders</h1>
 
         <div className="space-y-4">
-          {orders.map((order) => (
+          {orders.map((order, idx) => (
             <Link
               key={order._id}
               to={`/orders/${order._id}`}
-              className="block bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] hover:shadow-[rgba(0,0,0,0.15)_0px_8px_16px_-2px,rgba(0,0,0,0.1)_0px_3px_6px_-3px] transition-shadow"
+              className="block bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] hover:shadow-[rgba(0,0,0,0.15)_0px_8px_16px_-2px,rgba(0,0,0,0.1)_0px_3px_6px_-3px] transition-shadow animate-fade-up-stagger"
+              style={{ '--stagger-delay': `${Math.min(idx * 50, 200)}ms` } as React.CSSProperties}
             >
               <div className="flex items-start justify-between mb-4">
                 <div>

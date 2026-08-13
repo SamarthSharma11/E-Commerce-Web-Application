@@ -126,8 +126,12 @@ const AdminUsersPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#ebebeb]">
-                {users.map((user) => (
-                  <tr key={user._id} className="hover:bg-[#f2f4f5]/60 transition-colors">
+                {users.map((user, idx) => (
+                  <tr
+                    key={user._id}
+                    className="hover:bg-[#f2f4f5]/60 transition-colors animate-table-row"
+                    style={{ '--row-delay': `${Math.min(idx * 30, 200)}ms` } as React.CSSProperties}
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-full bg-[#f2f4f5] border border-[#ebebeb] flex items-center justify-center text-[#000000] font-normal text-[12px]">

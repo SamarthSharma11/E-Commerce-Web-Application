@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, ShoppingBag } from 'lucide-react';
+import { Star, ShoppingBag, Check } from 'lucide-react';
 import type { Product } from '../types';
 import { useCartStore } from '../store/cartStore';
 
@@ -9,16 +9,30 @@ import { useCartStore } from '../store/cartStore';
 // =====================================================
 interface ProductCardProps {
   product: Product;
+  /** Stagger delay in ms — set by parent grid for entrance animation */
+  staggerDelay?: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, staggerDelay = 0 }) => {
   const addToCart = useCartStore((state) => state.addToCart);
+  const [atcState, setAtcState] = useState<'idle' | 'pulse' | 'done'>('idle');
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const handleAddToCart = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    await addToCart(product, 1);
-  };
+    if (atcState !== 'idle') return;
+
+    setAtcState('pulse');
+    try {
+      await addToCart(product, 1);
+      setAtcState('done');
+    } catch {
+      setAtcState('idle');
+      return;
+    }
+    // Reset button after 900ms
+    setTimeout(() => setAtcState('idle'), 900);
+  }, [addToCart, atcState, product]);
 
   const effectivePrice = product.discountPrice ?? product.price;
   const hasDiscount = product.discountPrice && product.discountPrice < product.price;
@@ -29,14 +43,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link
       to={`/products/${product.slug}`}
-      className="group bg-white rounded-[28px] border-none shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] hover:shadow-[rgba(0,0,0,0.14)_0px_8px_16px_-2px] transition-shadow duration-200 flex flex-col p-2.5 overflow-hidden"
+      className="group card-hover-lift bg-white rounded-[28px] border-none shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] flex flex-col p-2.5 overflow-hidden animate-fade-up-stagger"
+      style={{ '--stagger-delay': `${staggerDelay}ms` } as React.CSSProperties}
     >
       {/* 1:1 Image Area with 20px inner radius creating ~8px white frame */}
       <div className="relative w-full aspect-square rounded-[20px] overflow-hidden bg-[#f2f4f5] flex-shrink-0">
         <img
           src={product.images[0] || '/placeholder.png'}
           alt={product.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
           loading="lazy"
         />
 
@@ -51,13 +66,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* Stock Badge */}
         {product.stock === 0 && (
-          <div className="absolute inset-0 bg-white/85 backdrop-blur-[1px] flex items-center justify-center">
-            <span className="text-[#787574] text-[12px] font-normal tracking-[-0.017em]">Out of Stock</span>
+          <div className="absolute inset-0 bg-white/90 backdrop-blur-[1px] flex items-center justify-center">
+            <span className="text-[#000000] text-[12px] font-normal tracking-[-0.017em]">Out of Stock</span>
           </div>
         )}
       </div>
 
-      {/* Content Text Block (12-16px gap below image) */}
+      {/* Content Text Block */}
       <div className="pt-3.5 px-1.5 pb-1 flex flex-col flex-1 gap-1.5 text-left">
         <div>
           {product.brand && (
@@ -94,11 +109,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <button
             onClick={handleAddToCart}
             disabled={product.stock === 0}
-            className="rounded-full bg-[#000000] text-white hover:opacity-90 disabled:bg-[#cccccc] disabled:text-[#787574] disabled:cursor-not-allowed px-3.5 py-1.5 text-[12px] font-normal tracking-[-0.017em] flex items-center gap-1.5 transition-opacity cursor-pointer"
+            className={`rounded-full text-white disabled:bg-[#ebebeb] disabled:text-[#666666] disabled:cursor-not-allowed px-3.5 py-1.5 text-[12px] font-normal tracking-[-0.017em] flex items-center gap-1.5 cursor-pointer transition-colors duration-200 ${
+              atcState === 'done'
+                ? 'bg-[#16a34a]'   // green on success
+                : 'bg-[#000000] hover:opacity-90'
+            } ${atcState === 'pulse' ? 'btn-atc-pulse' : ''}`}
             aria-label="Add to Cart"
           >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span>Add</span>
+            {atcState === 'done' ? (
+              <>
+                <Check className="w-3.5 h-3.5" />
+                <span>Added</span>
+              </>
+            ) : (
+              <>
+                <ShoppingBag className="w-3.5 h-3.5" />
+                <span>Add</span>
+              </>
+            )}
           </button>
         </div>
       </div>

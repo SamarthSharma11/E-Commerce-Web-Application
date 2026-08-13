@@ -24,15 +24,15 @@ const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] flex">
+    <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[var(--color-ink-black)] flex font-['Inter']">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-[var(--color-border)] bg-[var(--color-surface)] flex-shrink-0 hidden md:flex flex-col">
+      <aside className="w-64 border-r border-[#ebebeb] bg-white flex-shrink-0 hidden md:flex flex-col shadow-[rgba(0,0,0,0.04)_2px_0px_8px_0px]">
         <div className="p-6">
           <Link to="/admin" className="flex items-center mb-8">
             <GoalKartLogo size="sm" />
           </Link>
 
-          <nav className="space-y-1">
+          <nav className="space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.path, item.exact);
@@ -40,13 +40,13 @@ const AdminLayout: React.FC = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-full text-xs font-normal transition-all duration-200 ${
                     active
-                      ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'
-                      : 'text-[var(--color-text-muted)] hover:text-white hover:bg-[var(--color-surface-2)]'
+                      ? 'bg-[var(--color-ink-black)] text-white shadow-sm'
+                      : 'text-[var(--color-muted-gray)] hover:text-[var(--color-ink-black)] hover:bg-[#f2f4f5]'
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-4 h-4" />
                   {item.label}
                 </Link>
               );
@@ -58,7 +58,7 @@ const AdminLayout: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 min-w-0">
         {/* Mobile Header */}
-        <header className="md:hidden border-b border-[var(--color-border)] bg-[var(--color-surface)]/80 backdrop-blur-md sticky top-0 z-50">
+        <header className="md:hidden border-b border-[#ebebeb] bg-white/90 backdrop-blur-md sticky top-0 z-50">
           <div className="px-6 h-14 flex items-center justify-between">
             <Link to="/admin" className="flex items-center">
               <GoalKartLogo size="sm" />
@@ -66,7 +66,7 @@ const AdminLayout: React.FC = () => {
           </div>
         </header>
 
-        <div className="p-4 sm:p-8">
+        <div className="p-4 sm:p-6">
           <Outlet />
         </div>
       </main>

@@ -5,12 +5,12 @@ import React from 'react';
 // =====================================================
 
 export const ProductCardSkeleton = () => (
-  <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl overflow-hidden animate-pulse">
-    <div className="w-full aspect-square bg-[var(--color-surface-2)]" />
-    <div className="p-4 space-y-3">
-      <div className="h-5 bg-[var(--color-surface-2)] rounded-lg w-3/4" />
-      <div className="h-4 bg-[var(--color-surface-2)] rounded-lg w-1/2" />
-      <div className="h-6 bg-[var(--color-surface-2)] rounded-lg w-1/3" />
+  <div className="bg-white border-none rounded-[28px] p-2 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] animate-pulse flex flex-col">
+    <div className="w-full aspect-square bg-[#f2f4f5] rounded-[20px]" />
+    <div className="p-4 pt-3 space-y-2.5">
+      <div className="h-4 bg-[#f2f4f5] rounded-full w-3/4" />
+      <div className="h-3 bg-[#f2f4f5] rounded-full w-1/2" />
+      <div className="h-5 bg-[#f2f4f5] rounded-full w-1/3 mt-2" />
     </div>
   </div>
 );
@@ -24,25 +24,25 @@ export const ProductListSkeleton = ({ count = 8 }: { count?: number }) => (
 );
 
 export const CategoryNavSkeleton = () => (
-  <div className="hidden md:flex items-center gap-6 animate-pulse">
+  <div className="flex items-center gap-3 overflow-x-auto py-2 animate-pulse">
     {Array.from({ length: 6 }).map((_, i) => (
-      <div key={i} className="h-4 bg-[var(--color-surface-2)] rounded w-20" />
+      <div key={i} className="h-9 bg-[#f2f4f5] border border-[#ebebeb] rounded-full w-28 flex-shrink-0" />
     ))}
   </div>
 );
 
 export const ReviewSkeleton = () => (
-  <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-4 space-y-3 animate-pulse">
+  <div className="bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] space-y-4 animate-pulse">
     <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-full bg-[var(--color-surface-2)]" />
+      <div className="w-10 h-10 rounded-full bg-[#f2f4f5]" />
       <div className="space-y-2">
-        <div className="h-4 bg-[var(--color-surface-2)] rounded w-32" />
-        <div className="h-3 bg-[var(--color-surface-2)] rounded w-20" />
+        <div className="h-4 bg-[#f2f4f5] rounded-full w-32" />
+        <div className="h-3 bg-[#f2f4f5] rounded-full w-20" />
       </div>
     </div>
     <div className="space-y-2">
-      <div className="h-3 bg-[var(--color-surface-2)] rounded w-full" />
-      <div className="h-3 bg-[var(--color-surface-2)] rounded w-5/6" />
+      <div className="h-3 bg-[#f2f4f5] rounded-full w-full" />
+      <div className="h-3 bg-[#f2f4f5] rounded-full w-5/6" />
     </div>
   </div>
 );

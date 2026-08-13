@@ -1,35 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCartStore, useCartCount, useCartSubtotal } from '../store/cartStore';
 import toast from 'react-hot-toast';
 
 // =====================================================
-// CartDrawer Component — White Canvas Floating Panel
+// CartDrawer Component — Animated slide-in from right
 // =====================================================
 const CartDrawer: React.FC = () => {
   const { items, isOpen, setCartOpen, removeFromCart, updateQuantity, clearCart } = useCartStore();
   const cartCount = useCartCount();
   const subtotal = useCartSubtotal();
 
+  // Track mount state so we can animate OUT before unmount
+  const [visible, setVisible] = useState(false);
+  const [closing, setClosing] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setVisible(true);
+      setClosing(false);
+    } else if (visible) {
+      // Trigger exit animation then unmount
+      setClosing(true);
+      const t = setTimeout(() => { setVisible(false); setClosing(false); }, 260);
+      return () => clearTimeout(t);
+    }
+  }, [isOpen]);
+
+  const handleClose = () => setCartOpen(false);
+
   const getProductId = (product: string | { _id: string } | null | undefined): string => {
     if (!product) return '';
     return typeof product === 'string' ? product : product._id || '';
   };
 
-  if (!isOpen) return null;
+  if (!visible) return null;
 
   return (
     <div className="fixed inset-0 z-50">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"
-        onClick={() => setCartOpen(false)}
+        className={`absolute inset-0 bg-black/20 backdrop-blur-[2px] ${closing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`}
+        onClick={handleClose}
       />
 
       {/* Drawer Panel */}
-      <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white flex flex-col shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px]">
-
+      <div
+        className={`absolute right-0 top-0 bottom-0 w-full max-w-md bg-white flex flex-col shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px] ${closing ? 'animate-drawer-out' : 'animate-drawer-in'}`}
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#ebebeb]">
           <div className="flex items-center gap-3">
@@ -40,7 +59,7 @@ const CartDrawer: React.FC = () => {
             </span>
           </div>
           <button
-            onClick={() => setCartOpen(false)}
+            onClick={handleClose}
             className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] transition-colors text-[#787574] hover:text-[#000000] cursor-pointer"
           >
             <X className="w-4 h-4" />
@@ -50,14 +69,14 @@ const CartDrawer: React.FC = () => {
         {/* Cart Items */}
         <div className="flex-1 overflow-y-auto p-6">
           {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center">
+            <div className="flex flex-col items-center justify-center h-full text-center animate-fade-in">
               <div className="w-16 h-16 rounded-full bg-[#f2f4f5] flex items-center justify-center mb-4">
                 <ShoppingBag className="w-7 h-7 text-[#cccccc]" />
               </div>
               <h3 className="text-[16px] font-normal text-[#000000] mb-1.5">Your cart is empty</h3>
               <p className="text-[14px] text-[#787574] mb-6">Looks like you haven't added any items yet.</p>
               <button
-                onClick={() => setCartOpen(false)}
+                onClick={handleClose}
                 className="px-6 py-2.5 bg-[#000000] hover:opacity-90 text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
               >
                 Continue Shopping
@@ -72,7 +91,11 @@ const CartDrawer: React.FC = () => {
                 const itemKey = item._id || productId || `cart-item-${idx}`;
 
                 return (
-                  <div key={itemKey} className="bg-[#f2f4f5] rounded-[20px] p-4 flex gap-3">
+                  <div
+                    key={itemKey}
+                    className="bg-[#f2f4f5] rounded-[20px] p-4 flex gap-3 animate-fade-up-stagger"
+                    style={{ '--stagger-delay': `${idx * 40}ms` } as React.CSSProperties}
+                  >
                     {/* Product Image */}
                     <div className="w-16 h-16 min-w-[64px] rounded-[16px] overflow-hidden border border-[#ebebeb] flex-shrink-0 bg-white">
                       <img
@@ -132,7 +155,7 @@ const CartDrawer: React.FC = () => {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-[#ebebeb] px-6 py-5 space-y-4">
+          <div className="border-t border-[#ebebeb] px-6 py-5 space-y-4 animate-fade-up">
             <div className="flex items-center justify-between">
               <span className="text-[14px] text-[#787574]">Subtotal ({cartCount} items)</span>
               <span className="text-xl font-normal text-[#000000]">₹{subtotal.toLocaleString()}</span>
@@ -141,7 +164,7 @@ const CartDrawer: React.FC = () => {
             <div className="flex gap-3">
               <Link
                 to="/cart"
-                onClick={() => setCartOpen(false)}
+                onClick={handleClose}
                 className="flex-1 py-3 px-4 bg-white border border-[#ebebeb] hover:bg-[#f2f4f5] text-[#000000] text-[14px] font-normal rounded-full transition-colors text-center"
               >
                 View Cart
@@ -150,7 +173,7 @@ const CartDrawer: React.FC = () => {
                 to="/checkout"
                 onClick={() => {
                   toast.success('Proceeding to checkout...');
-                  setCartOpen(false);
+                  handleClose();
                 }}
                 className="flex-1 py-3 px-4 bg-[#000000] hover:opacity-90 text-white text-[14px] font-normal rounded-full transition-opacity flex items-center justify-center gap-2"
               >

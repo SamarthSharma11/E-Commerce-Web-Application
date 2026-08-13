@@ -103,21 +103,25 @@ const DashboardHome: React.FC = () => {
           title="Total Revenue"
           value={formatCurrency(summary?.totalRevenue || 0)}
           icon={DollarSign}
+          delay={0}
         />
         <StatCard
           title="Total Orders"
           value={summary?.totalOrders.toString() || '0'}
           icon={ShoppingCart}
+          delay={40}
         />
         <StatCard
           title="Total Users"
           value={summary?.totalUsers.toString() || '0'}
           icon={Users}
+          delay={80}
         />
         <StatCard
           title="Total Products"
           value={summary?.totalProducts.toString() || '0'}
           icon={Package}
+          delay={120}
         />
       </div>
 
@@ -206,6 +210,8 @@ const DashboardHome: React.FC = () => {
                   strokeWidth={2}
                   dot={{ fill: '#000000', strokeWidth: 2, r: 3 }}
                   activeDot={{ r: 5, stroke: '#000000', strokeWidth: 2 }}
+                  isAnimationActive={true}
+                  animationDuration={1000}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -235,7 +241,11 @@ const DashboardHome: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#ebebeb]">
                 {topProducts.map((product, idx) => (
-                  <tr key={product.productId} className="hover:bg-[#f2f4f5]/60 transition-colors">
+                  <tr
+                    key={product.productId}
+                    className="hover:bg-[#f2f4f5]/60 transition-colors animate-table-row"
+                    style={{ '--row-delay': `${Math.min(idx * 30, 200)}ms` } as React.CSSProperties}
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <span className="w-6 h-6 rounded-full bg-[#f2f4f5] border border-[#ebebeb] text-[#787574] flex items-center justify-center text-[12px] font-normal">
@@ -272,11 +282,15 @@ interface StatCardProps {
   title: string;
   value: string;
   icon: React.FC<{ className?: string }>;
+  delay?: number;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, delay = 0 }) => {
   return (
-    <div className="bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] hover:shadow-[rgba(0,0,0,0.15)_0px_8px_16px_-2px,rgba(0,0,0,0.1)_0px_3px_6px_-3px] transition-shadow">
+    <div
+      className="bg-white border-none rounded-[28px] p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] hover:shadow-[rgba(0,0,0,0.15)_0px_8px_16px_-2px,rgba(0,0,0,0.1)_0px_3px_6px_-3px] transition-shadow animate-fade-up-stagger"
+      style={{ '--stagger-delay': `${delay}ms` } as React.CSSProperties}
+    >
       <div className="flex items-center justify-between mb-4">
         <span className="text-[12px] font-normal text-[#787574]">{title}</span>
         <div className="w-9 h-9 rounded-full bg-[#f2f4f5] flex items-center justify-center">

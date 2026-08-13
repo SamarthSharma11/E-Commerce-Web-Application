@@ -32,19 +32,19 @@ const OrderDetailPage: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending': return <Clock className="w-5 h-5 text-[#787574]" />;
-      case 'processing': return <Package className="w-5 h-5 text-[#787574]" />;
-      case 'shipped': return <Truck className="w-5 h-5 text-[#787574]" />;
-      case 'delivered': return <CheckCircle className="w-5 h-5 text-[#000000]" />;
-      case 'cancelled': return <XCircle className="w-5 h-5 text-[#787574]" />;
-      default: return <Clock className="w-5 h-5 text-[#cccccc]" />;
+      case 'pending': return <Clock className="w-5 h-5 text-[#525252]" />;
+      case 'processing': return <Package className="w-5 h-5 text-[#525252]" />;
+      case 'shipped': return <Truck className="w-5 h-5 text-[#525252]" />;
+      case 'delivered': return <CheckCircle className="w-5 h-5 text-white" />;
+      case 'cancelled': return <XCircle className="w-5 h-5 text-red-500" />;
+      default: return <Clock className="w-5 h-5 text-[#525252]" />;
     }
   };
 
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'delivered': return 'bg-[#000000] text-white border-[#000000]';
-      case 'cancelled': return 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]';
+      case 'cancelled': return 'bg-[#fef2f2] text-red-600 border-red-200';
       default: return 'bg-[#f2f4f5] text-[#000000] border-[#ebebeb]';
     }
   };
@@ -81,14 +81,14 @@ const OrderDetailPage: React.FC = () => {
     <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
       <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-[14px] text-[#787574] mb-6">
+        <div className="flex items-center gap-2 text-[14px] text-[#787574] mb-6 animate-fade-up">
           <Link to="/orders" className="hover:text-[#000000] transition-colors">Orders</Link>
           <span>/</span>
           <span className="text-[#000000]">#{order._id.slice(-8).toUpperCase()}</span>
         </div>
 
         {/* Order Header Card */}
-        <div className="bg-white border-none rounded-[28px] p-6 sm:p-8 mb-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+        <div className="bg-white border-none rounded-[28px] p-6 sm:p-8 mb-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] animate-fade-up" style={{ animationDelay: '40ms' }}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
               <h1 className="text-2xl font-normal tracking-[-0.05em]">Order #{order._id.slice(-8).toUpperCase()}</h1>

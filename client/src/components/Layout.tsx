@@ -60,10 +60,10 @@ const Layout: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[var(--color-ink-black)] flex flex-col md:pl-16 pb-16 md:pb-0">
+    <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[var(--color-ink-black)] flex font-['Inter']">
       
-      {/* ── Persistent Desktop Left Sidebar Rail (~64px / w-16, fixed, white, no border) ── */}
-      <aside className="hidden md:flex flex-col items-center justify-between py-5 fixed left-0 top-0 bottom-0 w-16 bg-white z-50 select-none">
+      {/* ── Persistent Desktop Left Sidebar Rail (~64px / w-16, fixed, white, border-r) ── */}
+      <aside className="hidden md:flex flex-col items-center justify-between py-5 app-sidebar select-none shadow-[rgba(0,0,0,0.04)_2px_0px_8px_0px]">
         
         {/* Navigation Rail Items */}
         <div className="flex flex-col items-center gap-3 w-full">
@@ -79,7 +79,7 @@ const Layout: React.FC = () => {
               <button
                 key={item.label}
                 onClick={item.onClick}
-                className={`relative w-12 h-12 rounded-[20px] flex items-center justify-center transition-colors ${
+                className={`relative w-12 h-12 rounded-[20px] flex items-center justify-center transition-all duration-200 active:scale-95 ${
                   isActive ? 'bg-[var(--color-canvas-mist)]' : 'hover:bg-[var(--color-canvas-mist)]'
                 }`}
                 title={item.label}
@@ -87,7 +87,7 @@ const Layout: React.FC = () => {
               >
                 <IconComponent className="w-6 h-6 text-[#000000]" />
                 {item.badge ? (
-                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[var(--color-shop-violet)] text-white text-[9px] font-normal rounded-full flex items-center justify-center">
+                  <span key={item.badge} className="absolute top-1.5 right-1.5 w-4 h-4 bg-[var(--color-shop-violet)] text-white text-[9px] font-normal rounded-full flex items-center justify-center animate-badge-pop">
                     {item.badge > 99 ? '99+' : item.badge}
                   </span>
                 ) : null}
@@ -135,7 +135,7 @@ const Layout: React.FC = () => {
       </aside>
 
       {/* ── Mobile Bottom Navigation Bar (collapsed rail under 768px) ── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white z-50 flex items-center justify-around px-2 border-t border-[#ebebeb]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white z-50 flex items-center justify-around px-2 border-t border-[#ebebeb] animate-slide-up-nav">
         {navItems.map((item) => {
           const IconComponent = item.icon;
           const isActive = item.path !== '#cart' && (
@@ -148,14 +148,14 @@ const Layout: React.FC = () => {
             <button
               key={item.label}
               onClick={item.onClick}
-              className={`relative w-12 h-12 rounded-[20px] flex items-center justify-center transition-colors ${
+              className={`relative w-12 h-12 rounded-[20px] flex items-center justify-center transition-all duration-200 active:scale-95 ${
                 isActive ? 'bg-[var(--color-canvas-mist)]' : ''
               }`}
               aria-label={item.label}
             >
               <IconComponent className="w-6 h-6 text-[#000000]" />
               {item.badge ? (
-                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[var(--color-shop-violet)] text-white text-[9px] font-normal rounded-full flex items-center justify-center">
+                <span key={item.badge} className="absolute top-1.5 right-1.5 w-4 h-4 bg-[var(--color-shop-violet)] text-white text-[9px] font-normal rounded-full flex items-center justify-center animate-badge-pop">
                   {item.badge > 99 ? '99+' : item.badge}
                 </span>
               ) : null}
@@ -188,13 +188,14 @@ const Layout: React.FC = () => {
         </Link>
       </nav>
 
-      {/* ── Main Content Area ── */}
-      <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 md:px-8 py-6">
-        <Outlet />
-      </main>
+      {/* ── Page Content Wrapper (guaranteed 80px left margin for sidebar clearance) ── */}
+      <div className="app-main-wrapper flex-1 min-w-0 flex flex-col pb-16 md:pb-0">
+        <main className="flex-1 w-full max-w-[1200px] mx-auto px-6 md:px-10 py-6">
+          <Outlet />
+        </main>
 
-      {/* ── Full-Width Dark Band Footer (#000000) ── */}
-      <footer className="bg-[#000000] text-white border-none mt-auto w-full py-14 px-4 md:px-12 select-none">
+        {/* ── Full-Width Dark Band Footer (#000000) ── */}
+        <footer className="bg-[#000000] text-white border-none mt-auto w-full py-14 px-6 md:px-12 select-none">
         <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           
           {/* Column 1: Shop */}
@@ -310,8 +311,9 @@ const Layout: React.FC = () => {
         </div>
       </footer>
 
-      {/* Cart Drawer */}
-      <CartDrawer />
+        {/* Cart Drawer */}
+        <CartDrawer />
+      </div>
     </div>
   );
 };

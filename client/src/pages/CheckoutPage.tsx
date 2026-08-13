@@ -71,7 +71,7 @@ const CheckoutPage: React.FC = () => {
   if (items.length === 0 && !createdOrder) {
     return (
       <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
-        <div className="max-w-[900px] mx-auto px-4 py-12">
+        <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-12">
           <div className="flex flex-col items-center justify-center text-center">
             <h1 className="text-3xl font-normal tracking-[-0.05em] mb-4">Your Cart is Empty</h1>
             <p className="text-[#787574] text-[14px] mb-6">Add some products before checking out.</p>
@@ -150,12 +150,12 @@ const CheckoutPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
-      <div className="max-w-[900px] mx-auto px-4 py-8">
+      <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
-        <h1 className="text-3xl font-normal tracking-[-0.05em] mb-8">Checkout</h1>
+        <h1 className="text-3xl font-normal tracking-[-0.05em] mb-8 animate-fade-up">Checkout</h1>
 
         {/* Steps Indicator */}
-        <div className="flex items-center justify-start mb-8 gap-2">
+        <div className="flex items-center justify-start mb-8 gap-2 animate-fade-up" style={{ animationDelay: '40ms' }}>
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isActive = currentStep === step.key;
@@ -168,15 +168,15 @@ const CheckoutPage: React.FC = () => {
                       ? 'bg-[#000000] text-white'
                       : isActive
                         ? 'bg-[#000000] text-white'
-                        : 'bg-white border border-[#ebebeb] text-[#787574]'
+                        : 'bg-white border border-[#ebebeb] text-[#525252]'
                   }`}
                 >
                   {isCompleted ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                 </div>
-                <span className={`text-[14px] font-normal ${isActive ? 'text-[#000000]' : 'text-[#787574]'}`}>
+                <span className={`text-[14px] font-normal ${isActive ? 'text-[#000000]' : 'text-[#525252]'}`}>
                   {step.label}
                 </span>
-                {index < steps.length - 1 && <ChevronRight className="w-4 h-4 text-[#cccccc] mx-1" />}
+                {index < steps.length - 1 && <ChevronRight className="w-4 h-4 text-[#8a8a8a] mx-1" />}
               </div>
             );
           })}
@@ -472,7 +472,7 @@ interface OrderConfirmationPageProps {
 const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({ order }) => {
   return (
     <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
-      <div className="max-w-[700px] mx-auto px-4 py-12 text-center">
+      <div className="max-w-[700px] mx-auto px-4 sm:px-6 py-12 text-center">
         <div className="w-16 h-16 rounded-full bg-[#f2f4f5] flex items-center justify-center mx-auto mb-6">
           <Check className="w-8 h-8 text-[#000000]" />
         </div>

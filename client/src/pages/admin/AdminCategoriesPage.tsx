@@ -13,6 +13,8 @@ const AdminCategoriesPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalClosing, setModalClosing] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -44,6 +46,22 @@ const AdminCategoriesPage: React.FC = () => {
       setLoading(false);
     }
   }, [currentPage, search]);
+
+  useEffect(() => {
+    if (showModal) {
+      setModalVisible(true);
+      setModalClosing(false);
+    } else if (modalVisible) {
+      setModalClosing(true);
+      const t = setTimeout(() => {
+        setModalVisible(false);
+        setModalClosing(false);
+      }, 200);
+      return () => clearTimeout(t);
+    }
+  }, [showModal]);
+
+  const closeModal = () => setShowModal(false);
 
   useEffect(() => {
     fetchCategories();
@@ -175,8 +193,12 @@ const AdminCategoriesPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#ebebeb]">
-                {categories.map((category) => (
-                  <tr key={category._id} className="hover:bg-[#f2f4f5]/60 transition-colors">
+                {categories.map((category, idx) => (
+                  <tr
+                    key={category._id}
+                    className="hover:bg-[#f2f4f5]/60 transition-colors animate-table-row"
+                    style={{ '--row-delay': `${Math.min(idx * 30, 200)}ms` } as React.CSSProperties}
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {category.image && (
@@ -204,7 +226,7 @@ const AdminCategoriesPage: React.FC = () => {
                       <span className={`px-2.5 py-1 rounded-full text-[12px] font-normal border ${
                         category.isActive
                           ? 'bg-[#000000] text-white border-[#000000]'
-                          : 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]'
+                          : 'bg-[#f2f4f5] text-[#525252] border-[#ebebeb]'
                       }`}>
                         {category.isActive ? 'Active' : 'Inactive'}
                       </span>
@@ -264,16 +286,21 @@ const AdminCategoriesPage: React.FC = () => {
       </div>
 
       {/* Create/Edit Modal */}
-      {showModal && (
+      {modalVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" onClick={() => setShowModal(false)} />
-          <div className="relative bg-white border-none rounded-[28px] w-full max-w-lg shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px]">
+          <div
+            className={`absolute inset-0 bg-black/20 backdrop-blur-[2px] ${modalClosing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`}
+            onClick={closeModal}
+          />
+          <div
+            className={`relative bg-white border-none rounded-[28px] w-full max-w-lg shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px] ${modalClosing ? 'animate-modal-out' : 'animate-modal-in'}`}
+          >
             <div className="border-b border-[#ebebeb] px-6 py-4 flex items-center justify-between">
               <h2 className="text-xl font-normal tracking-[-0.05em] text-[#000000]">
                 {editingCategory ? 'Edit Category' : 'Create Category'}
               </h2>
               <button
-                onClick={() => setShowModal(false)}
+                onClick={closeModal}
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -349,7 +376,7 @@ const AdminCategoriesPage: React.FC = () => {
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#ebebeb]">
                 <button
                   type="button"
-                  onClick={() => setShowModal(false)}
+                  onClick={closeModal}
                   className="px-5 py-2.5 text-[14px] font-normal text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
                 >
                   Cancel
@@ -357,7 +384,7 @@ const AdminCategoriesPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-6 py-2.5 bg-[#000000] hover:opacity-90 disabled:bg-[#cccccc] disabled:cursor-not-allowed text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
+                  className="px-6 py-2.5 bg-[#000000] hover:opacity-90 disabled:bg-[#ebebeb] disabled:text-[#666666] disabled:cursor-not-allowed text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
                 >
                   {submitting ? 'Saving...' : editingCategory ? 'Update Category' : 'Create Category'}
                 </button>

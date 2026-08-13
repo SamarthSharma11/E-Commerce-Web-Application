@@ -146,7 +146,7 @@ const ProductDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
-        <div className="max-w-[1200px] mx-auto px-4 py-8">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <ProductCardSkeleton />
             <div className="space-y-4">
@@ -183,9 +183,9 @@ const ProductDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
-      <div className="max-w-[1200px] mx-auto px-4 py-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-[14px] text-[#787574] mb-6">
+        <nav className="flex items-center gap-2 text-[14px] text-[#787574] mb-6 animate-fade-up">
           <Link to="/products" className="hover:text-[#000000] transition-colors">Products</Link>
           {category && (
             <>
@@ -200,7 +200,7 @@ const ProductDetailPage: React.FC = () => {
         </nav>
 
         {/* Product Main */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Image Gallery */}
           <div className="space-y-4">
             <div className="relative aspect-square rounded-[28px] overflow-hidden bg-white shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] p-2.5">
@@ -291,10 +291,15 @@ const ProductDetailPage: React.FC = () => {
               )}
             </div>
 
-            {/* Stock Status */}
+            {/* Stock Badge */}
             <div className="flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full ${product.stock > 0 ? 'bg-[#000000]' : 'bg-[#cccccc]'}`} />
-              <span className="text-[14px] font-normal text-[#000000]">
+              <span
+                className={`px-3 py-1 rounded-full text-[12px] font-normal border ${
+                  product.stock > 0
+                    ? 'bg-[#000000] text-white border-[#000000]'
+                    : 'bg-[#f2f4f5] text-[#525252] border-[#ebebeb]'
+                }`}
+              >
                 {product.stock > 0 ? `In Stock (${product.stock} available)` : 'Out of Stock'}
               </span>
             </div>
@@ -320,8 +325,8 @@ const ProductDetailPage: React.FC = () => {
               </div>
               <button
                 onClick={handleAddToCart}
-                disabled={product.stock === 0}
-                className="flex-1 py-3.5 px-8 bg-[#000000] hover:opacity-90 disabled:bg-[#cccccc] disabled:cursor-not-allowed text-white font-normal text-[14px] rounded-full transition-opacity flex items-center justify-center gap-2 cursor-pointer"
+                disabled={product.stock === 0 || addingToCart}
+                className="w-full py-4 bg-[#000000] hover:opacity-90 disabled:bg-[#ebebeb] disabled:text-[#666666] disabled:cursor-not-allowed text-white font-normal text-[14px] rounded-full transition-opacity flex items-center justify-center gap-2 cursor-pointer shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px]"
               >
                 <ShoppingBag className="w-4 h-4" />
                 {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
@@ -359,7 +364,7 @@ const ProductDetailPage: React.FC = () => {
         </div>
 
         {/* Reviews Section */}
-        <div className="border-t border-[#ebebeb] pt-12">
+        <div className="border-t border-[#ebebeb] pt-8 animate-fade-up" style={{ animationDelay: '80ms' }}>
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-normal tracking-[-0.05em]">Customer Reviews</h2>
@@ -427,7 +432,7 @@ const ProductDetailPage: React.FC = () => {
             {/* Review Form */}
             <div className="lg:col-span-1">
               {isAuthenticated ? (
-                <div className="bg-white rounded-[28px] border-none p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] sticky top-6">
+                <div className="bg-white rounded-[28px] border-none p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] sticky top-8">
                   <h3 className="text-[16px] font-normal mb-4">Write a Review</h3>
                   <form onSubmit={handleSubmitReview} className="space-y-4">
                     <div>
@@ -465,15 +470,15 @@ const ProductDetailPage: React.FC = () => {
                     </div>
                     <button
                       type="submit"
-                      disabled={submittingReview || reviewComment.length < 10}
-                      className="w-full py-3 bg-[#000000] hover:opacity-90 disabled:bg-[#cccccc] disabled:cursor-not-allowed text-white font-normal text-[14px] rounded-full transition-opacity cursor-pointer"
+                      disabled={submittingReview}
+                      className="w-full py-3 bg-[#000000] hover:opacity-90 disabled:bg-[#ebebeb] disabled:text-[#666666] disabled:cursor-not-allowed text-white text-[14px] font-normal rounded-full transition-opacity cursor-pointer"
                     >
                       {submittingReview ? 'Submitting...' : 'Submit Review'}
                     </button>
                   </form>
                 </div>
               ) : (
-                <div className="bg-white rounded-[28px] border-none p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] text-center sticky top-6">
+                <div className="bg-white rounded-[28px] border-none p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] text-center sticky top-8">
                   <p className="text-[#787574] text-[14px] mb-4">Please log in to write a review</p>
                   <Link
                     to="/login"

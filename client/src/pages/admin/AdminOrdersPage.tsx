@@ -16,6 +16,24 @@ const AdminOrdersPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [drawerClosing, setDrawerClosing] = useState(false);
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      setDrawerVisible(true);
+      setDrawerClosing(false);
+    } else if (drawerVisible) {
+      setDrawerClosing(true);
+      const t = setTimeout(() => {
+        setDrawerVisible(false);
+        setDrawerClosing(false);
+      }, 240);
+      return () => clearTimeout(t);
+    }
+  }, [isDrawerOpen]);
+
+  const closeDrawer = () => setIsDrawerOpen(false);
 
   useEffect(() => {
     fetchOrders();
@@ -62,19 +80,19 @@ const AdminOrdersPage: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending': return <Clock className="w-4 h-4 text-[#787574]" />;
-      case 'processing': return <Package className="w-4 h-4 text-[#787574]" />;
-      case 'shipped': return <Truck className="w-4 h-4 text-[#787574]" />;
-      case 'delivered': return <CheckCircle className="w-4 h-4 text-[#000000]" />;
-      case 'cancelled': return <XCircle className="w-4 h-4 text-[#787574]" />;
-      default: return <Clock className="w-4 h-4 text-[#cccccc]" />;
+      case 'pending': return <Clock className="w-4 h-4 text-[#525252]" />;
+      case 'processing': return <Package className="w-4 h-4 text-[#525252]" />;
+      case 'shipped': return <Truck className="w-4 h-4 text-[#525252]" />;
+      case 'delivered': return <CheckCircle className="w-4 h-4 text-white" />;
+      case 'cancelled': return <XCircle className="w-4 h-4 text-red-500" />;
+      default: return <Clock className="w-4 h-4 text-[#525252]" />;
     }
   };
 
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'delivered': return 'bg-[#000000] text-white border-[#000000]';
-      case 'cancelled': return 'bg-[#f2f4f5] text-[#787574] border-[#ebebeb]';
+      case 'cancelled': return 'bg-[#fef2f2] text-red-600 border-red-200';
       default: return 'bg-[#f2f4f5] text-[#000000] border-[#ebebeb]';
     }
   };
@@ -140,8 +158,12 @@ const AdminOrdersPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#ebebeb]">
-                {orders.map((order) => (
-                  <tr key={order._id} className="hover:bg-[#f2f4f5]/60 transition-colors">
+                {orders.map((order, idx) => (
+                  <tr
+                    key={order._id}
+                    className="hover:bg-[#f2f4f5]/60 transition-colors animate-table-row"
+                    style={{ '--row-delay': `${Math.min(idx * 30, 200)}ms` } as React.CSSProperties}
+                  >
                     <td className="px-6 py-4">
                       <span className="font-mono text-[12px] text-[#787574]">#{order._id.slice(-8).toUpperCase()}</span>
                     </td>
@@ -215,17 +237,22 @@ const AdminOrdersPage: React.FC = () => {
       </div>
 
       {/* Order Detail Drawer */}
-      {isDrawerOpen && selectedOrder && (
+      {drawerVisible && selectedOrder && (
         <div className="fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" onClick={() => setIsDrawerOpen(false)} />
-          <div className="absolute right-0 top-0 bottom-0 w-full max-w-lg bg-white flex flex-col shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px]">
+          <div
+            className={`absolute inset-0 bg-black/20 backdrop-blur-[2px] ${drawerClosing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`}
+            onClick={closeDrawer}
+          />
+          <div
+            className={`absolute right-0 top-0 bottom-0 w-full max-w-lg bg-white flex flex-col shadow-[rgba(0,0,0,0.12)_0px_4px_24px_0px] ${drawerClosing ? 'animate-drawer-out' : 'animate-drawer-in'}`}
+          >
             <div className="flex items-center justify-between p-6 border-b border-[#ebebeb]">
               <div>
                 <h2 className="text-xl font-normal tracking-[-0.05em] text-[#000000]">Order Details</h2>
                 <p className="text-[12px] text-[#787574]">#{selectedOrder._id.slice(-8).toUpperCase()}</p>
               </div>
               <button
-                onClick={() => setIsDrawerOpen(false)}
+                onClick={closeDrawer}
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#f2f4f5] text-[#787574] hover:text-[#000000] transition-colors cursor-pointer"
               >
                 ✕

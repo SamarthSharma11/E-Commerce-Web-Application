@@ -21,8 +21,8 @@ const CartPage: React.FC = () => {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
-        <div className="max-w-[1200px] mx-auto px-4 py-16">
-          <div className="flex flex-col items-center justify-center text-center">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-16">
+          <div className="flex flex-col items-center justify-center py-24 text-center">
             <div className="w-20 h-20 rounded-full bg-white border border-[#ebebeb] shadow-[rgba(0,0,0,0.06)_0px_2px_8px_0px] flex items-center justify-center mb-6">
               <ShoppingBag className="w-8 h-8 text-[#787574]" />
             </div>
@@ -45,11 +45,11 @@ const CartPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-canvas-mist)] text-[#000000]">
-      <div className="max-w-[1200px] mx-auto px-4 py-8">
-        <h1 className="text-3xl font-normal tracking-[-0.05em] mb-1">Shopping Cart</h1>
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8">
+        <h1 className="text-3xl font-normal tracking-[-0.05em] mb-1 animate-fade-up">Shopping Cart</h1>
         <p className="text-[#787574] text-[14px] mb-8">{cartCount} item{cartCount !== 1 ? 's' : ''} in your cart</p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-up" style={{ animationDelay: '40ms' }}>
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((item, idx) => {
@@ -60,7 +60,7 @@ const CartPage: React.FC = () => {
               const itemKey = item._id || productId || `cart-page-item-${idx}`;
 
               return (
-                <div key={itemKey} className="bg-white rounded-[28px] border-none p-5 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
+                <div key={itemKey} className="bg-white rounded-[28px] border-none p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px]">
                   <div className="flex gap-5">
                     {/* Product Image with 20px inner radius */}
                     <Link to={`/products/${productSlug}`} className="flex-shrink-0">
@@ -128,7 +128,7 @@ const CartPage: React.FC = () => {
 
           {/* Cart Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-[28px] border-none p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] sticky top-6">
+            <div className="bg-white rounded-[28px] border-none p-6 shadow-[rgba(0,0,0,0.1)_0px_4px_6px_-1px,rgba(0,0,0,0.1)_0px_2px_4px_-2px] sticky top-8">
               <h2 className="text-[20px] font-normal tracking-[-0.05em] mb-6">Order Summary</h2>
 
               <div className="space-y-4 mb-6">
