@@ -185,7 +185,7 @@ export const LandingPage: React.FC = () => {
                 title: 'MATCH BOOTS',
                 desc: 'Precision traction with ultra-responsive carbon fiber feel for explosive speed.',
                 features: ['Carbon Plate', 'Anti-Slip Grip', 'Lightweight', 'Firm Ground'],
-                image: FALLBACK_PRODUCTS[1]?.images[0] || '/products/boots-academy.png',
+                image: FALLBACK_PRODUCTS[5]?.images[0] || '/products/boots-academy.png',
                 link: '/products?category=cat-boots',
               },
               {
@@ -194,7 +194,7 @@ export const LandingPage: React.FC = () => {
                 title: 'TRAINING KIT',
                 desc: 'Breathable sweat-wicking apparel designed for intense daily training sessions.',
                 features: ['Dry-Fit Tech', 'Breathable Mesh', '4-Way Stretch', 'Ergonomic'],
-                image: FALLBACK_PRODUCTS[2]?.images[0] || '/products/jersey-club.png',
+                image: FALLBACK_PRODUCTS[9]?.images[0] || '/products/jersey-club.png',
                 link: '/products?category=cat-apparel',
               },
               {
@@ -203,7 +203,7 @@ export const LandingPage: React.FC = () => {
                 title: 'GOALKEEPER GEAR',
                 desc: 'Maximum grip latex palm with finger-save protection and impact dampening.',
                 features: ['Contact Latex', 'Finger-Save', 'Padded Palm', '3D Punch Zone'],
-                image: FALLBACK_PRODUCTS[3]?.images[0] || '/products/gk-gloves.png',
+                image: FALLBACK_PRODUCTS[30]?.images[0] || '/products/gk-gloves.png',
                 link: '/products?category=cat-protection',
               },
               {
