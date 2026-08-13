@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check, GraduationCap, Users, School, Award, Heart, Camera } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check, GraduationCap, Users, School, Award, Heart, Camera, Mail } from 'lucide-react';
 import '../styles/landing.css';
 import { FALLBACK_PRODUCTS } from '../data/mockProducts';
 
 export const LandingPage: React.FC = () => {
   const [showAnnouncement, setShowAnnouncement] = useState(true);
+  const [emailInput, setEmailInput] = useState('');
+  const [signedUp, setSignedUp] = useState(false);
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (emailInput.trim()) {
+      setSignedUp(true);
+    }
+  };
   const featuredProducts = FALLBACK_PRODUCTS.slice(0, 4);
 
   return (
@@ -542,40 +551,182 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── CTA Banner ── */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-          <div className="p-12 sm:p-16 rounded-[36px] bg-gradient-to-r from-[var(--landing-surface-2)] via-[var(--landing-surface)] to-[var(--landing-surface-2)] border border-[var(--landing-neon)]/30 landing-card-glow">
-            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mb-6">
-              READY TO ELEVATE <br />
-              <span className="text-[var(--landing-neon)]">YOUR GAME?</span>
-            </h2>
-            <p className="text-[var(--landing-gray)] text-base sm:text-lg max-w-xl mx-auto mb-8">
-              Join thousands of footballers getting matchday ready with GoalKart. Fast shipping, instant checkout.
-            </p>
-            <Link
-              to="/products"
-              className="inline-flex items-center gap-3 px-10 py-5 bg-[var(--landing-neon)] text-black font-extrabold text-sm uppercase tracking-wider rounded-full hover:brightness-110 transition-all shadow-[0_0_35px_rgba(198,255,0,0.5)]"
-            >
-              SHOP CATALOG NOW
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+      {/* ── Closing CTA Band ── */}
+      <section className="py-24 bg-[#0A0A0A] border-b border-[var(--landing-border)] relative overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
+          <div className="rounded-[36px] bg-[#141414] border border-white/10 p-10 sm:p-16 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-2xl">
+            
+            {/* Left Headline */}
+            <div className="flex-1 text-center lg:text-left">
+              <h2 className="landing-display-text text-4xl sm:text-6xl text-white leading-[0.95] mb-4">
+                READY TO <br />
+                <span className="text-[var(--landing-neon)]">LEVEL UP?</span>
+              </h2>
+              <p className="text-xs sm:text-sm text-[var(--landing-gray)] font-normal max-w-md">
+                Join 50k+ players. No spam, just gear.
+              </p>
+            </div>
+
+            {/* Right Action & Form */}
+            <div className="w-full lg:w-auto flex flex-col sm:flex-row items-center gap-4">
+              {!signedUp ? (
+                <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                  <div className="relative w-full sm:w-72">
+                    <Mail className="w-4 h-4 text-[var(--landing-gray)] absolute left-4 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="email"
+                      value={emailInput}
+                      onChange={(e) => setEmailInput(e.target.value)}
+                      placeholder="Enter your email"
+                      required
+                      className="w-full pl-11 pr-4 py-3.5 bg-black border border-white/15 rounded-full text-xs text-white placeholder-[var(--landing-gray)] focus:outline-none focus:border-[var(--landing-neon)]"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-[var(--landing-neon)] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:brightness-110 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(198,255,0,0.3)] whitespace-nowrap"
+                  >
+                    Get 20% Off
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
+              ) : (
+                <div className="bg-[var(--landing-neon)]/10 border border-[var(--landing-neon)] text-[var(--landing-neon)] px-6 py-3.5 rounded-full text-xs font-bold flex items-center gap-2">
+                  <Check className="w-4 h-4" />
+                  <span>YOU'RE IN! CHECK YOUR INBOX FOR YOUR 20% CODE</span>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[var(--landing-border)] py-12 bg-[#050505] text-xs text-[var(--landing-gray)]">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <span className="landing-display-text text-lg text-white">GOALKART</span>
-            <span>© {new Date().getFullYear()} GoalKart Inc. All rights reserved.</span>
+      <footer className="bg-[#050505] text-white pt-16 pb-12 text-xs">
+        <div className="max-w-7xl mx-auto px-6">
+          
+          {/* 4 Columns Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+            
+            {/* Col 1: Products */}
+            <div>
+              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-4">
+                Products
+              </h4>
+              <ul className="space-y-2.5 text-[var(--landing-gray)] font-normal">
+                <li>
+                  <Link to="/products?category=cat-boots" className="hover:text-white transition-colors">
+                    Match Boots
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products?category=cat-apparel" className="hover:text-white transition-colors">
+                    Training Kit & Jerseys
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products?category=cat-protection" className="hover:text-white transition-colors">
+                    Goalkeeper Gear
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products?category=cat-balls" className="hover:text-white transition-colors">
+                    Match Balls
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products?category=cat-training" className="hover:text-white transition-colors">
+                    Training Equipment
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 2: Quick Links */}
+            <div>
+              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-4">
+                Quick Links
+              </h4>
+              <ul className="space-y-2.5 text-[var(--landing-gray)] font-normal">
+                <li>
+                  <Link to="/" className="hover:text-white transition-colors">Home</Link>
+                </li>
+                <li>
+                  <Link to="/products" className="hover:text-white transition-colors">Shop Catalog</Link>
+                </li>
+                <li>
+                  <a href="#features" className="hover:text-white transition-colors">Athletes</a>
+                </li>
+                <li>
+                  <a href="#featured" className="hover:text-white transition-colors">Stockists</a>
+                </li>
+                <li>
+                  <Link to="/cart" className="hover:text-white transition-colors">Cart</Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 3: Company */}
+            <div>
+              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-4">
+                Company
+              </h4>
+              <ul className="space-y-2.5 text-[var(--landing-gray)] font-normal">
+                <li>
+                  <a href="#features" className="hover:text-white transition-colors">About Us</a>
+                </li>
+                <li>
+                  <a href="#reviews" className="hover:text-white transition-colors">Careers</a>
+                </li>
+                <li>
+                  <Link to="/products" className="hover:text-white transition-colors">Contact</Link>
+                </li>
+                <li>
+                  <Link to="/register" className="hover:text-white transition-colors">Club Membership</Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 4: Legal */}
+            <div>
+              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-4">
+                Legal
+              </h4>
+              <ul className="space-y-2.5 text-[var(--landing-gray)] font-normal">
+                <li>
+                  <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
+                </li>
+                <li>
+                  <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
+                </li>
+                <li>
+                  <span className="hover:text-white transition-colors cursor-pointer">Shipping & Returns</span>
+                </li>
+                <li>
+                  <span className="hover:text-white transition-colors cursor-pointer">Cookie Settings</span>
+                </li>
+              </ul>
+            </div>
+
           </div>
-          <div className="flex items-center gap-6">
-            <Link to="/products" className="hover:text-white transition-colors">Catalog</Link>
-            <Link to="/login" className="hover:text-white transition-colors">Sign In</Link>
-            <Link to="/register" className="hover:text-white transition-colors">Register</Link>
+
+          {/* Bottom Row */}
+          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[var(--landing-gray)]">
+            <div className="flex items-center gap-3">
+              <span className="landing-display-text text-xl text-white tracking-tighter">
+                GOAL<span className="text-[var(--landing-neon)]">KART</span>
+              </span>
+              <span className="text-[10px] font-semibold text-white/40 uppercase tracking-widest border-l border-white/10 pl-3">
+                made for players
+              </span>
+            </div>
+
+            <p className="text-[11px] font-normal">
+              © {new Date().getFullYear()} GoalKart Inc. All rights reserved.
+            </p>
           </div>
+
         </div>
       </footer>
 
