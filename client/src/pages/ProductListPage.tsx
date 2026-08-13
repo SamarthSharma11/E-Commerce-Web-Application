@@ -137,7 +137,10 @@ const ProductListPage: React.FC = () => {
     } else {
       newParams.delete(key);
     }
-    newParams.set('page', '1');
+    // Only reset to page 1 when changing a filter — NOT when changing the page itself
+    if (key !== 'page') {
+      newParams.set('page', '1');
+    }
     setSearchParams(newParams);
   };
 
