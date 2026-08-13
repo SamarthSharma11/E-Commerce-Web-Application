@@ -26,6 +26,7 @@ const ProductDetailPage: React.FC = () => {
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   const addToCart = useCartStore((state) => state.addToCart);
   const { user, isAuthenticated } = useAuthStore();
@@ -90,11 +91,12 @@ const ProductDetailPage: React.FC = () => {
 
   const handleAddToCart = async () => {
     if (!product) return;
-    if (product.stock === 0) {
-      toast.error('Product is out of stock');
-      return;
+    setAddingToCart(true);
+    try {
+      await addToCart(product, quantity);
+    } finally {
+      setAddingToCart(false);
     }
-    await addToCart(product, quantity);
   };
 
   const handleSubmitReview = async (e: React.FormEvent) => {

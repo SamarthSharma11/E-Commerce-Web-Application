@@ -36,6 +36,9 @@ const AdminProductsPage: React.FC = () => {
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [existingImages, setExistingImages] = useState<string[]>([]);
 
+  const currentPage = pagination?.currentPage || 1;
+  const totalPages = pagination?.totalPages || 1;
+
   useEffect(() => {
     if (showModal) {
       setModalVisible(true);
