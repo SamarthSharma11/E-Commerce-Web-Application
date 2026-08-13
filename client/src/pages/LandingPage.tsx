@@ -1,29 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check, GraduationCap, Users, School, Award, Heart, Camera, Mail, Menu } from 'lucide-react';
 import '../styles/landing.css';
 import { FALLBACK_PRODUCTS } from '../data/mockProducts';
 
+/* ─────────────────────────────────────────────────────────
+   Scroll-reveal hook — attaches IntersectionObserver to
+   any element with .reveal or .stagger-children class.
+───────────────────────────────────────────────────────── */
+function useScrollReveal() {
+  useEffect(() => {
+    const targets = document.querySelectorAll('.reveal, .stagger-children');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target); // fire once
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+}
+
+/* ─────────────────────────────────────────────────────────
+   SectionHeader — reusable eyebrow + headline block
+───────────────────────────────────────────────────────── */
+const SectionHeader: React.FC<{
+  eyebrow: string;
+  headline: React.ReactNode;
+  sub?: string;
+  center?: boolean;
+}> = ({ eyebrow, headline, sub, center = false }) => (
+  <div className={`reveal mb-16 ${center ? 'text-center max-w-3xl mx-auto' : 'text-left'}`}>
+    <span className="section-eyebrow">{eyebrow}</span>
+    <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-2 leading-none">
+      {headline}
+    </h2>
+    {sub && (
+      <p className="text-[var(--landing-gray)] text-base mt-5 leading-relaxed max-w-2xl mx-auto">
+        {sub}
+      </p>
+    )}
+  </div>
+);
+
+/* ═══════════════════════════════════════════════════════
+   LandingPage
+═══════════════════════════════════════════════════════ */
 export const LandingPage: React.FC = () => {
   const [showAnnouncement, setShowAnnouncement] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [signedUp, setSignedUp] = useState(false);
 
+  useScrollReveal();
+
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (emailInput.trim()) {
-      setSignedUp(true);
-    }
+    if (emailInput.trim()) setSignedUp(true);
   };
+
   const featuredProducts = FALLBACK_PRODUCTS.slice(0, 4);
 
   return (
     <div className="landing-page min-h-screen flex flex-col overflow-x-hidden selection:bg-[#C6FF00] selection:text-black">
-      
+
       {/* ── 1. Top Slim Announcement Bar ── */}
       {showAnnouncement && (
-        <div className="bg-[#000000] border-b border-white/10 px-4 py-2.5 flex items-center justify-between text-xs relative z-50">
+        <div className="bg-[#000000] border-b border-white/10 px-4 py-3 flex items-center justify-between text-xs relative z-50">
           <div className="flex-1 text-center font-bold tracking-wider text-[var(--landing-neon)] uppercase">
             GET 20% OFF YOUR FIRST ORDER
           </div>
@@ -40,7 +92,7 @@ export const LandingPage: React.FC = () => {
       {/* ── 2. Navigation Bar ── */}
       <nav className="border-b border-[var(--landing-border)] bg-[#0A0A0A]/90 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          
+
           {/* Left: Wordmark Logo */}
           <Link to="/" className="flex items-center gap-1.5">
             <span className="font-extrabold text-2xl tracking-tighter text-white font-['Inter'] uppercase">
@@ -74,12 +126,11 @@ export const LandingPage: React.FC = () => {
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-
         </div>
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#0A0A0A] border-b border-white/10 px-6 py-6 flex flex-col gap-4 text-xs font-bold tracking-widest uppercase text-white animate-in slide-in-from-top-2">
+          <div className="lg:hidden bg-[#0A0A0A] border-b border-white/10 px-6 py-6 flex flex-col gap-4 text-xs font-bold tracking-widest uppercase text-white">
             <Link to="/" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--landing-neon)] transition-colors py-2 border-b border-white/5">Home</Link>
             <Link to="/products" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--landing-neon)] transition-colors py-2 border-b border-white/5">Shop Catalog</Link>
             <a href="#features" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--landing-neon)] transition-colors py-2 border-b border-white/5">Athletes</a>
@@ -89,32 +140,28 @@ export const LandingPage: React.FC = () => {
         )}
       </nav>
 
-      {/* ── Hero Section ── */}
-      <header className="relative pt-12 pb-20 md:pt-20 md:pb-28 bg-[#FAFAFA] text-[#0A0A0A] border-b border-[#E5E5E5] overflow-hidden">
-        
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-          
-          {/* Left Column Content */}
+      {/* ── 3. Hero Section ── */}
+      <header className="relative pt-16 pb-28 md:pt-24 md:pb-36 bg-[#FAFAFA] text-[#0A0A0A] border-b border-[#E5E5E5] overflow-hidden">
+
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
+
+          {/* Left Column */}
           <div className="lg:col-span-7 flex flex-col items-start text-left z-20">
-            
-            {/* Eyebrow Label */}
-            <div className="text-xs font-extrabold tracking-[0.25em] uppercase text-[#0A0A0A] mb-4">
+
+            <div className="text-xs font-extrabold tracking-[0.25em] uppercase text-[#0A0A0A] mb-5 reveal">
               PERFORMANCE FOOTBALL GEAR
             </div>
 
-            {/* Display Headline */}
-            <h1 className="landing-display-text text-6xl sm:text-7xl lg:text-[88px] leading-[0.92] tracking-tighter text-[#0A0A0A] mb-6">
+            <h1 className="landing-display-text text-6xl sm:text-7xl lg:text-[88px] leading-[0.92] tracking-tighter text-[#0A0A0A] mb-8 reveal">
               GEAR YOUR <br />
               <span className="text-[#0A0A0A]">GREATNESS</span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-base sm:text-lg text-[#555555] max-w-lg mb-8 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-[#555555] max-w-lg mb-10 leading-relaxed font-normal reveal">
               Match-ready boots. Zero compromise. Built for players who show up.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-10">
+            <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-12 reveal">
               <Link
                 to="/products"
                 className="w-full sm:w-auto px-9 py-4 bg-[#0A0A0A] hover:bg-[#222222] text-white font-extrabold text-xs uppercase tracking-wider rounded-full transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
@@ -130,8 +177,7 @@ export const LandingPage: React.FC = () => {
               </Link>
             </div>
 
-            {/* Horizontal Feature Pills */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 reveal">
               {['Match-Ready', 'Lightweight', 'All-Weather Grip', 'FIFA-Grade'].map((feature) => (
                 <div
                   key={feature}
@@ -144,14 +190,11 @@ export const LandingPage: React.FC = () => {
                 </div>
               ))}
             </div>
-
           </div>
 
           {/* Right Column Floating Boot Image */}
-          <div className="lg:col-span-5 relative flex items-center justify-center lg:-ml-12 z-10">
-            {/* Subtle glow circle accent behind image */}
+          <div className="lg:col-span-5 relative flex items-center justify-center lg:-ml-12 z-10 reveal reveal-right">
             <div className="absolute w-[380px] h-[380px] bg-[var(--landing-neon)]/20 rounded-full blur-[80px] pointer-events-none" />
-            
             <div className="relative w-full max-w-lg aspect-square flex items-center justify-center">
               <img
                 src="/hero_boot.png"
@@ -160,24 +203,16 @@ export const LandingPage: React.FC = () => {
               />
             </div>
           </div>
-
         </div>
       </header>
 
-      {/* ── OUR GEAR / CHOOSE YOUR KIT Section ── */}
-      <section className="py-24 border-b border-[var(--landing-border)] bg-[#0A0A0A] overflow-hidden">
+      {/* ── 4. CHOOSE YOUR KIT Section ── */}
+      <section className="py-32 border-b border-[var(--landing-border)] bg-[#0A0A0A] overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-12">
-            <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-[var(--landing-neon)]">
-              OUR GEAR
-            </span>
-            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-1">
-              CHOOSE YOUR KIT
-            </h2>
-          </div>
+          <SectionHeader eyebrow="OUR GEAR" headline="CHOOSE YOUR KIT" />
 
           {/* Horizontally Scrollable Row of Large Product Line Cards */}
-          <div className="flex gap-6 overflow-x-auto pb-8 pt-2 scrollbar-none snap-x snap-mandatory">
+          <div className="stagger-children flex gap-8 overflow-x-auto pb-6 pt-2 scrollbar-none snap-x snap-mandatory">
             {[
               {
                 id: 'line-1',
@@ -218,50 +253,43 @@ export const LandingPage: React.FC = () => {
             ].map((line) => (
               <div
                 key={line.id}
-                className="snap-start flex-shrink-0 w-[320px] sm:w-[380px] lg:w-[420px] bg-[#141414] border border-white/10 rounded-[32px] p-6 flex flex-col justify-between hover:border-[var(--landing-neon)] transition-all duration-300 shadow-2xl group"
+                className="snap-start flex-shrink-0 w-[320px] sm:w-[380px] lg:w-[420px] bg-[#141414] border border-white/10 rounded-[32px] p-8 flex flex-col justify-between hover:border-[var(--landing-neon)] transition-all duration-300 shadow-2xl group"
               >
                 <div>
                   {/* Top Badge */}
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-5">
                     <span className="bg-[var(--landing-neon)] text-black font-extrabold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full">
                       {line.badge}
                     </span>
                   </div>
 
-                  {/* Large Immersive Product Photo Area */}
-                  <div className="aspect-[4/3] rounded-[24px] overflow-hidden bg-black/60 p-4 mb-6 relative flex items-center justify-center border border-white/5">
+                  {/* Product Image */}
+                  <div className="aspect-[4/3] rounded-[24px] overflow-hidden bg-black/40 mb-6">
                     <img
                       src={line.image}
                       alt={line.title}
-                      className="w-full h-full object-cover rounded-[16px] group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
 
-                  {/* Line Title & One-line Description */}
-                  <h3 className="landing-display-text text-2xl sm:text-3xl text-white mb-2">
-                    {line.title}
-                  </h3>
-                  <p className="text-xs text-[var(--landing-gray)] leading-relaxed mb-6 font-normal">
-                    {line.desc}
-                  </p>
+                  {/* Title & Description */}
+                  <h3 className="landing-display-text text-2xl text-white mb-3 leading-tight">{line.title}</h3>
+                  <p className="text-sm text-[var(--landing-gray)] mb-5 leading-relaxed">{line.desc}</p>
 
-                  {/* Row of Small Feature Chips */}
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {line.features.map((feat) => (
-                      <span
-                        key={feat}
-                        className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-semibold text-white/90"
-                      >
-                        {feat}
+                  {/* Feature Tags */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {line.features.map((f) => (
+                      <span key={f} className="text-[10px] font-bold uppercase tracking-wider text-[var(--landing-neon)] border border-[var(--landing-neon)]/30 bg-[var(--landing-neon)]/5 px-2.5 py-1 rounded-full">
+                        {f}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                {/* Bottom CTA Pill Button */}
+                {/* CTA */}
                 <Link
                   to={line.link}
-                  className="w-full py-3.5 bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:bg-[var(--landing-neon)] transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                  className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-white/5 hover:bg-[var(--landing-neon)] hover:text-black text-white font-extrabold text-xs uppercase tracking-wider rounded-full transition-all duration-250 border border-white/10 hover:border-[var(--landing-neon)]"
                 >
                   Shop Now
                   <ArrowRight className="w-4 h-4" />
@@ -272,55 +300,31 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── WHAT'S INSIDE / BUILT FOR PERFORMANCE Section ── */}
-      <section className="py-24 border-b border-[var(--landing-border)] bg-[#070707]">
+      {/* ── 5. BUILT FOR PERFORMANCE Section ── */}
+      <section className="py-32 border-b border-[var(--landing-border)] bg-[#070707]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-14 text-center md:text-left">
-            <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-[var(--landing-neon)]">
-              WHAT'S INSIDE
-            </span>
-            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-1">
-              BUILT FOR PERFORMANCE
-            </h2>
-          </div>
+          <SectionHeader eyebrow="WHAT'S INSIDE" headline="BUILT FOR PERFORMANCE" />
 
-          {/* 4-Column Stat Grid (2-Column on Mobile) */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="stagger-children grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              {
-                stat: '210g',
-                label: 'Ultra-Light',
-                desc: 'Barely feel it on your feet during full 90-minute matches.',
-              },
-              {
-                stat: '0',
-                label: 'Compromise',
-                desc: 'Unmatched standard for grip, comfort, and durability.',
-              },
-              {
-                stat: '360°',
-                label: 'Touch Control',
-                desc: '3D micro-textured surface for ultimate ball handling.',
-              },
-              {
-                stat: 'FIFA',
-                label: 'Certified',
-                desc: 'Approved tournament-grade quality for competitive play.',
-              },
+              { stat: '210g', label: 'Ultra-Light', desc: 'Barely feel it on your feet during full 90-minute matches.' },
+              { stat: '0',    label: 'Compromise',  desc: 'Unmatched standard for grip, comfort, and durability.' },
+              { stat: '360°', label: 'Touch Control', desc: '3D micro-textured surface for ultimate ball handling.' },
+              { stat: 'FIFA', label: 'Certified',   desc: 'Approved tournament-grade quality for competitive play.' },
             ].map((cell, idx) => (
               <div
                 key={idx}
-                className="bg-[#111111] border border-white/10 rounded-[28px] p-8 flex flex-col justify-between hover:border-[var(--landing-neon)]/50 transition-all duration-300 group"
+                className="bg-[#111111] border border-white/10 rounded-[28px] p-10 flex flex-col justify-between hover:border-[var(--landing-neon)]/50 transition-all duration-300 group"
               >
                 <div>
-                  <span className="landing-display-text text-5xl sm:text-6xl lg:text-7xl text-[var(--landing-neon)] block mb-4 group-hover:scale-105 transition-transform duration-300 origin-left">
+                  <span className="landing-display-text text-5xl sm:text-6xl lg:text-7xl text-[var(--landing-neon)] block mb-5 group-hover:scale-105 transition-transform duration-300 origin-left">
                     {cell.stat}
                   </span>
-                  <h3 className="landing-display-text text-xl sm:text-2xl text-white mb-2 tracking-tight">
+                  <h3 className="landing-display-text text-xl sm:text-2xl text-white mb-3 tracking-tight">
                     {cell.label}
                   </h3>
                 </div>
-                <p className="text-xs sm:text-sm text-[var(--landing-gray)] font-normal leading-relaxed">
+                <p className="text-xs sm:text-sm text-[var(--landing-gray)] font-normal leading-relaxed mt-3">
                   {cell.desc}
                 </p>
               </div>
@@ -329,49 +333,17 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── GET INVOLVED / BRING GOALKART TO YOUR GAME Section ── */}
-      <section className="py-24 border-b border-[var(--landing-border)] bg-[#0A0A0A]">
+      {/* ── 6. GET INVOLVED Section ── */}
+      <section className="py-32 border-b border-[var(--landing-border)] bg-[#0A0A0A]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-14 text-center md:text-left">
-            <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-[var(--landing-neon)]">
-              GET INVOLVED
-            </span>
-            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-1">
-              BRING GOALKART TO YOUR GAME
-            </h2>
-          </div>
+          <SectionHeader eyebrow="GET INVOLVED" headline="BRING GOALKART TO YOUR GAME" />
 
-          {/* 4-Card Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="stagger-children grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              {
-                icon: GraduationCap,
-                title: 'Academy Trials',
-                desc: 'Try our gear free at partner football academies across the country.',
-                cta: 'Find Trials',
-                link: '/products?category=cat-balls',
-              },
-              {
-                icon: Users,
-                title: 'Club Partnerships',
-                desc: 'Kit out your club with bulk team orders and custom branding options.',
-                cta: 'Partner With Us',
-                link: '/products?category=cat-apparel',
-              },
-              {
-                icon: School,
-                title: 'School Programs',
-                desc: 'Equip the next generation of players with durable training bundles.',
-                cta: 'Get a Quote',
-                link: '/products?category=cat-training',
-              },
-              {
-                icon: Award,
-                title: 'Tournament Sponsorship',
-                desc: 'Sponsor your next tournament with official GoalKart match balls & prizes.',
-                cta: 'Sponsor an Event',
-                link: '/products?category=cat-protection',
-              },
+              { icon: GraduationCap, title: 'Academy Trials',         desc: 'Try our gear free at partner football academies across the country.',                            cta: 'Find Trials',       link: '/products?category=cat-balls' },
+              { icon: Users,         title: 'Club Partnerships',       desc: 'Kit out your club with bulk team orders and custom branding options.',                          cta: 'Partner With Us',   link: '/products?category=cat-apparel' },
+              { icon: School,        title: 'School Programs',         desc: 'Equip the next generation of players with durable training bundles.',                           cta: 'Get a Quote',       link: '/products?category=cat-training' },
+              { icon: Award,         title: 'Tournament Sponsorship',  desc: 'Sponsor your next tournament with official GoalKart match balls & prizes.',                     cta: 'Sponsor an Event',  link: '/products?category=cat-protection' },
             ].map((card, idx) => {
               const Icon = card.icon;
               return (
@@ -380,26 +352,15 @@ export const LandingPage: React.FC = () => {
                   className="bg-[#141414] border border-white/10 rounded-[28px] p-8 flex flex-col justify-between hover:border-[var(--landing-neon)]/50 transition-all duration-300 group"
                 >
                   <div>
-                    {/* Top Icon */}
-                    <div className="w-12 h-12 rounded-2xl bg-[var(--landing-neon)]/10 text-[var(--landing-neon)] flex items-center justify-center mb-6">
-                      <Icon className="w-6 h-6" />
+                    <div className="w-14 h-14 rounded-2xl bg-[var(--landing-neon)]/10 text-[var(--landing-neon)] flex items-center justify-center mb-7">
+                      <Icon className="w-7 h-7" />
                     </div>
-
-                    {/* Heading */}
-                    <h3 className="landing-display-text text-2xl text-white mb-3 tracking-tight">
-                      {card.title}
-                    </h3>
-
-                    {/* One-line Description */}
-                    <p className="text-xs sm:text-sm text-[var(--landing-gray)] font-normal leading-relaxed mb-6">
-                      {card.desc}
-                    </p>
+                    <h3 className="landing-display-text text-2xl text-white mb-4 tracking-tight">{card.title}</h3>
+                    <p className="text-sm text-[var(--landing-gray)] font-normal leading-relaxed mb-8">{card.desc}</p>
                   </div>
-
-                  {/* Ghost-style Text Link with Arrow */}
                   <Link
                     to={card.link}
-                    className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-white hover:text-[var(--landing-neon)] transition-colors group-hover:translate-x-1 transition-transform"
+                    className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-white hover:text-[var(--landing-neon)] transition-colors"
                   >
                     <span>{card.cta}</span>
                     <ArrowRight className="w-4 h-4 text-[var(--landing-neon)]" />
@@ -411,46 +372,32 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Feature Highlights ── */}
-      <section id="features" className="py-24 border-b border-[var(--landing-border)] bg-[#0E0E0E]">
+      {/* ── 7. Feature Highlights ── */}
+      <section id="features" className="py-32 border-b border-[var(--landing-border)] bg-[#0E0E0E]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="landing-display-text text-4xl sm:text-5xl text-white mb-4">
-              WHY ATHLETES CHOOSE <span className="text-[var(--landing-neon)]">GOALKART</span>
-            </h2>
-            <p className="text-[var(--landing-gray)] text-base">
-              Built by players, for players. We deliver uncompromised quality for matchday dominance.
-            </p>
-          </div>
+          <SectionHeader
+            eyebrow="WHY US"
+            headline={<>WHY ATHLETES CHOOSE <span className="text-[var(--landing-neon)]">GOALKART</span></>}
+            sub="Built by players, for players. We deliver uncompromised quality for matchday dominance."
+            center
+          />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="stagger-children grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              {
-                icon: Trophy,
-                title: 'MATCH-CERTIFIED QUALITY',
-                desc: 'All products pass rigorous durability tests and meet official league specifications.',
-              },
-              {
-                icon: ShieldCheck,
-                title: 'VERIFIED AUTHENTICITY',
-                desc: 'Direct partnerships with world-leading brands ensure 100% genuine merchandise.',
-              },
-              {
-                icon: Zap,
-                title: 'LIGHTNING FAST DISPATCH',
-                desc: 'Same-day processing and expedited delivery so you never miss a matchday.',
-              },
+              { icon: Trophy,      title: 'MATCH-CERTIFIED QUALITY',   desc: 'All products pass rigorous durability tests and meet official league specifications.' },
+              { icon: ShieldCheck, title: 'VERIFIED AUTHENTICITY',      desc: 'Direct partnerships with world-leading brands ensure 100% genuine merchandise.' },
+              { icon: Zap,         title: 'LIGHTNING FAST DISPATCH',    desc: 'Same-day processing and expedited delivery so you never miss a matchday.' },
             ].map((feature, idx) => {
               const Icon = feature.icon;
               return (
                 <div
                   key={idx}
-                  className="p-8 rounded-[24px] bg-[var(--landing-surface)] border border-white/5 landing-border-glow transition-all duration-300"
+                  className="p-10 rounded-[24px] bg-[var(--landing-surface)] border border-white/5 landing-border-glow transition-all duration-300"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-[var(--landing-neon)]/10 text-[var(--landing-neon)] flex items-center justify-center mb-6">
+                  <div className="w-14 h-14 rounded-2xl bg-[var(--landing-neon)]/10 text-[var(--landing-neon)] flex items-center justify-center mb-8">
                     <Icon className="w-7 h-7" />
                   </div>
-                  <h3 className="landing-display-text text-xl text-white mb-3">{feature.title}</h3>
+                  <h3 className="landing-display-text text-xl text-white mb-4">{feature.title}</h3>
                   <p className="text-[var(--landing-gray)] text-sm leading-relaxed">{feature.desc}</p>
                 </div>
               );
@@ -459,13 +406,13 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Featured Products Grid ── */}
-      <section id="featured" className="py-24 border-b border-[var(--landing-border)]">
+      {/* ── 8. Featured Products Grid ── */}
+      <section id="featured" className="py-32 border-b border-[var(--landing-border)] bg-[#0A0A0A]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6">
+          <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6">
             <div>
-              <span className="text-[var(--landing-neon)] text-xs font-bold uppercase tracking-widest">CURATED CATALOG</span>
-              <h2 className="landing-display-text text-4xl sm:text-5xl text-white mt-1">PRO GEAR DROP</h2>
+              <span className="section-eyebrow">CURATED CATALOG</span>
+              <h2 className="landing-display-text text-4xl sm:text-5xl text-white mt-2">PRO GEAR DROP</h2>
             </div>
             <Link
               to="/products"
@@ -475,7 +422,7 @@ export const LandingPage: React.FC = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="stagger-children grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProducts.map((product) => (
               <Link
                 key={product._id}
@@ -483,7 +430,7 @@ export const LandingPage: React.FC = () => {
                 className="group rounded-[24px] bg-[var(--landing-surface)] border border-white/10 p-5 flex flex-col justify-between hover:border-[var(--landing-neon)]/50 transition-all duration-300"
               >
                 <div>
-                  <div className="aspect-square rounded-[18px] overflow-hidden bg-black/50 mb-4 p-2">
+                  <div className="aspect-square rounded-[18px] overflow-hidden bg-black/50 mb-5 p-2">
                     <img
                       src={product.images[0]}
                       alt={product.name}
@@ -491,10 +438,10 @@ export const LandingPage: React.FC = () => {
                     />
                   </div>
                   <p className="landing-display-text text-lg text-white line-clamp-1 mb-1">{product.name}</p>
-                  <p className="text-xs text-[var(--landing-gray)] mb-3">{product.brand || 'GoalKart Pro'}</p>
+                  <p className="text-xs text-[var(--landing-gray)] mb-4">{product.brand || 'GoalKart Pro'}</p>
                 </div>
 
-                <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                <div className="flex items-center justify-between pt-4 border-t border-white/5">
                   <span className="landing-display-text text-xl text-[var(--landing-neon)]">
                     ₹{product.price.toLocaleString()}
                   </span>
@@ -508,27 +455,19 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── FOLLOW THE GAME / @GOALKART Section ── */}
-      <section id="reviews" className="py-24 border-b border-[var(--landing-border)] bg-[#0A0A0A]">
+      {/* ── 9. @GOALKART Social Grid ── */}
+      <section id="reviews" className="py-32 border-b border-[var(--landing-border)] bg-[#0A0A0A]">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <div className="mb-12">
-            <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-[var(--landing-neon)]">
-              FOLLOW THE GAME
-            </span>
-            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-1">
-              @GOALKART
-            </h2>
-          </div>
+          <SectionHeader eyebrow="FOLLOW THE GAME" headline="@GOALKART" center />
 
-          {/* 6 Square Images Responsive Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
+          <div className="stagger-children grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
             {[
-              { likes: '2.4k', image: FALLBACK_PRODUCTS[0]?.images[0] || '/products/ball-club-size5.png', tag: 'Matchday Setup' },
-              { likes: '3.8k', image: FALLBACK_PRODUCTS[1]?.images[0] || '/products/boots-academy.png', tag: 'Boot Tech' },
-              { likes: '1.9k', image: FALLBACK_PRODUCTS[2]?.images[0] || '/products/jersey-club.png', tag: 'Training Drills' },
-              { likes: '4.2k', image: FALLBACK_PRODUCTS[3]?.images[0] || '/products/gk-gloves.png', tag: 'GK Save' },
-              { likes: '2.7k', image: FALLBACK_PRODUCTS[4]?.images[0] || '/products/grip-socks.png', tag: 'Pitch Close-Up' },
-              { likes: '5.1k', image: FALLBACK_PRODUCTS[5]?.images[0] || '/products/agility-ladder.png', tag: 'Academy Session' },
+              { likes: '2.4k', image: FALLBACK_PRODUCTS[0]?.images[0],  tag: 'Matchday Setup' },
+              { likes: '3.8k', image: FALLBACK_PRODUCTS[5]?.images[0],  tag: 'Boot Tech' },
+              { likes: '1.9k', image: FALLBACK_PRODUCTS[9]?.images[0],  tag: 'Training Drills' },
+              { likes: '4.2k', image: FALLBACK_PRODUCTS[30]?.images[0], tag: 'GK Save' },
+              { likes: '2.7k', image: FALLBACK_PRODUCTS[4]?.images[0],  tag: 'Pitch Close-Up' },
+              { likes: '5.1k', image: FALLBACK_PRODUCTS[11]?.images[0], tag: 'Academy Session' },
             ].map((item, idx) => (
               <div
                 key={idx}
@@ -557,7 +496,6 @@ export const LandingPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Centered Follow Button */}
           <a
             href="https://instagram.com"
             target="_blank"
@@ -570,18 +508,18 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Closing CTA Band ── */}
-      <section className="py-24 bg-[#0A0A0A] border-b border-[var(--landing-border)] relative overflow-hidden">
+      {/* ── 10. Closing CTA Band ── */}
+      <section className="py-32 bg-[#0A0A0A] border-b border-[var(--landing-border)] relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 relative z-10">
-          <div className="rounded-[36px] bg-[#141414] border border-white/10 p-10 sm:p-16 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-2xl">
-            
+          <div className="reveal reveal-scale rounded-[36px] bg-[#141414] border border-white/10 p-12 sm:p-20 flex flex-col lg:flex-row items-center justify-between gap-14 shadow-2xl">
+
             {/* Left Headline */}
             <div className="flex-1 text-center lg:text-left">
-              <h2 className="landing-display-text text-4xl sm:text-6xl text-white leading-[0.95] mb-4">
+              <h2 className="landing-display-text text-4xl sm:text-6xl text-white leading-[0.95] mb-5">
                 READY TO <br />
                 <span className="text-[var(--landing-neon)]">LEVEL UP?</span>
               </h2>
-              <p className="text-xs sm:text-sm text-[var(--landing-gray)] font-normal max-w-md">
+              <p className="text-sm text-[var(--landing-gray)] font-normal max-w-md">
                 Join 50k+ players. No spam, just gear.
               </p>
             </div>
@@ -622,109 +560,55 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#050505] text-white pt-16 pb-12 text-xs">
+      <footer className="bg-[#050505] text-white pt-20 pb-14 text-xs">
         <div className="max-w-7xl mx-auto px-6">
-          
+
           {/* 4 Columns Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
-            
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
+
             {/* Col 1: Products */}
             <div>
-              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-4">
-                Products
-              </h4>
-              <ul className="space-y-2.5 text-[var(--landing-gray)] font-normal">
-                <li>
-                  <Link to="/products?category=cat-boots" className="hover:text-white transition-colors">
-                    Match Boots
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/products?category=cat-apparel" className="hover:text-white transition-colors">
-                    Training Kit & Jerseys
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/products?category=cat-protection" className="hover:text-white transition-colors">
-                    Goalkeeper Gear
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/products?category=cat-balls" className="hover:text-white transition-colors">
-                    Match Balls
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/products?category=cat-training" className="hover:text-white transition-colors">
-                    Training Equipment
-                  </Link>
-                </li>
+              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-6">Products</h4>
+              <ul className="space-y-3.5 text-[var(--landing-gray)] font-normal">
+                <li><Link to="/products?category=cat-boots"      className="hover:text-white transition-colors">Match Boots</Link></li>
+                <li><Link to="/products?category=cat-apparel"    className="hover:text-white transition-colors">Training Kit & Jerseys</Link></li>
+                <li><Link to="/products?category=cat-protection" className="hover:text-white transition-colors">Goalkeeper Gear</Link></li>
+                <li><Link to="/products?category=cat-balls"      className="hover:text-white transition-colors">Match Balls</Link></li>
+                <li><Link to="/products?category=cat-training"   className="hover:text-white transition-colors">Training Equipment</Link></li>
               </ul>
             </div>
 
             {/* Col 2: Quick Links */}
             <div>
-              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-4">
-                Quick Links
-              </h4>
-              <ul className="space-y-2.5 text-[var(--landing-gray)] font-normal">
-                <li>
-                  <Link to="/" className="hover:text-white transition-colors">Home</Link>
-                </li>
-                <li>
-                  <Link to="/products" className="hover:text-white transition-colors">Shop Catalog</Link>
-                </li>
-                <li>
-                  <a href="#features" className="hover:text-white transition-colors">Athletes</a>
-                </li>
-                <li>
-                  <a href="#featured" className="hover:text-white transition-colors">Stockists</a>
-                </li>
-                <li>
-                  <Link to="/cart" className="hover:text-white transition-colors">Cart</Link>
-                </li>
+              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-6">Quick Links</h4>
+              <ul className="space-y-3.5 text-[var(--landing-gray)] font-normal">
+                <li><Link to="/"          className="hover:text-white transition-colors">Home</Link></li>
+                <li><Link to="/products"  className="hover:text-white transition-colors">Shop Catalog</Link></li>
+                <li><a href="#features"   className="hover:text-white transition-colors">Athletes</a></li>
+                <li><a href="#featured"   className="hover:text-white transition-colors">Stockists</a></li>
+                <li><Link to="/cart"      className="hover:text-white transition-colors">Cart</Link></li>
               </ul>
             </div>
 
             {/* Col 3: Company */}
             <div>
-              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-4">
-                Company
-              </h4>
-              <ul className="space-y-2.5 text-[var(--landing-gray)] font-normal">
-                <li>
-                  <a href="#features" className="hover:text-white transition-colors">About Us</a>
-                </li>
-                <li>
-                  <a href="#reviews" className="hover:text-white transition-colors">Careers</a>
-                </li>
-                <li>
-                  <Link to="/products" className="hover:text-white transition-colors">Contact</Link>
-                </li>
-                <li>
-                  <Link to="/register" className="hover:text-white transition-colors">Club Membership</Link>
-                </li>
+              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-6">Company</h4>
+              <ul className="space-y-3.5 text-[var(--landing-gray)] font-normal">
+                <li><a href="#features" className="hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#reviews"  className="hover:text-white transition-colors">Careers</a></li>
+                <li><Link to="/products"   className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link to="/register"   className="hover:text-white transition-colors">Club Membership</Link></li>
               </ul>
             </div>
 
             {/* Col 4: Legal */}
             <div>
-              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-4">
-                Legal
-              </h4>
-              <ul className="space-y-2.5 text-[var(--landing-gray)] font-normal">
-                <li>
-                  <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
-                </li>
-                <li>
-                  <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
-                </li>
-                <li>
-                  <span className="hover:text-white transition-colors cursor-pointer">Shipping & Returns</span>
-                </li>
-                <li>
-                  <span className="hover:text-white transition-colors cursor-pointer">Cookie Settings</span>
-                </li>
+              <h4 className="font-extrabold uppercase tracking-wider text-[var(--landing-neon)] text-xs mb-6">Legal</h4>
+              <ul className="space-y-3.5 text-[var(--landing-gray)] font-normal">
+                <li><span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">Shipping & Returns</span></li>
+                <li><span className="hover:text-white transition-colors cursor-pointer">Cookie Settings</span></li>
               </ul>
             </div>
 
@@ -740,7 +624,6 @@ export const LandingPage: React.FC = () => {
                 made for players
               </span>
             </div>
-
             <p className="text-[11px] font-normal">
               © {new Date().getFullYear()} GoalKart Inc. All rights reserved.
             </p>
