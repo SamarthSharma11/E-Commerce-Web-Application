@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check, GraduationCap, Users, School, Award, Heart, Camera, Mail } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check, GraduationCap, Users, School, Award, Heart, Camera, Mail, Menu } from 'lucide-react';
 import '../styles/landing.css';
 import { FALLBACK_PRODUCTS } from '../data/mockProducts';
 
 export const LandingPage: React.FC = () => {
   const [showAnnouncement, setShowAnnouncement] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [signedUp, setSignedUp] = useState(false);
 
@@ -57,17 +58,35 @@ export const LandingPage: React.FC = () => {
             <a href="#reviews" className="hover:text-[var(--landing-neon)] transition-colors">Careers</a>
           </div>
 
-          {/* Far Right: Pill CTA Button */}
-          <div className="flex items-center gap-4">
+          {/* Far Right: Pill CTA Button & Hamburger */}
+          <div className="flex items-center gap-3">
             <Link
               to="/products"
-              className="px-6 py-2.5 text-xs font-extrabold uppercase tracking-wider text-black bg-[var(--landing-neon)] hover:brightness-110 rounded-full transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(198,255,0,0.3)] cursor-pointer"
+              className="px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-black bg-[var(--landing-neon)] hover:brightness-110 rounded-full transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(198,255,0,0.3)] cursor-pointer"
             >
               Get 20% Off
             </Link>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 text-white hover:text-[var(--landing-neon)] transition-colors cursor-pointer"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
 
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-[#0A0A0A] border-b border-white/10 px-6 py-6 flex flex-col gap-4 text-xs font-bold tracking-widest uppercase text-white animate-in slide-in-from-top-2">
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--landing-neon)] transition-colors py-2 border-b border-white/5">Home</Link>
+            <Link to="/products" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--landing-neon)] transition-colors py-2 border-b border-white/5">Shop Catalog</Link>
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--landing-neon)] transition-colors py-2 border-b border-white/5">Athletes</a>
+            <a href="#featured" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--landing-neon)] transition-colors py-2 border-b border-white/5">Stockists</a>
+            <a href="#reviews" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--landing-neon)] transition-colors py-2">Careers</a>
+          </div>
+        )}
       </nav>
 
       {/* ── Hero Section ── */}
@@ -330,28 +349,28 @@ export const LandingPage: React.FC = () => {
                 title: 'Academy Trials',
                 desc: 'Try our gear free at partner football academies across the country.',
                 cta: 'Find Trials',
-                link: '/products',
+                link: '/products?category=cat-balls',
               },
               {
                 icon: Users,
                 title: 'Club Partnerships',
                 desc: 'Kit out your club with bulk team orders and custom branding options.',
                 cta: 'Partner With Us',
-                link: '/products',
+                link: '/products?category=cat-apparel',
               },
               {
                 icon: School,
                 title: 'School Programs',
                 desc: 'Equip the next generation of players with durable training bundles.',
                 cta: 'Get a Quote',
-                link: '/products',
+                link: '/products?category=cat-training',
               },
               {
                 icon: Award,
                 title: 'Tournament Sponsorship',
                 desc: 'Sponsor your next tournament with official GoalKart match balls & prizes.',
                 cta: 'Sponsor an Event',
-                link: '/products',
+                link: '/products?category=cat-protection',
               },
             ].map((card, idx) => {
               const Icon = card.icon;
