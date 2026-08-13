@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check, GraduationCap, Users, School, Award } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, X, Check, GraduationCap, Users, School, Award, Heart, Camera } from 'lucide-react';
 import '../styles/landing.css';
 import { FALLBACK_PRODUCTS } from '../data/mockProducts';
 
@@ -477,6 +477,68 @@ export const LandingPage: React.FC = () => {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── FOLLOW THE GAME / @GOALKART Section ── */}
+      <section id="reviews" className="py-24 border-b border-[var(--landing-border)] bg-[#0A0A0A]">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="mb-12">
+            <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-[var(--landing-neon)]">
+              FOLLOW THE GAME
+            </span>
+            <h2 className="landing-display-text text-4xl sm:text-6xl text-white mt-1">
+              @GOALKART
+            </h2>
+          </div>
+
+          {/* 6 Square Images Responsive Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
+            {[
+              { likes: '2.4k', image: FALLBACK_PRODUCTS[0]?.images[0] || '/products/ball-club-size5.png', tag: 'Matchday Setup' },
+              { likes: '3.8k', image: FALLBACK_PRODUCTS[1]?.images[0] || '/products/boots-academy.png', tag: 'Boot Tech' },
+              { likes: '1.9k', image: FALLBACK_PRODUCTS[2]?.images[0] || '/products/jersey-club.png', tag: 'Training Drills' },
+              { likes: '4.2k', image: FALLBACK_PRODUCTS[3]?.images[0] || '/products/gk-gloves.png', tag: 'GK Save' },
+              { likes: '2.7k', image: FALLBACK_PRODUCTS[4]?.images[0] || '/products/grip-socks.png', tag: 'Pitch Close-Up' },
+              { likes: '5.1k', image: FALLBACK_PRODUCTS[5]?.images[0] || '/products/agility-ladder.png', tag: 'Academy Session' },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="group relative aspect-square rounded-[24px] overflow-hidden bg-[#141414] border border-white/10"
+              >
+                <img
+                  src={item.image}
+                  alt={item.tag}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors flex flex-col justify-between p-3">
+                  <div className="flex justify-end">
+                    <Camera className="w-4 h-4 text-white/70 group-hover:text-[var(--landing-neon)] transition-colors" />
+                  </div>
+                  <div className="flex items-center justify-between text-white">
+                    <span className="text-[10px] font-semibold text-white/80 bg-black/60 px-2 py-0.5 rounded-full backdrop-blur-sm">
+                      {item.tag}
+                    </span>
+                    <div className="flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-full backdrop-blur-sm text-[10px] font-bold">
+                      <Heart className="w-3 h-3 text-[var(--landing-neon)] fill-[var(--landing-neon)]" />
+                      <span>{item.likes}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Centered Follow Button */}
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:bg-[var(--landing-neon)] transition-colors shadow-lg cursor-pointer"
+          >
+            <Camera className="w-4 h-4" />
+            <span>Follow @goalkart</span>
+          </a>
         </div>
       </section>
 
